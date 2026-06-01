@@ -1,124 +1,107 @@
 ---
 name: moventiq-ci
 description: >-
-  Sets up and maintains GitHub Actions CI for Moventiq — Gradle tests, detekt,
-  ktlint, Android Lint, SwiftLint. Use when adding PR checks or fixing CI on
-  the develop branch.
+  Sets up and maintains GitHub Actions CI for Moventiq — Gradle tests, Android
+  APK, iOS simulator build. Use when adding PR checks or fixing CI on develop.
 ---
 
 # Moventiq CI
+
+Follows the [Kotlin KMP GitHub Actions guide](https://kotlinlang.org/docs/multiplatform/github-actions-for-kmp.html).
 
 Adapted for Moventiq module names (`:androidApp`, `:sharedLogic`, `iosApp/`).
 
 Sibling skills: `kotlin-static-analysis`, `swift-static-analysis`, `kmp-ci-code-analysis`.
 
-## Goal
+## Repo layout
 
-One PR proves:
+```
+.github/
+├── actions/gradle-setup/action.yml   # reusable Java 17 + setup-gradle
+└── workflows/build.yml               # test → build-android → build-ios
+```
 
-- Kotlin modules compile and unit tests pass
-- Kotlin static analysis passes (detekt + ktlint + Android Lint)
-- SwiftLint passes when Swift files change
-- Optional: Xcode Analyze on schedule (slow)
+Target branch: **`develop`** (not `main`).
 
-## Moventiq module map
+## Composite action (official pattern)
+
+`.github/actions/gradle-setup/action.yml`:
+
+- `actions/setup-java@v4` — Java **17**, Temurin
+- `gradle/actions/setup-gradle@v5` — caching + consistent Gradle (replaces manual `actions/cache`)
+
+Do not duplicate Gradle cache config when using `setup-gradle`.
+
+## Workflow env
+
+```yaml
+env:
+  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096M -Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.caching=true"
+```
+
+Matches Kotlin docs: no daemon in CI, parallel + build cache enabled.
+
+## Jobs
+
+| Job | Runner | Needs | Command |
+|---|---|---|---|
+| `test` | `ubuntu-latest` | — | `:sharedLogic:testAndroidHostTest` `:sharedUI:testAndroidHostTest` |
+| `build-android` | `ubuntu-latest` | `test` | `:androidApp:assembleDebug` |
+| `build-ios` | `macos-latest` | `test` | `:sharedLogic:iosSimulatorArm64Test`, `xcodebuild build` |
+
+### Why not `jvmTest` / `allTests` on Ubuntu?
+
+Official Jetcaster sample uses `./gradlew jvmTest`. Moventiq has no root `jvmTest` task. `allTests` includes `iosSimulatorArm64Test`, which requires a Mac — so Linux runs **Android host tests only**; iOS Kotlin tests run in the `build-ios` job.
+
+### Moventiq module map
 
 | Path | Gradle / Xcode target |
 |---|---|
 | `sharedLogic/` | `:sharedLogic` |
 | `androidApp/` | `:androidApp` |
-| `iosApp/` | Xcode scheme `iosApp` (verify in `.xcodeproj` before hardcoding) |
-| `sharedUI/` | Deprecated — exclude from new CI jobs when removed |
+| `iosApp/` | scheme `iosApp`, project `iosApp/iosApp.xcodeproj` |
+| `sharedUI/` | deprecated — remove from CI when module is deleted |
 
-**Do not** reference `composeApp` — Moventiq uses `:androidApp`.
+**Do not** reference `composeApp`.
 
-## Suggested job split
+## Artifacts (official pattern)
 
-| Job | Trigger | Commands |
-|---|---|---|
-| `kotlin` | Every PR | See Kotlin job below |
-| `swiftlint` | PRs touching `iosApp/**/*.swift` | `swiftlint lint --strict` |
-| `analyze` | Nightly or `main`/`develop` schedule | `xcodebuild analyze` (optional) |
+- Test reports: `**/build/reports/tests/` → artifact `test-reports`
+- Android APK: `androidApp/build/outputs/apk/debug/*.apk` → `android-apk`
+- iOS app: `build/Build/Products/Debug-iphonesimulator/` → `iphonesimulator-app`
 
-## Kotlin job
+## Future: static analysis jobs
 
-```bash
-./gradlew \
-  :sharedLogic:testAndroidHostTest \
-  :androidApp:assembleDebug \
-  :androidApp:lintDebug \
-  detekt \
-  ktlintCheck
-```
-
-Add detekt/ktlint plugins first if not yet wired — see `kotlin-static-analysis` skill.
-
-### Gradle caching
-
-```yaml
-- uses: actions/cache@v4
-  with:
-    path: |
-      ~/.gradle/caches
-      ~/.gradle/wrapper
-    key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-```
-
-## SwiftLint job
-
-```yaml
-on:
-  pull_request:
-    paths:
-      - 'iosApp/**/*.swift'
-      - '.swiftlint.yml'
-
-steps:
-  - run: swiftlint lint --strict iosApp/
-```
-
-Add `.swiftlint.yml` at repo root if missing — see `swift-static-analysis` skill.
-
-## iOS build job (optional, M5+)
+Add when detekt/ktlint/SwiftLint are wired (see `kotlin-static-analysis` skill):
 
 ```bash
-xcodebuild build \
-  -project iosApp/iosApp.xcodeproj \
-  -scheme iosApp \
-  -destination 'platform=iOS Simulator,name=iPhone 16' \
-  CODE_SIGNING_ALLOWED=NO
+./gradlew detekt ktlintCheck :androidApp:lintDebug
+swiftlint lint --strict iosApp/
 ```
 
-Requires macOS runner. Cache DerivedData if runtime is high.
+Prefer a separate workflow or extra job — keep `build.yml` fast for PR gating.
+
+## iOS build notes
+
+- Xcode Run Script phase calls `:sharedLogic:embedAndSignAppleFrameworkForXcode` during `xcodebuild`
+- Use `CODE_SIGNING_ALLOWED=NO` for simulator builds (no secrets)
+- Verify scheme name in Xcode before changing workflow YAML
 
 ## Agent workflow
 
-1. Inspect existing `.github/workflows/` before adding files
-2. Reuse JDK version from `gradle/libs.versions.toml` / project config
-3. Do not add signing secrets unless user explicitly needs device tests
-4. Keep workflow files small; one workflow file per concern is fine
-5. Target branch: `develop`
+1. Inspect `.github/workflows/` before editing
+2. Reuse `./.github/actions/gradle-setup` in every Gradle job
+3. Do not add signing secrets unless user explicitly needs device/release builds
+4. Upload test reports with `if: always()` on the test job
 
-## Workflow file location
+## Local PR checklist
 
-```
-.github/workflows/
-  kotlin-ci.yml       # detekt, ktlint, tests, lint, assembleDebug
-  swiftlint.yml       # path-filtered
-  ios-analyze.yml     # optional nightly
-```
-
-## PR checklist (before merge)
-
-- [ ] `./gradlew :sharedLogic:testAndroidHostTest` green
-- [ ] `./gradlew :androidApp:assembleDebug` green
-- [ ] detekt + ktlint pass (or baseline documented)
-- [ ] SwiftLint pass if Swift changed
-- [ ] No secrets in workflow files
+- [ ] `./gradlew :sharedLogic:testAndroidHostTest :sharedUI:testAndroidHostTest`
+- [ ] `./gradlew :androidApp:assembleDebug`
+- [ ] On Mac: `./gradlew :sharedLogic:iosSimulatorArm64Test`
 
 ## Related skills
 
 - Unit tests: `moventiq-unit-tests`
-- UI tests (manual/CI emulator): `moventiq-ui-tests`
+- UI tests: `moventiq-ui-tests`
 - Review: `moventiq-code-review`
-- Keep PR green: `babysit` (personal skill)
