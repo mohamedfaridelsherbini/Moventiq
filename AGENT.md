@@ -104,12 +104,12 @@ Provide light/dark via a `MoventiqTheme(darkTheme) { }` wrapper exposing `Materi
 | `Component/LocationCard` | `LocationCard` (status pill, radius, count, last-trigger) |
 | `Component/LocationBanner` | `ActiveLocationCard` (live status, triggered preview) |
 | `Component/StatusBar` | system bar / scaffold inset (usually OS-provided) |
-| `Component/MoventiqSymbol` | brand mark (vector asset in `brand-assets/`) |
+| `Component/MoventiqSymbol` | brand mark (vector assets in `androidApp/src/main/res/`) |
 
 ### Screens (`sharedUI/.../ui/<feature>/`)
 `splash, onboarding, permission, firstLocationSetup, home, locations, locationDetail (tasks), createLocation, createTask, arrival, settings`. Each = a stateless `XScreen(state, onEvent)` + a `XViewModel` (in `sharedLogic` or a `sharedUI` viewmodel layer).
 
-> Brand assets (icons, splash, store art) are already generated in `brand-assets/` (SVG + Android vector drawables + iOS appiconset). Reuse them; don't regenerate.
+> Launcher icons and brand drawables live in `androidApp/src/main/res/` and the iOS asset catalog. The local `brand-assets/` export folder is gitignored.
 
 ---
 

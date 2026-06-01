@@ -60,7 +60,7 @@ Reference boards (not shipped): Navigation System, Settings States, Loading/Skel
 | `Component/OfflineBanner` | `OfflineBanner` | `OfflineBannerView` |
 | `Component/Dialog` | `MoventiqDialog` | `MoventiqDialog` |
 | `Component/SectionHeader` | `SectionHeader` | `SectionHeaderView` |
-| `Component/MoventiqSymbol` | brand mark from `brand-assets/` | same |
+| `Component/MoventiqSymbol` | brand mark (`androidApp` drawables / iOS assets) | same |
 
 Build components in `:androidApp/ui/components/` and `iosApp/iosApp/UI/Components/`.
 
