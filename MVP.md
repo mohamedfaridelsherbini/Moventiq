@@ -3,7 +3,7 @@
 > **The right task. At the right place.**
 > Moventiq is a location-aware productivity app. Users attach tasks to places; when they arrive, the relevant tasks surface automatically via geofencing + notifications.
 
-This document defines the **Minimum Viable Product** derived from the product brief and the finished design system (`pencil-new.pen`, tokens in `DESIGN.md`). It is the source of truth for *what* to build first. For *how* to build it, see `AGENT.md`.
+This document defines the **Minimum Viable Product** derived from the product brief and the finished design system (`Moventiq.pen`, tokens in `DESIGN.md`). It is the source of truth for *what* to build first. For *how* to build it, see `AGENT.md`.
 
 ---
 
@@ -56,7 +56,7 @@ If a user can save "Supermarket", add "Buy milk", drive there, and get the task 
 
 ## 4. Screen inventory (designed → MVP status)
 
-All screens exist in `pencil-new.pen` in **light + dark**. Status indicates MVP inclusion.
+All screens exist in `Moventiq.pen` in **light + dark**. Status indicates MVP inclusion.
 
 | # | Screen (in .pen) | Purpose | MVP |
 |---|---|---|---|
@@ -198,4 +198,4 @@ Settings persisted: theme (system/light/dark), arrival/reminder/sound toggles, q
 - Light/dark both correct on every shipped screen.
 - Permission denial paths are non-blocking and recoverable.
 - Locations show live health (active/paused, last-trigger, counts).
-- All shipped screens match the `pencil-new.pen` design within tokens.
+- All shipped screens match the `Moventiq.pen` design within tokens.

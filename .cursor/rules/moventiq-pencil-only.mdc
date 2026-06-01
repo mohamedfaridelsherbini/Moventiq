@@ -1,0 +1,17 @@
+---
+description: Moventiq.pen is encrypted — use Pencil MCP only, never text tools
+alwaysApply: true
+---
+
+# Pencil design file access
+
+**`Moventiq.pen`** (repo root) is **encrypted**. Do not use Read, Grep, or text editors on any `.pen` file.
+
+Use **Pencil MCP** tools only:
+
+- `get_editor_state` (with schema) — discover file structure
+- `batch_get` — read screen/component nodes
+- `get_screenshot` — visual reference
+- `batch_design` — create or edit design nodes
+
+Visual spec: rendered screens in `Moventiq.pen`. Numeric spec: [DESIGN.md](../../DESIGN.md).

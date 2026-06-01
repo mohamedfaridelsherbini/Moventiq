@@ -2,6 +2,8 @@
 
 Guidance for AI agents and developers working in this repository. Read this with [MVP.md](MVP.md) (what to build), [ARCHITECTURE.md](ARCHITECTURE.md) (how modules/layers/DB are structured), and [DESIGN.md](DESIGN.md) (visual source of truth).
 
+**Agent skills & rules:** `.cursor/skills/` (workflows) and `.cursor/rules/` (always-on guardrails).
+
 ---
 
 ## 1. What this is
@@ -20,7 +22,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for the full module diagram, package layo
 
 | Module | Path | Responsibility |
 |---|---|---|
-| `:androidApp` | `androidApp/` | Jetpack Compose UI, Navigation, Hilt, Android geofencing/notifications |
+| `:androidApp` | `androidApp/` | Jetpack Compose UI, Navigation, Koin, Android geofencing/notifications |
 | `:iosApp` | `iosApp/` | SwiftUI UI, NavigationStack, CoreLocation, links `SharedLogic.framework` |
 | `:sharedLogic` | `sharedLogic/` | Domain, use cases, **Room 3** DB, repositories, `expect`/`actual` platform APIs |
 | `:sharedUI` | `sharedUI/` | *(deprecated — remove after native UI migration)* |
@@ -40,6 +42,7 @@ UI never talks to Room DAOs directly — ViewModels call use cases in `sharedLog
 ## 3. Tech stack (from `gradle/libs.versions.toml`)
 
 - Kotlin **2.3.21**, Compose Multiplatform **1.11.0**, Material3 **1.11.0-alpha07**
+- **Koin 4.0.3** — DI in `:sharedLogic` (`koin-core`) and `:androidApp` (`koin-android`, `koin-compose-viewmodel`)
 - AGP **9.0.1**, minSdk **24**, compile/target **36**
 - Lifecycle ViewModel/runtime Compose, `compose.components.resources`
 - Add new deps to the **version catalog** (`gradle/libs.versions.toml`), never hardcode versions in module `build.gradle.kts`.
@@ -143,7 +146,7 @@ On ENTER → mark `lastTriggeredAt`, surface triggered (incomplete, linked) task
 
 ## 8. Working with the design file
 
-- `pencil-new.pen` is the **encrypted Pencil design source**. Do **not** open/edit it with text/Read tools — use the Pencil MCP tools only.
+- `Moventiq.pen` is the **encrypted Pencil design source**. Do **not** open/edit it with text/Read tools — use the Pencil MCP tools only.
 - Treat the rendered screens as the visual spec; treat `DESIGN.md` tokens as the numeric spec. If they ever conflict, `DESIGN.md` wins for values, the `.pen` wins for layout/composition.
 - Maps in the design are high-fidelity *mockups*. In code, drop a real `MapView` / Google Maps SDK (Android) or `MKMapView` (iOS) and bind the radius control to the geofence circle.
 

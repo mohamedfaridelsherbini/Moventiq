@@ -1,0 +1,15 @@
+---
+description: Use MoventiqTheme tokens — no hardcoded colors or spacing in UI
+alwaysApply: true
+---
+
+# Design tokens only
+
+Never hardcode hex colors, dp spacing, or font sizes in UI code.
+
+- Read token values from [DESIGN.md](../../DESIGN.md); implement via `MoventiqTheme` (Compose) or `MoventiqTheme` (SwiftUI)
+- Use `MaterialTheme` + `LocalMoventiqColors` / `LocalMoventiqSpacing` on Android
+- Ship **light and dark** for every screen and component
+- Reuse assets from `brand-assets/` — do not regenerate icons
+
+If `Moventiq.pen` layout and `DESIGN.md` values conflict: **layout** from design file, **numeric tokens** from DESIGN.md.

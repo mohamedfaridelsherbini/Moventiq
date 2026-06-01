@@ -2,7 +2,7 @@
 
 > **Local-only MVP** · Android Jetpack Compose · iOS SwiftUI · Room 3 (KMP) · shared Kotlin business logic
 
-This document defines the target architecture for implementation. Visual specs live in `pencil-new.pen` / `DESIGN.md`. Product scope lives in `MVP.md`.
+This document defines the target architecture for implementation. Visual specs live in `Moventiq.pen` / `DESIGN.md`. Product scope lives in `MVP.md`.
 
 ---
 
@@ -27,7 +27,7 @@ This document defines the target architecture for implementation. Visual specs l
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                        :androidApp                              │
-│  Compose UI · Navigation · Android ViewModels · Hilt · GMS    │
+│  Compose UI · Navigation · Android ViewModels · Koin · GMS    │
 └────────────────────────────┬────────────────────────────────────┘
                              │ depends on
 ┌────────────────────────────▼────────────────────────────────────┐
@@ -103,7 +103,7 @@ com.mohamedfaridelsherbini.moventiq/
 │   NotificationScheduler.kt   // expect
 │   PermissionState.kt         // expect (optional)
 └── di/
-    SharedLogicModule.kt       // Koin module or factory for KMP
+    SharedLogicModule.kt       // Koin module (commonMain + platform actuals)
 ```
 
 ### androidMain additions
@@ -302,7 +302,7 @@ Geofences are **not** stored in Room — they are derived from active `LocationE
 com.mohamedfaridelsherbini.moventiq/
 ├── MoventiqApplication.kt
 ├── MainActivity.kt
-├── di/                          Hilt modules
+├── di/                          Koin modules (app + sharedLogic imports)
 ├── navigation/
 │   MoventiqNavHost.kt
 │   Routes.kt
@@ -333,7 +333,7 @@ com.mohamedfaridelsherbini.moventiq/
 | UI | Compose BOM / Material 3 |
 | Navigation | Navigation Compose (`NavHost` + typed routes) |
 | ViewModel | `androidx.lifecycle:lifecycle-viewmodel-compose` |
-| DI | Hilt (Android) + Koin or manual factory bridging `sharedLogic` |
+| DI | **Koin** — modules in `:sharedLogic` (data/domain) + `:androidApp` (ViewModels) |
 | Maps | Google Maps Compose (Create/Edit Location) |
 | Geofencing | Play Services Location |
 | Permissions | Accompanist Permissions or `ActivityResultContracts` |
@@ -344,14 +344,13 @@ com.mohamedfaridelsherbini.moventiq/
 ```kotlin
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel(),
+    viewModel: HomeViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     HomeContent(state = state, onEvent = viewModel::onEvent)
 }
 
-@HiltViewModel
-class HomeViewModel @Inject constructor(
+class HomeViewModel(
     private val observeLocations: ObserveActiveLocations,
     private val observeTasks: ObserveAllActiveTasks,
     private val geofenceEvents: GeofenceManager,
@@ -360,6 +359,11 @@ class HomeViewModel @Inject constructor(
     val state: StateFlow<HomeUiState> = _state.asStateFlow()
 
     fun onEvent(event: HomeEvent) { /* … */ }
+}
+
+// androidApp/di/AppModule.kt
+val appModule = module {
+    viewModel { HomeViewModel(get(), get(), get()) }
 }
 ```
 
@@ -455,7 +459,7 @@ Swift ViewModels call Kotlin **use cases** exported through `SharedLogic`. Use [
 
 ### Tab structure (matches design)
 
-Same five destinations as Android — implement `MoventiqBottomBar` to match `Component/TabBar` in `pencil-new.pen`.
+Same five destinations as Android — implement `MoventiqBottomBar` to match `Component/TabBar` in `Moventiq.pen`.
 
 ---
 
@@ -522,21 +526,39 @@ flowchart LR
 
 ---
 
-## 10. DI bootstrap
+## 10. DI bootstrap (Koin)
 
-### Android (Hilt)
+Gradle deps (see `gradle/libs.versions.toml`):
+
+- `:sharedLogic` — `koin-core` in `commonMain`; `koin-test` in `commonTest`
+- `:androidApp` — `koin-android`, `koin-compose`, `koin-compose-viewmodel`; `koin-test-junit4` in `androidTest`
+
+### sharedLogic (commonMain)
 
 ```kotlin
-@HiltAndroidApp
-class MoventiqApplication : Application() {
-    lateinit var sharedLogic: SharedLogicComponent
+// sharedLogic/di/SharedLogicModule.kt
+val sharedLogicModule = module {
+    single { createDatabase() }
+    single { get<MoventiqDatabase>().locationDao() }
+    single { get<MoventiqDatabase>().taskDao() }
+    single { get<MoventiqDatabase>().settingsDao() }
+    single<LocationRepository> { LocationRepositoryImpl(get(), get()) }
+    factory { CreateTask(get(), get()) }
+    // … repositories, use cases, GeofenceManager via expect/actual
 }
+```
 
-@Module @InstallIn(SingletonComponent::class)
-object SharedLogicModule {
-    @Provides @Singleton
-    fun provideDatabase(@ApplicationContext ctx: Context): MoventiqDatabase =
-        Room.databaseBuilder(ctx, MoventiqDatabase::class.java, "moventiq.db").build()
+### Android
+
+```kotlin
+class MoventiqApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        startKoin {
+            androidContext(this@MoventiqApplication)
+            modules(sharedLogicModule, appModule)
+        }
+    }
 }
 ```
 
@@ -545,17 +567,17 @@ object SharedLogicModule {
 ```swift
 @main
 struct MoventiqApp: App {
-    let deps = AppDependencies()  // calls SharedLogicFactory.shared.createDatabase()
+    init() {
+        KoinKt.doInitKoin()  // or SharedLogicFactory.startKoin() wrapper
+    }
 
     var body: some Scene {
-        WindowGroup {
-            RootView(deps: deps)
-        }
+        WindowGroup { RootView() }
     }
 }
 ```
 
-Expose a `SharedLogicFactory` object from Kotlin (`sharedLogic/di/`) that iOS and Android both use to construct repositories and use cases.
+Expose `initKoin()` from Kotlin (`sharedLogic/di/`) so iOS and Android share the same Koin graph for repositories and use cases. Swift ViewModels receive use cases via constructor injection from a small `AppDependencies` wrapper.
 
 ---
 
@@ -571,7 +593,7 @@ Expose a `SharedLogicFactory` object from Kotlin (`sharedLogic/di/`) that iOS an
 | `Component/LocationCard` | `LocationCard()` | `LocationCardView` |
 | Light / dark | `MoventiqTheme(darkTheme)` | `@Environment(\.colorScheme)` + override |
 
-Each screen in `pencil-new.pen` maps 1:1 to a Compose `@Composable` and a SwiftUI `View`.
+Each screen in `Moventiq.pen` maps 1:1 to a Compose `@Composable` and a SwiftUI `View`.
 
 ---
 

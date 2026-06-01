@@ -1,0 +1,15 @@
+---
+description: Moventiq MVP is local-only — no profile, auth, or account UI
+alwaysApply: true
+---
+
+# No profile / auth UI
+
+Moventiq MVP is **device-local only**. Never add:
+
+- Profile page, avatar, display name, email, PRO badge
+- Sign-in, sign-up, OAuth, or any authentication flow
+- Cloud sync, account settings, or third-party integrations (Calendar, Maps, etc.)
+- "Delete account" — use **Clear all data** in Settings → Privacy instead
+
+The Settings tab is **app preferences**, not a user profile. All data lives in Room on device.
