@@ -47,7 +47,7 @@ Cross-ref: `moventiq-ui-architecture`, `moventiq-context`, `.cursor/rules/`.
 
 - Preview only in one theme
 - Missing `PreviewParameterProvider` for multi-state component
-- Test names not descriptive
+- Test name not `{subject}_{outcome}_{condition}` snake_case — see `moventiq-unit-tests` / `moventiq-ui-tests`
 - Missing `testTag` on list items used in UI tests
 
 ## Architecture quick check
