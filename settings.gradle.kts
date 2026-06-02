@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage") // dependencyResolutionManagement DSL is @Incubating in Gradle 9.x.
+
 rootProject.name = "Moventiq"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 

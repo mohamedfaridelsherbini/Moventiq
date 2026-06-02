@@ -7,3 +7,13 @@ plugins {
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
 }
+
+val moventiqCompileSdk = providers.gradleProperty("android.compileSdk").get().toInt()
+val moventiqMinSdk = providers.gradleProperty("android.minSdk").get().toInt()
+val moventiqTargetSdk = providers.gradleProperty("android.targetSdk").get().toInt()
+check(moventiqTargetSdk <= moventiqCompileSdk) {
+    "targetSdk ($moventiqTargetSdk) must not exceed compileSdk ($moventiqCompileSdk)"
+}
+check(moventiqMinSdk <= moventiqTargetSdk) {
+    "minSdk ($moventiqMinSdk) must not exceed targetSdk ($moventiqTargetSdk)"
+}

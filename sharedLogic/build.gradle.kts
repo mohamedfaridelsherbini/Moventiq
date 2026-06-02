@@ -18,8 +18,8 @@ kotlin {
     
     androidLibrary {
        namespace = "com.mohamedfaridelsherbini.moventiq.sharedLogic"
-       compileSdk = libs.versions.android.compileSdk.get().toInt()
-       minSdk = libs.versions.android.minSdk.get().toInt()
+       compileSdk = providers.gradleProperty("android.compileSdk").get().toInt()
+       minSdk = providers.gradleProperty("android.minSdk").get().toInt()
     
        compilerOptions {
            jvmTarget = JvmTarget.JVM_11

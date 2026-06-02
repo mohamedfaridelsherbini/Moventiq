@@ -52,13 +52,12 @@ dependencies {
 
 android {
     namespace = "com.mohamedfaridelsherbini.moventiq"
-    val compileSdkVersion = libs.versions.android.compileSdk.get().toInt()
-    compileSdk = compileSdkVersion
+    compileSdk = providers.gradleProperty("android.compileSdk").get().toInt()
 
     defaultConfig {
         applicationId = "com.mohamedfaridelsherbini.moventiq"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = compileSdkVersion
+        minSdk = providers.gradleProperty("android.minSdk").get().toInt()
+        targetSdk = providers.gradleProperty("android.targetSdk").get().toInt()
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
