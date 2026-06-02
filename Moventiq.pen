@@ -23,12 +23,75 @@
           "alignItems": "center",
           "children": [
             {
+              "type": "frame",
               "id": "SwrnX",
-              "type": "ref",
-              "ref": "D3aDa",
               "name": "Mark",
               "width": 56,
-              "height": 56
+              "height": 56,
+              "fill": "#00000000",
+              "layout": "none",
+              "children": [
+                {
+                  "type": "path",
+                  "id": "wmFJW",
+                  "x": 0,
+                  "y": 0,
+                  "name": "M-Stroke",
+                  "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                  "viewBox": [
+                    0,
+                    0,
+                    100,
+                    100
+                  ],
+                  "fill": "#00000000",
+                  "width": 100,
+                  "height": 100,
+                  "stroke": "$brand-indigo",
+                  "strokeWidth": 16,
+                  "strokeLinejoin": "round",
+                  "strokeLinecap": "round"
+                },
+                {
+                  "type": "path",
+                  "id": "DLWKS",
+                  "x": 33,
+                  "y": 12,
+                  "name": "Location-Pin",
+                  "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                  "fillRule": "evenodd",
+                  "viewBox": [
+                    0,
+                    0,
+                    24,
+                    24
+                  ],
+                  "fill": "#4f46e5ff",
+                  "width": 33,
+                  "height": 30
+                },
+                {
+                  "type": "path",
+                  "id": "E8imk",
+                  "x": 34,
+                  "y": 64,
+                  "name": "Check",
+                  "geometry": "M4 13l8 8 16-17",
+                  "viewBox": [
+                    0,
+                    0,
+                    32,
+                    24
+                  ],
+                  "fill": "#00000000",
+                  "width": 32,
+                  "height": 24,
+                  "stroke": "#4f46e5ff",
+                  "strokeWidth": 8,
+                  "strokeLinejoin": "round",
+                  "strokeLinecap": "round"
+                }
+              ]
             },
             {
               "type": "frame",
@@ -141,12 +204,75 @@
                       "alignItems": "center",
                       "children": [
                         {
+                          "type": "frame",
                           "id": "IA1ow",
-                          "type": "ref",
-                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 84,
-                          "height": 84
+                          "height": 84,
+                          "fill": "#00000000",
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "pOltE",
+                              "x": 0,
+                              "y": 0,
+                              "name": "M-Stroke",
+                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "#00000000",
+                              "width": 100,
+                              "height": 100,
+                              "stroke": "$brand-indigo",
+                              "strokeWidth": 16,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "eYmeg",
+                              "x": 33,
+                              "y": 12,
+                              "name": "Location-Pin",
+                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                              "fillRule": "evenodd",
+                              "viewBox": [
+                                0,
+                                0,
+                                24,
+                                24
+                              ],
+                              "fill": "#4f46e5ff",
+                              "width": 33,
+                              "height": 30
+                            },
+                            {
+                              "type": "path",
+                              "id": "O5vs7",
+                              "x": 34,
+                              "y": 64,
+                              "name": "Check",
+                              "geometry": "M4 13l8 8 16-17",
+                              "viewBox": [
+                                0,
+                                0,
+                                32,
+                                24
+                              ],
+                              "fill": "#00000000",
+                              "width": 32,
+                              "height": 24,
+                              "stroke": "#4f46e5ff",
+                              "strokeWidth": 8,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
+                            }
+                          ]
                         },
                         {
                           "type": "text",
@@ -218,12 +344,75 @@
                       "alignItems": "center",
                       "children": [
                         {
+                          "type": "frame",
                           "id": "uvFGy",
-                          "type": "ref",
-                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 96,
-                          "height": 96
+                          "height": 96,
+                          "fill": "#00000000",
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "idogg",
+                              "x": 0,
+                              "y": 0,
+                              "name": "M-Stroke",
+                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "#00000000",
+                              "width": 100,
+                              "height": 100,
+                              "stroke": "$brand-indigo",
+                              "strokeWidth": 16,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "m13usQ",
+                              "x": 33,
+                              "y": 12,
+                              "name": "Location-Pin",
+                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                              "fillRule": "evenodd",
+                              "viewBox": [
+                                0,
+                                0,
+                                24,
+                                24
+                              ],
+                              "fill": "#4f46e5ff",
+                              "width": 33,
+                              "height": 30
+                            },
+                            {
+                              "type": "path",
+                              "id": "GZuqA",
+                              "x": 34,
+                              "y": 64,
+                              "name": "Check",
+                              "geometry": "M4 13l8 8 16-17",
+                              "viewBox": [
+                                0,
+                                0,
+                                32,
+                                24
+                              ],
+                              "fill": "#00000000",
+                              "width": 32,
+                              "height": 24,
+                              "stroke": "#4f46e5ff",
+                              "strokeWidth": 8,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
+                            }
+                          ]
                         },
                         {
                           "type": "text",
@@ -325,23 +514,75 @@
                       "alignItems": "center",
                       "children": [
                         {
+                          "type": "frame",
                           "id": "znMn5",
-                          "type": "ref",
-                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 100,
                           "height": 100,
-                          "descendants": {
-                            "L0A6p": {
-                              "stroke": "#FFFFFF"
+                          "fill": "#00000000",
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "gm5hi",
+                              "x": 0,
+                              "y": 0,
+                              "name": "M-Stroke",
+                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "#00000000",
+                              "width": 100,
+                              "height": 100,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 16,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
                             },
-                            "XpLNp": {
-                              "fill": "#FFFFFF"
+                            {
+                              "type": "path",
+                              "id": "gXVKm",
+                              "x": 33,
+                              "y": 12,
+                              "name": "Location-Pin",
+                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                              "fillRule": "evenodd",
+                              "viewBox": [
+                                0,
+                                0,
+                                24,
+                                24
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 33,
+                              "height": 30
                             },
-                            "JMO33": {
-                              "stroke": "#FFFFFF"
+                            {
+                              "type": "path",
+                              "id": "KWoxe",
+                              "x": 34,
+                              "y": 64,
+                              "name": "Check",
+                              "geometry": "M4 13l8 8 16-17",
+                              "viewBox": [
+                                0,
+                                0,
+                                32,
+                                24
+                              ],
+                              "fill": "#00000000",
+                              "width": 32,
+                              "height": 24,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 8,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
                             }
-                          }
+                          ]
                         }
                       ]
                     },
@@ -401,23 +642,75 @@
                       "alignItems": "center",
                       "children": [
                         {
+                          "type": "frame",
                           "id": "jjwLv",
-                          "type": "ref",
-                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 96,
                           "height": 96,
-                          "descendants": {
-                            "L0A6p": {
-                              "stroke": "#FFFFFF"
+                          "fill": "#00000000",
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "v94E6d",
+                              "x": 0,
+                              "y": 0,
+                              "name": "M-Stroke",
+                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "#00000000",
+                              "width": 100,
+                              "height": 100,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 16,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
                             },
-                            "XpLNp": {
-                              "fill": "#FFFFFF"
+                            {
+                              "type": "path",
+                              "id": "u6JXkP",
+                              "x": 33,
+                              "y": 12,
+                              "name": "Location-Pin",
+                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                              "fillRule": "evenodd",
+                              "viewBox": [
+                                0,
+                                0,
+                                24,
+                                24
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 33,
+                              "height": 30
                             },
-                            "JMO33": {
-                              "stroke": "#FFFFFF"
+                            {
+                              "type": "path",
+                              "id": "mCtAA",
+                              "x": 34,
+                              "y": 64,
+                              "name": "Check",
+                              "geometry": "M4 13l8 8 16-17",
+                              "viewBox": [
+                                0,
+                                0,
+                                32,
+                                24
+                              ],
+                              "fill": "#00000000",
+                              "width": 32,
+                              "height": 24,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 8,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
                             }
-                          }
+                          ]
                         }
                       ]
                     },
@@ -477,23 +770,75 @@
                       "alignItems": "center",
                       "children": [
                         {
+                          "type": "frame",
                           "id": "bsZQ2",
-                          "type": "ref",
-                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 100,
                           "height": 100,
-                          "descendants": {
-                            "L0A6p": {
-                              "stroke": "#FFFFFF"
+                          "fill": "#00000000",
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "yW5by",
+                              "x": 0,
+                              "y": 0,
+                              "name": "M-Stroke",
+                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "#00000000",
+                              "width": 100,
+                              "height": 100,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 16,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
                             },
-                            "XpLNp": {
-                              "fill": "#FFFFFF"
+                            {
+                              "type": "path",
+                              "id": "PVS4A",
+                              "x": 33,
+                              "y": 12,
+                              "name": "Location-Pin",
+                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                              "fillRule": "evenodd",
+                              "viewBox": [
+                                0,
+                                0,
+                                24,
+                                24
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 33,
+                              "height": 30
                             },
-                            "JMO33": {
-                              "stroke": "#FFFFFF"
+                            {
+                              "type": "path",
+                              "id": "ozZAY",
+                              "x": 34,
+                              "y": 64,
+                              "name": "Check",
+                              "geometry": "M4 13l8 8 16-17",
+                              "viewBox": [
+                                0,
+                                0,
+                                32,
+                                24
+                              ],
+                              "fill": "#00000000",
+                              "width": 32,
+                              "height": 24,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 8,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
                             }
-                          }
+                          ]
                         }
                       ]
                     },
@@ -553,23 +898,75 @@
                       "alignItems": "center",
                       "children": [
                         {
+                          "type": "frame",
                           "id": "y96jnZ",
-                          "type": "ref",
-                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 96,
                           "height": 96,
-                          "descendants": {
-                            "L0A6p": {
-                              "stroke": "#FFFFFF"
+                          "fill": "#00000000",
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "T1zqzC",
+                              "x": 0,
+                              "y": 0,
+                              "name": "M-Stroke",
+                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "#00000000",
+                              "width": 100,
+                              "height": 100,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 16,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
                             },
-                            "XpLNp": {
-                              "fill": "#FFFFFF"
+                            {
+                              "type": "path",
+                              "id": "Y81WEU",
+                              "x": 33,
+                              "y": 12,
+                              "name": "Location-Pin",
+                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                              "fillRule": "evenodd",
+                              "viewBox": [
+                                0,
+                                0,
+                                24,
+                                24
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 33,
+                              "height": 30
                             },
-                            "JMO33": {
-                              "stroke": "#FFFFFF"
+                            {
+                              "type": "path",
+                              "id": "ZsVqi",
+                              "x": 34,
+                              "y": 64,
+                              "name": "Check",
+                              "geometry": "M4 13l8 8 16-17",
+                              "viewBox": [
+                                0,
+                                0,
+                                32,
+                                24
+                              ],
+                              "fill": "#00000000",
+                              "width": 32,
+                              "height": 24,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 8,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
                             }
-                          }
+                          ]
                         }
                       ]
                     },
@@ -638,23 +1035,75 @@
                           "alignItems": "center",
                           "children": [
                             {
+                              "type": "frame",
                               "id": "XcBnM",
-                              "type": "ref",
-                              "ref": "D3aDa",
                               "name": "Mark",
                               "width": 40,
                               "height": 40,
-                              "descendants": {
-                                "L0A6p": {
-                                  "stroke": "#FFFFFF"
+                              "fill": "#00000000",
+                              "layout": "none",
+                              "children": [
+                                {
+                                  "type": "path",
+                                  "id": "Q5efB",
+                                  "x": 0,
+                                  "y": 0,
+                                  "name": "M-Stroke",
+                                  "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                                  "viewBox": [
+                                    0,
+                                    0,
+                                    100,
+                                    100
+                                  ],
+                                  "fill": "#00000000",
+                                  "width": 100,
+                                  "height": 100,
+                                  "stroke": "#FFFFFF",
+                                  "strokeWidth": 16,
+                                  "strokeLinejoin": "round",
+                                  "strokeLinecap": "round"
                                 },
-                                "XpLNp": {
-                                  "fill": "#FFFFFF"
+                                {
+                                  "type": "path",
+                                  "id": "Bssap",
+                                  "x": 33,
+                                  "y": 12,
+                                  "name": "Location-Pin",
+                                  "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                                  "fillRule": "evenodd",
+                                  "viewBox": [
+                                    0,
+                                    0,
+                                    24,
+                                    24
+                                  ],
+                                  "fill": "#FFFFFF",
+                                  "width": 33,
+                                  "height": 30
                                 },
-                                "JMO33": {
-                                  "stroke": "#FFFFFF"
+                                {
+                                  "type": "path",
+                                  "id": "q2l0l",
+                                  "x": 34,
+                                  "y": 64,
+                                  "name": "Check",
+                                  "geometry": "M4 13l8 8 16-17",
+                                  "viewBox": [
+                                    0,
+                                    0,
+                                    32,
+                                    24
+                                  ],
+                                  "fill": "#00000000",
+                                  "width": 32,
+                                  "height": 24,
+                                  "stroke": "#FFFFFF",
+                                  "strokeWidth": 8,
+                                  "strokeLinejoin": "round",
+                                  "strokeLinecap": "round"
                                 }
-                              }
+                              ]
                             }
                           ]
                         },
@@ -694,23 +1143,75 @@
                           "alignItems": "center",
                           "children": [
                             {
+                              "type": "frame",
                               "id": "ua25p",
-                              "type": "ref",
-                              "ref": "D3aDa",
                               "name": "Mark",
                               "width": 21,
                               "height": 21,
-                              "descendants": {
-                                "L0A6p": {
-                                  "stroke": "#FFFFFF"
+                              "fill": "#00000000",
+                              "layout": "none",
+                              "children": [
+                                {
+                                  "type": "path",
+                                  "id": "lyp8p",
+                                  "x": 0,
+                                  "y": 0,
+                                  "name": "M-Stroke",
+                                  "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                                  "viewBox": [
+                                    0,
+                                    0,
+                                    100,
+                                    100
+                                  ],
+                                  "fill": "#00000000",
+                                  "width": 100,
+                                  "height": 100,
+                                  "stroke": "#FFFFFF",
+                                  "strokeWidth": 16,
+                                  "strokeLinejoin": "round",
+                                  "strokeLinecap": "round"
                                 },
-                                "XpLNp": {
-                                  "fill": "#FFFFFF"
+                                {
+                                  "type": "path",
+                                  "id": "iYGor",
+                                  "x": 33,
+                                  "y": 12,
+                                  "name": "Location-Pin",
+                                  "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                                  "fillRule": "evenodd",
+                                  "viewBox": [
+                                    0,
+                                    0,
+                                    24,
+                                    24
+                                  ],
+                                  "fill": "#FFFFFF",
+                                  "width": 33,
+                                  "height": 30
                                 },
-                                "JMO33": {
-                                  "stroke": "#FFFFFF"
+                                {
+                                  "type": "path",
+                                  "id": "dWDQI",
+                                  "x": 34,
+                                  "y": 64,
+                                  "name": "Check",
+                                  "geometry": "M4 13l8 8 16-17",
+                                  "viewBox": [
+                                    0,
+                                    0,
+                                    32,
+                                    24
+                                  ],
+                                  "fill": "#00000000",
+                                  "width": 32,
+                                  "height": 24,
+                                  "stroke": "#FFFFFF",
+                                  "strokeWidth": 8,
+                                  "strokeLinejoin": "round",
+                                  "strokeLinecap": "round"
                                 }
-                              }
+                              ]
                             }
                           ]
                         },
@@ -750,23 +1251,75 @@
                           "alignItems": "center",
                           "children": [
                             {
+                              "type": "frame",
                               "id": "ePNvi",
-                              "type": "ref",
-                              "ref": "D3aDa",
                               "name": "Mark",
                               "width": 11,
                               "height": 11,
-                              "descendants": {
-                                "L0A6p": {
-                                  "stroke": "#FFFFFF"
+                              "fill": "#00000000",
+                              "layout": "none",
+                              "children": [
+                                {
+                                  "type": "path",
+                                  "id": "t2ZPod",
+                                  "x": 0,
+                                  "y": 0,
+                                  "name": "M-Stroke",
+                                  "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                                  "viewBox": [
+                                    0,
+                                    0,
+                                    100,
+                                    100
+                                  ],
+                                  "fill": "#00000000",
+                                  "width": 100,
+                                  "height": 100,
+                                  "stroke": "#FFFFFF",
+                                  "strokeWidth": 16,
+                                  "strokeLinejoin": "round",
+                                  "strokeLinecap": "round"
                                 },
-                                "XpLNp": {
-                                  "fill": "#FFFFFF"
+                                {
+                                  "type": "path",
+                                  "id": "gzj4Z",
+                                  "x": 33,
+                                  "y": 12,
+                                  "name": "Location-Pin",
+                                  "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                                  "fillRule": "evenodd",
+                                  "viewBox": [
+                                    0,
+                                    0,
+                                    24,
+                                    24
+                                  ],
+                                  "fill": "#FFFFFF",
+                                  "width": 33,
+                                  "height": 30
                                 },
-                                "JMO33": {
-                                  "stroke": "#FFFFFF"
+                                {
+                                  "type": "path",
+                                  "id": "G1Ktn",
+                                  "x": 34,
+                                  "y": 64,
+                                  "name": "Check",
+                                  "geometry": "M4 13l8 8 16-17",
+                                  "viewBox": [
+                                    0,
+                                    0,
+                                    32,
+                                    24
+                                  ],
+                                  "fill": "#00000000",
+                                  "width": 32,
+                                  "height": 24,
+                                  "stroke": "#FFFFFF",
+                                  "strokeWidth": 8,
+                                  "strokeLinejoin": "round",
+                                  "strokeLinecap": "round"
                                 }
-                              }
+                              ]
                             }
                           ]
                         }
@@ -859,12 +1412,75 @@
                       "alignItems": "center",
                       "children": [
                         {
+                          "type": "frame",
                           "id": "V1kb7S",
-                          "type": "ref",
-                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 60,
-                          "height": 60
+                          "height": 60,
+                          "fill": "#00000000",
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "p4cKh",
+                              "x": 0,
+                              "y": 0,
+                              "name": "M-Stroke",
+                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "#00000000",
+                              "width": 100,
+                              "height": 100,
+                              "stroke": "$brand-indigo",
+                              "strokeWidth": 16,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "mBYMj",
+                              "x": 33,
+                              "y": 12,
+                              "name": "Location-Pin",
+                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                              "fillRule": "evenodd",
+                              "viewBox": [
+                                0,
+                                0,
+                                24,
+                                24
+                              ],
+                              "fill": "#4f46e5ff",
+                              "width": 33,
+                              "height": 30
+                            },
+                            {
+                              "type": "path",
+                              "id": "Wgubv",
+                              "x": 34,
+                              "y": 64,
+                              "name": "Check",
+                              "geometry": "M4 13l8 8 16-17",
+                              "viewBox": [
+                                0,
+                                0,
+                                32,
+                                24
+                              ],
+                              "fill": "#00000000",
+                              "width": 32,
+                              "height": 24,
+                              "stroke": "#4f46e5ff",
+                              "strokeWidth": 8,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
+                            }
+                          ]
                         },
                         {
                           "type": "text",
@@ -927,23 +1543,75 @@
                       "alignItems": "center",
                       "children": [
                         {
+                          "type": "frame",
                           "id": "VRKYn",
-                          "type": "ref",
-                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 60,
                           "height": 60,
-                          "descendants": {
-                            "L0A6p": {
-                              "stroke": "#818CF8"
+                          "fill": "#00000000",
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "jPL6E",
+                              "x": 0,
+                              "y": 0,
+                              "name": "M-Stroke",
+                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "#00000000",
+                              "width": 100,
+                              "height": 100,
+                              "stroke": "#818CF8",
+                              "strokeWidth": 16,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
                             },
-                            "XpLNp": {
-                              "fill": "#22D3EE"
+                            {
+                              "type": "path",
+                              "id": "shNU6",
+                              "x": 33,
+                              "y": 12,
+                              "name": "Location-Pin",
+                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                              "fillRule": "evenodd",
+                              "viewBox": [
+                                0,
+                                0,
+                                24,
+                                24
+                              ],
+                              "fill": "#22D3EE",
+                              "width": 33,
+                              "height": 30
                             },
-                            "JMO33": {
-                              "stroke": "#22D3EE"
+                            {
+                              "type": "path",
+                              "id": "aCLQs",
+                              "x": 34,
+                              "y": 64,
+                              "name": "Check",
+                              "geometry": "M4 13l8 8 16-17",
+                              "viewBox": [
+                                0,
+                                0,
+                                32,
+                                24
+                              ],
+                              "fill": "#00000000",
+                              "width": 32,
+                              "height": 24,
+                              "stroke": "#22D3EE",
+                              "strokeWidth": 8,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
                             }
-                          }
+                          ]
                         },
                         {
                           "type": "text",
@@ -1005,23 +1673,75 @@
                       "alignItems": "center",
                       "children": [
                         {
+                          "type": "frame",
                           "id": "VU4d7",
-                          "type": "ref",
-                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 60,
                           "height": 60,
-                          "descendants": {
-                            "L0A6p": {
-                              "stroke": "#0F172A"
+                          "fill": "#00000000",
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "J2Was3",
+                              "x": 0,
+                              "y": 0,
+                              "name": "M-Stroke",
+                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "#00000000",
+                              "width": 100,
+                              "height": 100,
+                              "stroke": "#0F172A",
+                              "strokeWidth": 16,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
                             },
-                            "XpLNp": {
-                              "fill": "#0F172A"
+                            {
+                              "type": "path",
+                              "id": "mWvgM",
+                              "x": 33,
+                              "y": 12,
+                              "name": "Location-Pin",
+                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                              "fillRule": "evenodd",
+                              "viewBox": [
+                                0,
+                                0,
+                                24,
+                                24
+                              ],
+                              "fill": "#0F172A",
+                              "width": 33,
+                              "height": 30
                             },
-                            "JMO33": {
-                              "stroke": "#0F172A"
+                            {
+                              "type": "path",
+                              "id": "N2J2J",
+                              "x": 34,
+                              "y": 64,
+                              "name": "Check",
+                              "geometry": "M4 13l8 8 16-17",
+                              "viewBox": [
+                                0,
+                                0,
+                                32,
+                                24
+                              ],
+                              "fill": "#00000000",
+                              "width": 32,
+                              "height": 24,
+                              "stroke": "#0F172A",
+                              "strokeWidth": 8,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
                             }
-                          }
+                          ]
                         },
                         {
                           "type": "text",
@@ -1084,23 +1804,75 @@
                       "alignItems": "center",
                       "children": [
                         {
+                          "type": "frame",
                           "id": "C5GOvV",
-                          "type": "ref",
-                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 60,
                           "height": 60,
-                          "descendants": {
-                            "L0A6p": {
-                              "stroke": "#FFFFFF"
+                          "fill": "#00000000",
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "uULEy",
+                              "x": 0,
+                              "y": 0,
+                              "name": "M-Stroke",
+                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "#00000000",
+                              "width": 100,
+                              "height": 100,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 16,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
                             },
-                            "XpLNp": {
-                              "fill": "#FFFFFF"
+                            {
+                              "type": "path",
+                              "id": "rY6vz",
+                              "x": 33,
+                              "y": 12,
+                              "name": "Location-Pin",
+                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                              "fillRule": "evenodd",
+                              "viewBox": [
+                                0,
+                                0,
+                                24,
+                                24
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 33,
+                              "height": 30
                             },
-                            "JMO33": {
-                              "stroke": "#FFFFFF"
+                            {
+                              "type": "path",
+                              "id": "mvkZs",
+                              "x": 34,
+                              "y": 64,
+                              "name": "Check",
+                              "geometry": "M4 13l8 8 16-17",
+                              "viewBox": [
+                                0,
+                                0,
+                                32,
+                                24
+                              ],
+                              "fill": "#00000000",
+                              "width": 32,
+                              "height": 24,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 8,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
                             }
-                          }
+                          ]
                         },
                         {
                           "type": "text",
@@ -1161,14 +1933,30 @@
                       "alignItems": "center",
                       "children": [
                         {
+                          "type": "frame",
                           "id": "puSRZ",
-                          "type": "ref",
-                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 60,
                           "height": 60,
-                          "descendants": {
-                            "L0A6p": {
+                          "fill": "#00000000",
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "zw25u",
+                              "x": 0,
+                              "y": 0,
+                              "name": "M-Stroke",
+                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "#00000000",
+                              "width": 100,
+                              "height": 100,
                               "stroke": {
                                 "type": "gradient",
                                 "gradientType": "linear",
@@ -1191,9 +1979,51 @@
                                     "position": 1
                                   }
                                 ]
-                              }
+                              },
+                              "strokeWidth": 16,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "S6JsO",
+                              "x": 33,
+                              "y": 12,
+                              "name": "Location-Pin",
+                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                              "fillRule": "evenodd",
+                              "viewBox": [
+                                0,
+                                0,
+                                24,
+                                24
+                              ],
+                              "fill": "#4f46e5ff",
+                              "width": 33,
+                              "height": 30
+                            },
+                            {
+                              "type": "path",
+                              "id": "y0a14l",
+                              "x": 34,
+                              "y": 64,
+                              "name": "Check",
+                              "geometry": "M4 13l8 8 16-17",
+                              "viewBox": [
+                                0,
+                                0,
+                                32,
+                                24
+                              ],
+                              "fill": "#00000000",
+                              "width": 32,
+                              "height": 24,
+                              "stroke": "#4f46e5ff",
+                              "strokeWidth": 8,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
                             }
-                          }
+                          ]
                         },
                         {
                           "type": "text",
@@ -1265,12 +2095,75 @@
                   "alignItems": "center",
                   "children": [
                     {
+                      "type": "frame",
                       "id": "HixpX",
-                      "type": "ref",
-                      "ref": "D3aDa",
                       "name": "Mark",
                       "width": 128,
-                      "height": 128
+                      "height": 128,
+                      "fill": "#00000000",
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "id": "UZ0jg",
+                          "x": 0,
+                          "y": 0,
+                          "name": "M-Stroke",
+                          "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                          "viewBox": [
+                            0,
+                            0,
+                            100,
+                            100
+                          ],
+                          "fill": "#00000000",
+                          "width": 100,
+                          "height": 100,
+                          "stroke": "$brand-indigo",
+                          "strokeWidth": 16,
+                          "strokeLinejoin": "round",
+                          "strokeLinecap": "round"
+                        },
+                        {
+                          "type": "path",
+                          "id": "Xrtwx",
+                          "x": 33,
+                          "y": 12,
+                          "name": "Location-Pin",
+                          "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                          "fillRule": "evenodd",
+                          "viewBox": [
+                            0,
+                            0,
+                            24,
+                            24
+                          ],
+                          "fill": "#4f46e5ff",
+                          "width": 33,
+                          "height": 30
+                        },
+                        {
+                          "type": "path",
+                          "id": "BIGOc",
+                          "x": 34,
+                          "y": 64,
+                          "name": "Check",
+                          "geometry": "M4 13l8 8 16-17",
+                          "viewBox": [
+                            0,
+                            0,
+                            32,
+                            24
+                          ],
+                          "fill": "#00000000",
+                          "width": 32,
+                          "height": 24,
+                          "stroke": "#4f46e5ff",
+                          "strokeWidth": 8,
+                          "strokeLinejoin": "round",
+                          "strokeLinecap": "round"
+                        }
+                      ]
                     }
                   ]
                 }
@@ -1329,12 +2222,75 @@
                       "alignItems": "center",
                       "children": [
                         {
+                          "type": "frame",
                           "id": "p15YP1",
-                          "type": "ref",
-                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 34,
-                          "height": 34
+                          "height": 34,
+                          "fill": "#00000000",
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "CrQIF",
+                              "x": 0,
+                              "y": 0,
+                              "name": "M-Stroke",
+                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                              "viewBox": [
+                                0,
+                                0,
+                                100,
+                                100
+                              ],
+                              "fill": "#00000000",
+                              "width": 100,
+                              "height": 100,
+                              "stroke": "$brand-indigo",
+                              "strokeWidth": 16,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "HyFzA",
+                              "x": 33,
+                              "y": 12,
+                              "name": "Location-Pin",
+                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                              "fillRule": "evenodd",
+                              "viewBox": [
+                                0,
+                                0,
+                                24,
+                                24
+                              ],
+                              "fill": "#4f46e5ff",
+                              "width": 33,
+                              "height": 30
+                            },
+                            {
+                              "type": "path",
+                              "id": "yZoD8",
+                              "x": 34,
+                              "y": 64,
+                              "name": "Check",
+                              "geometry": "M4 13l8 8 16-17",
+                              "viewBox": [
+                                0,
+                                0,
+                                32,
+                                24
+                              ],
+                              "fill": "#00000000",
+                              "width": 32,
+                              "height": 24,
+                              "stroke": "#4f46e5ff",
+                              "strokeWidth": 8,
+                              "strokeLinejoin": "round",
+                              "strokeLinecap": "round"
+                            }
+                          ]
                         },
                         {
                           "type": "text",
@@ -1508,35 +2464,75 @@
           "alignItems": "center",
           "children": [
             {
+              "type": "frame",
               "id": "ItEQC",
-              "type": "ref",
-              "ref": "D3aDa",
               "name": "Logo",
               "width": 140,
               "height": 140,
-              "descendants": {
-                "L0A6p": {
+              "fill": "#00000000",
+              "layout": "none",
+              "children": [
+                {
+                  "type": "path",
+                  "id": "zOqmU",
+                  "x": 0,
+                  "y": 0,
+                  "name": "M-Stroke",
+                  "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                  "viewBox": [
+                    0,
+                    0,
+                    100,
+                    100
+                  ],
+                  "fill": "#00000000",
+                  "width": 140,
+                  "height": 140,
                   "stroke": "#FFFFFF",
                   "strokeWidth": 22,
-                  "width": 140,
-                  "height": 140
+                  "strokeLinejoin": "round",
+                  "strokeLinecap": "round"
                 },
-                "XpLNp": {
-                  "fill": "#FFFFFF",
+                {
+                  "type": "path",
+                  "id": "n0sdNW",
                   "x": 46,
                   "y": 17,
+                  "name": "Location-Pin",
+                  "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                  "fillRule": "evenodd",
+                  "viewBox": [
+                    0,
+                    0,
+                    24,
+                    24
+                  ],
+                  "fill": "#FFFFFF",
                   "width": 46,
                   "height": 42
                 },
-                "JMO33": {
-                  "stroke": "#FFFFFF",
-                  "strokeWidth": 11,
+                {
+                  "type": "path",
+                  "id": "R8Z9el",
                   "x": 48,
                   "y": 90,
+                  "name": "Check",
+                  "geometry": "M4 13l8 8 16-17",
+                  "viewBox": [
+                    0,
+                    0,
+                    32,
+                    24
+                  ],
+                  "fill": "#00000000",
                   "width": 45,
-                  "height": 34
+                  "height": 34,
+                  "stroke": "#FFFFFF",
+                  "strokeWidth": 11,
+                  "strokeLinejoin": "round",
+                  "strokeLinecap": "round"
                 }
-              }
+              ]
             },
             {
               "type": "frame",
@@ -1664,35 +2660,75 @@
           "alignItems": "center",
           "children": [
             {
+              "type": "frame",
               "id": "N7fln",
-              "type": "ref",
-              "ref": "D3aDa",
               "name": "Logo",
               "width": 140,
               "height": 140,
-              "descendants": {
-                "L0A6p": {
+              "fill": "#00000000",
+              "layout": "none",
+              "children": [
+                {
+                  "type": "path",
+                  "id": "H1J81m",
+                  "x": 0,
+                  "y": 0,
+                  "name": "M-Stroke",
+                  "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                  "viewBox": [
+                    0,
+                    0,
+                    100,
+                    100
+                  ],
+                  "fill": "#00000000",
+                  "width": 140,
+                  "height": 140,
                   "stroke": "#4F46E5",
                   "strokeWidth": 22,
-                  "width": 140,
-                  "height": 140
+                  "strokeLinejoin": "round",
+                  "strokeLinecap": "round"
                 },
-                "XpLNp": {
-                  "fill": "#4F46E5",
+                {
+                  "type": "path",
+                  "id": "D2DcON",
                   "x": 46,
                   "y": 17,
+                  "name": "Location-Pin",
+                  "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                  "fillRule": "evenodd",
+                  "viewBox": [
+                    0,
+                    0,
+                    24,
+                    24
+                  ],
+                  "fill": "#4F46E5",
                   "width": 46,
                   "height": 42
                 },
-                "JMO33": {
-                  "stroke": "#4F46E5",
-                  "strokeWidth": 11,
+                {
+                  "type": "path",
+                  "id": "q90t2",
                   "x": 48,
                   "y": 90,
+                  "name": "Check",
+                  "geometry": "M4 13l8 8 16-17",
+                  "viewBox": [
+                    0,
+                    0,
+                    32,
+                    24
+                  ],
+                  "fill": "#00000000",
                   "width": 45,
-                  "height": 34
+                  "height": 34,
+                  "stroke": "#4F46E5",
+                  "strokeWidth": 11,
+                  "strokeLinejoin": "round",
+                  "strokeLinecap": "round"
                 }
-              }
+              ]
             },
             {
               "type": "frame",
@@ -2021,7 +3057,8 @@
                       "lineHeight": 1.5,
                       "textAlign": "center",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -2287,7 +3324,8 @@
                       "lineHeight": 1.5,
                       "textAlign": "center",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -2634,7 +3672,8 @@
                       "lineHeight": 1.5,
                       "textAlign": "center",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -2959,7 +3998,8 @@
                       "lineHeight": 1.5,
                       "textAlign": "center",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -3225,7 +4265,8 @@
                       "lineHeight": 1.5,
                       "textAlign": "center",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -3572,7 +4613,8 @@
                       "lineHeight": 1.5,
                       "textAlign": "center",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -3769,7 +4811,8 @@
                       "lineHeight": 1.5,
                       "textAlign": "center",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -4103,7 +5146,8 @@
                       "lineHeight": 1.5,
                       "textAlign": "center",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -4511,7 +5555,8 @@
                           "content": "Pick up protein powder",
                           "lineHeight": 1.4,
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 13
+                          "fontSize": 13,
+                          "fontWeight": "normal"
                         },
                         {
                           "type": "text",
@@ -4591,7 +5636,8 @@
                           "content": "Buy groceries for dinner",
                           "lineHeight": 1.4,
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 13
+                          "fontSize": 13,
+                          "fontWeight": "normal"
                         },
                         {
                           "type": "text",
@@ -4671,7 +5717,8 @@
                           "content": "Water the plants",
                           "lineHeight": 1.4,
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 13
+                          "fontSize": 13,
+                          "fontWeight": "normal"
                         },
                         {
                           "type": "text",
@@ -5218,7 +6265,8 @@
                           "content": "Pick up protein powder",
                           "lineHeight": 1.4,
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 13
+                          "fontSize": 13,
+                          "fontWeight": "normal"
                         },
                         {
                           "type": "text",
@@ -5298,7 +6346,8 @@
                           "content": "Buy groceries for dinner",
                           "lineHeight": 1.4,
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 13
+                          "fontSize": 13,
+                          "fontWeight": "normal"
                         },
                         {
                           "type": "text",
@@ -5378,7 +6427,8 @@
                           "content": "Water the plants",
                           "lineHeight": 1.4,
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 13
+                          "fontSize": 13,
+                          "fontWeight": "normal"
                         },
                         {
                           "type": "text",
@@ -8047,7 +9097,8 @@
                       "fill": "$text-muted",
                       "content": "Whole Foods, Market St · 80 m radius",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 13
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -8597,7 +9648,8 @@
                       "fill": "$text-muted",
                       "content": "Whole Foods, Market St · 80 m radius",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 13
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -9152,7 +10204,8 @@
                       "width": "fill_container",
                       "content": "Add notes…",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -9961,7 +11014,8 @@
                       "width": "fill_container",
                       "content": "Add notes…",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -10703,8 +11757,8 @@
         {
           "type": "frame",
           "id": "XIAsY",
-          "x": 116,
-          "y": 1764,
+          "x": 99,
+          "y": 1738,
           "name": "Component/PrimaryButton",
           "reusable": true,
           "height": 52,
@@ -10743,8 +11797,8 @@
         {
           "type": "frame",
           "id": "J5Mk51",
-          "x": 116,
-          "y": 1764,
+          "x": 291,
+          "y": 1712,
           "name": "Component/SecondaryButton",
           "reusable": true,
           "height": 52,
@@ -10773,8 +11827,8 @@
         {
           "type": "frame",
           "id": "O7alp4",
-          "x": 116,
-          "y": 1764,
+          "x": 79,
+          "y": 1668,
           "name": "Component/TaskChip",
           "reusable": true,
           "fill": "$primary-container",
@@ -11783,7 +12837,8 @@
                   "fill": "$text-muted",
                   "content": "221B Baker Street",
                   "fontFamily": "Plus Jakarta Sans",
-                  "fontSize": 13
+                  "fontSize": 13,
+                  "fontWeight": "normal"
                 },
                 {
                   "type": "frame",
@@ -11914,8 +12969,8 @@
         {
           "type": "frame",
           "id": "u8pbwf",
-          "x": 116,
-          "y": 1804,
+          "x": 224,
+          "y": 1660,
           "name": "Component/OfflineBanner",
           "reusable": true,
           "width": 350,
@@ -11955,8 +13010,8 @@
         {
           "type": "frame",
           "id": "ICanY",
-          "x": 116,
-          "y": 1804,
+          "x": 306,
+          "y": 1877,
           "name": "Component/Dialog",
           "reusable": true,
           "width": 320,
@@ -11995,7 +13050,8 @@
               "width": 272,
               "content": "This will also unlink all tasks. This action cannot be undone.",
               "fontFamily": "Plus Jakarta Sans",
-              "fontSize": 14
+              "fontSize": 14,
+              "fontWeight": "normal"
             },
             {
               "type": "frame",
@@ -12066,8 +13122,8 @@
         {
           "type": "frame",
           "id": "cOqaT",
-          "x": 116,
-          "y": 1804,
+          "x": 89,
+          "y": 1808,
           "name": "Component/SectionHeader",
           "reusable": true,
           "width": 350,
@@ -23386,7 +24442,8 @@
                           "fill": "$text-muted",
                           "content": "Today",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 12
+                          "fontSize": 12,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -23422,7 +24479,8 @@
                           "fill": "$text-muted",
                           "content": "Done",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 12
+                          "fontSize": 12,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -23454,7 +24512,8 @@
                           "fill": "$text-muted",
                           "content": "Tomorrow",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 12
+                          "fontSize": 12,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -23568,7 +24627,8 @@
                           "fill": "$text-muted",
                           "content": "Today · On arrival",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 12
+                          "fontSize": 12,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -23600,7 +24660,8 @@
                           "fill": "$text-muted",
                           "content": "3:00 PM",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 12
+                          "fontSize": 12,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -23636,7 +24697,8 @@
                           "fill": "$text-muted",
                           "content": "Done",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 12
+                          "fontSize": 12,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -23750,7 +24812,8 @@
                           "fill": "$accent",
                           "content": "On arrival",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 12
+                          "fontSize": 12,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -23782,7 +24845,8 @@
                           "fill": "$accent",
                           "content": "On arrival",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 12
+                          "fontSize": 12,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -24117,7 +25181,8 @@
                           "fill": "$text-muted",
                           "content": "Today",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 12
+                          "fontSize": 12,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -24153,7 +25218,8 @@
                           "fill": "$text-muted",
                           "content": "Done",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 12
+                          "fontSize": 12,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -24267,7 +25333,8 @@
                           "fill": "$text-muted",
                           "content": "Today · On arrival",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 12
+                          "fontSize": 12,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -24299,7 +25366,8 @@
                           "fill": "$text-muted",
                           "content": "3:00 PM",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 12
+                          "fontSize": 12,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -24413,7 +25481,8 @@
                           "fill": "$accent",
                           "content": "On arrival",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 12
+                          "fontSize": 12,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -24445,7 +25514,8 @@
                           "fill": "$accent",
                           "content": "On arrival",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 12
+                          "fontSize": 12,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -24925,7 +25995,8 @@
                   "width": "fill_container",
                   "content": "Remember to check expiry dates. Check for any offers.",
                   "fontFamily": "Plus Jakarta Sans",
-                  "fontSize": 14
+                  "fontSize": 14,
+                  "fontWeight": "normal"
                 }
               ]
             }
@@ -25471,7 +26542,8 @@
                   "width": "fill_container",
                   "content": "Remember to check expiry dates. Check for any offers.",
                   "fontFamily": "Plus Jakarta Sans",
-                  "fontSize": 14
+                  "fontSize": 14,
+                  "fontWeight": "normal"
                 }
               ]
             }
@@ -27776,7 +28848,8 @@
                       "width": "fill_container",
                       "content": "Moventiq needs to send you notifications so your tasks appear the moment you arrive at a saved location.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -27826,7 +28899,8 @@
                           "fill": "$text-secondary",
                           "content": "Arrival reminders when you enter a place",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 14
+                          "fontSize": 14,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -27868,7 +28942,8 @@
                           "fill": "$text-secondary",
                           "content": "See pending tasks instantly",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 14
+                          "fontSize": 14,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -27910,7 +28985,8 @@
                           "fill": "$text-secondary",
                           "content": "Silent mode and quiet hours supported",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 14
+                          "fontSize": 14,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -28092,7 +29168,8 @@
                       "width": "fill_container",
                       "content": "Moventiq needs to send you notifications so your tasks appear the moment you arrive at a saved location.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -28142,7 +29219,8 @@
                           "fill": "$text-secondary",
                           "content": "Arrival reminders when you enter a place",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 14
+                          "fontSize": 14,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -28184,7 +29262,8 @@
                           "fill": "$text-secondary",
                           "content": "See pending tasks instantly",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 14
+                          "fontSize": 14,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -28226,7 +29305,8 @@
                           "fill": "$text-secondary",
                           "content": "Silent mode and quiet hours supported",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 14
+                          "fontSize": 14,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -28386,7 +29466,8 @@
                   "width": "fill_container",
                   "content": "Moventiq needs location access to detect when you arrive at saved places. Please enable it in Settings.",
                   "fontFamily": "Plus Jakarta Sans",
-                  "fontSize": 15
+                  "fontSize": 15,
+                  "fontWeight": "normal"
                 }
               ]
             },
@@ -28720,7 +29801,8 @@
                   "width": "fill_container",
                   "content": "Moventiq needs location access to detect when you arrive at saved places. Please enable it in Settings.",
                   "fontFamily": "Plus Jakarta Sans",
-                  "fontSize": 15
+                  "fontSize": 15,
+                  "fontWeight": "normal"
                 }
               ]
             },
@@ -29042,7 +30124,8 @@
                   "fill": "$text-primary",
                   "content": "Supermarket",
                   "fontFamily": "Plus Jakarta Sans",
-                  "fontSize": 15
+                  "fontSize": 15,
+                  "fontWeight": "normal"
                 },
                 {
                   "type": "icon",
@@ -29119,7 +30202,8 @@
                       "fill": "$text-muted",
                       "content": "14 Market Road",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 13
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -29139,7 +30223,8 @@
                   "fill": "$text-muted",
                   "content": "No other locations match",
                   "fontFamily": "Plus Jakarta Sans",
-                  "fontSize": 14
+                  "fontSize": 14,
+                  "fontWeight": "normal"
                 }
               ]
             }
@@ -29255,7 +30340,8 @@
                   "fill": "$text-primary",
                   "content": "Supermarket",
                   "fontFamily": "Plus Jakarta Sans",
-                  "fontSize": 15
+                  "fontSize": 15,
+                  "fontWeight": "normal"
                 },
                 {
                   "type": "icon",
@@ -29332,7 +30418,8 @@
                       "fill": "$text-muted",
                       "content": "14 Market Road",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 13
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -29352,7 +30439,8 @@
                   "fill": "$text-muted",
                   "content": "No other locations match",
                   "fontFamily": "Plus Jakarta Sans",
-                  "fontSize": 14
+                  "fontSize": 14,
+                  "fontWeight": "normal"
                 }
               ]
             }
@@ -29454,7 +30542,8 @@
                   "fill": "$text-primary",
                   "content": "Buy milk",
                   "fontFamily": "Plus Jakarta Sans",
-                  "fontSize": 15
+                  "fontSize": 15,
+                  "fontWeight": "normal"
                 },
                 {
                   "type": "icon",
@@ -29521,7 +30610,8 @@
                       "fill": "$accent",
                       "content": "Supermarket · On arrival",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 12
+                      "fontSize": 12,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -29553,7 +30643,8 @@
                       "fill": "$accent",
                       "content": "Supermarket · On arrival",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 12
+                      "fontSize": 12,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -29585,7 +30676,8 @@
                       "fill": "$text-muted",
                       "content": "Home · On arrival",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 12
+                      "fontSize": 12,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -29703,7 +30795,8 @@
                   "fill": "$text-primary",
                   "content": "Buy milk",
                   "fontFamily": "Plus Jakarta Sans",
-                  "fontSize": 15
+                  "fontSize": 15,
+                  "fontWeight": "normal"
                 },
                 {
                   "type": "icon",
@@ -29770,7 +30863,8 @@
                       "fill": "$accent",
                       "content": "Supermarket · On arrival",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 12
+                      "fontSize": 12,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -29802,7 +30896,8 @@
                       "fill": "$accent",
                       "content": "Supermarket · On arrival",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 12
+                      "fontSize": 12,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -29834,7 +30929,8 @@
                       "fill": "$text-muted",
                       "content": "Home · On arrival",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 12
+                      "fontSize": 12,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -29971,7 +31067,8 @@
                       "fill": "$text-primary",
                       "content": "Arrival Alerts",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -30024,7 +31121,8 @@
                       "fill": "$text-primary",
                       "content": "Task Reminder Notifications",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -30077,7 +31175,8 @@
                       "fill": "$text-primary",
                       "content": "Completion Confirmation",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -30145,7 +31244,8 @@
                       "fill": "$text-primary",
                       "content": "Alert Sound",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -30154,7 +31254,8 @@
                       "fill": "$text-muted",
                       "content": "Default",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -30195,7 +31296,8 @@
                       "fill": "$text-primary",
                       "content": "Vibration",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -30263,7 +31365,8 @@
                       "fill": "$text-primary",
                       "content": "Enable Quiet Hours",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -30316,7 +31419,8 @@
                       "fill": "$text-primary",
                       "content": "Start Time",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -30325,7 +31429,8 @@
                       "fill": "$text-muted",
                       "content": "10:00 PM",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -30366,7 +31471,8 @@
                       "fill": "$text-primary",
                       "content": "End Time",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -30375,7 +31481,8 @@
                       "fill": "$text-muted",
                       "content": "7:00 AM",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -30536,7 +31643,8 @@
                       "fill": "$text-primary",
                       "content": "Arrival Alerts",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -30589,7 +31697,8 @@
                       "fill": "$text-primary",
                       "content": "Task Reminder Notifications",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -30642,7 +31751,8 @@
                       "fill": "$text-primary",
                       "content": "Completion Confirmation",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -30710,7 +31820,8 @@
                       "fill": "$text-primary",
                       "content": "Alert Sound",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -30719,7 +31830,8 @@
                       "fill": "$text-muted",
                       "content": "Default",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -30760,7 +31872,8 @@
                       "fill": "$text-primary",
                       "content": "Vibration",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -30828,7 +31941,8 @@
                       "fill": "$text-primary",
                       "content": "Enable Quiet Hours",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -30881,7 +31995,8 @@
                       "fill": "$text-primary",
                       "content": "Start Time",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -30890,7 +32005,8 @@
                       "fill": "$text-muted",
                       "content": "10:00 PM",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -30931,7 +32047,8 @@
                       "fill": "$text-primary",
                       "content": "End Time",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -30940,7 +32057,8 @@
                       "fill": "$text-muted",
                       "content": "7:00 AM",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -31087,7 +32205,8 @@
                       "fill": "$text-primary",
                       "content": "Default Radius",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -31096,7 +32215,8 @@
                       "fill": "$text-muted",
                       "content": "200 m",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -31137,7 +32257,8 @@
                       "fill": "$text-primary",
                       "content": "Dwell Time",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -31146,7 +32267,8 @@
                       "fill": "$text-muted",
                       "content": "10 seconds",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -31187,7 +32309,8 @@
                       "fill": "$text-primary",
                       "content": "High Accuracy Mode",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -31255,7 +32378,8 @@
                       "fill": "$text-primary",
                       "content": "Battery Saver Mode",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -31308,7 +32432,8 @@
                       "fill": "$text-primary",
                       "content": "Background Refresh",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -31376,7 +32501,8 @@
                       "fill": "$text-primary",
                       "content": "Auto-complete on Leave",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -31429,7 +32555,8 @@
                       "fill": "$text-primary",
                       "content": "Re-trigger on Next Arrival",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -31602,7 +32729,8 @@
                       "fill": "$text-primary",
                       "content": "Default Radius",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -31611,7 +32739,8 @@
                       "fill": "$text-muted",
                       "content": "200 m",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -31652,7 +32781,8 @@
                       "fill": "$text-primary",
                       "content": "Dwell Time",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -31661,7 +32791,8 @@
                       "fill": "$text-muted",
                       "content": "10 seconds",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -31702,7 +32833,8 @@
                       "fill": "$text-primary",
                       "content": "High Accuracy Mode",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -31770,7 +32902,8 @@
                       "fill": "$text-primary",
                       "content": "Battery Saver Mode",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -31823,7 +32956,8 @@
                       "fill": "$text-primary",
                       "content": "Background Refresh",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -31891,7 +33025,8 @@
                       "fill": "$text-primary",
                       "content": "Auto-complete on Leave",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -31944,7 +33079,8 @@
                       "fill": "$text-primary",
                       "content": "Re-trigger on Next Arrival",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -32103,7 +33239,8 @@
                       "fill": "$text-primary",
                       "content": "Theme",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -32245,7 +33382,8 @@
                       "fill": "$text-primary",
                       "content": "Bold Text",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -32298,7 +33436,8 @@
                       "fill": "$text-primary",
                       "content": "Reduce Motion",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -32471,7 +33610,8 @@
                       "fill": "$text-primary",
                       "content": "Theme",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -32613,7 +33753,8 @@
                       "fill": "$text-primary",
                       "content": "Bold Text",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -32666,7 +33807,8 @@
                       "fill": "$text-primary",
                       "content": "Reduce Motion",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -32825,7 +33967,8 @@
                       "fill": "$text-primary",
                       "content": "Share Anonymous Analytics",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -32878,7 +34021,8 @@
                       "fill": "$text-primary",
                       "content": "Crash Reports",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -32956,7 +34100,8 @@
                       "fill": "$text-primary",
                       "content": "Export My Data",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -33007,7 +34152,8 @@
                       "fill": "$text-primary",
                       "content": "Clear All Data",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -33168,7 +34314,8 @@
                       "fill": "$text-primary",
                       "content": "Share Anonymous Analytics",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -33221,7 +34368,8 @@
                       "fill": "$text-primary",
                       "content": "Crash Reports",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -33299,7 +34447,8 @@
                       "fill": "$text-primary",
                       "content": "Export My Data",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -33350,7 +34499,8 @@
                       "fill": "$text-primary",
                       "content": "Clear All Data",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -33485,12 +34635,75 @@
               "alignItems": "center",
               "children": [
                 {
-                  "id": "AT0gg",
-                  "type": "ref",
-                  "ref": "D3aDa",
+                  "type": "frame",
+                  "id": "ppor7",
                   "name": "Logo",
-                  "width": 60,
-                  "height": 60
+                  "width": 72,
+                  "height": 72,
+                  "fill": "#00000000",
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "path",
+                      "id": "FUKp8",
+                      "x": 0,
+                      "y": 0,
+                      "name": "M-Stroke",
+                      "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                      "viewBox": [
+                        0,
+                        0,
+                        100,
+                        100
+                      ],
+                      "fill": "#00000000",
+                      "width": 72,
+                      "height": 72,
+                      "stroke": "#4F46E5",
+                      "strokeWidth": 11,
+                      "strokeLinejoin": "round",
+                      "strokeLinecap": "round"
+                    },
+                    {
+                      "type": "path",
+                      "id": "sCGGZ",
+                      "x": 24,
+                      "y": 9,
+                      "name": "Location-Pin",
+                      "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                      "fillRule": "evenodd",
+                      "viewBox": [
+                        0,
+                        0,
+                        24,
+                        24
+                      ],
+                      "fill": "#4F46E5",
+                      "width": 24,
+                      "height": 22
+                    },
+                    {
+                      "type": "path",
+                      "id": "K72Hcs",
+                      "x": 25,
+                      "y": 46,
+                      "name": "Check",
+                      "geometry": "M4 13l8 8 16-17",
+                      "viewBox": [
+                        0,
+                        0,
+                        32,
+                        24
+                      ],
+                      "fill": "#00000000",
+                      "width": 23,
+                      "height": 17,
+                      "stroke": "#4F46E5",
+                      "strokeWidth": 6,
+                      "strokeLinejoin": "round",
+                      "strokeLinecap": "round"
+                    }
+                  ]
                 },
                 {
                   "type": "text",
@@ -33509,7 +34722,8 @@
                   "fill": "$text-muted",
                   "content": "Version 1.0.0 (Build 1)",
                   "fontFamily": "Plus Jakarta Sans",
-                  "fontSize": 13
+                  "fontSize": 13,
+                  "fontWeight": "normal"
                 }
               ]
             },
@@ -33563,7 +34777,8 @@
                       "fill": "$text-primary",
                       "content": "Privacy Policy",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -33614,7 +34829,8 @@
                       "fill": "$text-primary",
                       "content": "Terms of Service",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -33665,7 +34881,8 @@
                       "fill": "$text-primary",
                       "content": "Open Source Licenses",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -33731,7 +34948,8 @@
                       "fill": "$text-primary",
                       "content": "Rate Moventiq",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -33782,7 +35000,8 @@
                       "fill": "$text-primary",
                       "content": "Send Feedback",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -33931,12 +35150,75 @@
               "alignItems": "center",
               "children": [
                 {
-                  "id": "tDreK",
-                  "type": "ref",
-                  "ref": "D3aDa",
+                  "type": "frame",
+                  "id": "UOrcf",
                   "name": "Logo",
-                  "width": 60,
-                  "height": 60
+                  "width": 72,
+                  "height": 72,
+                  "fill": "#00000000",
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "path",
+                      "id": "BvzGY",
+                      "x": 0,
+                      "y": 0,
+                      "name": "M-Stroke",
+                      "geometry": "M18 80l0-50 32 28 32-28 0 50",
+                      "viewBox": [
+                        0,
+                        0,
+                        100,
+                        100
+                      ],
+                      "fill": "#00000000",
+                      "width": 72,
+                      "height": 72,
+                      "stroke": "#FFFFFF",
+                      "strokeWidth": 11,
+                      "strokeLinejoin": "round",
+                      "strokeLinecap": "round"
+                    },
+                    {
+                      "type": "path",
+                      "id": "v9MJn",
+                      "x": 24,
+                      "y": 9,
+                      "name": "Location-Pin",
+                      "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
+                      "fillRule": "evenodd",
+                      "viewBox": [
+                        0,
+                        0,
+                        24,
+                        24
+                      ],
+                      "fill": "#FFFFFF",
+                      "width": 24,
+                      "height": 22
+                    },
+                    {
+                      "type": "path",
+                      "id": "F8Qex",
+                      "x": 25,
+                      "y": 46,
+                      "name": "Check",
+                      "geometry": "M4 13l8 8 16-17",
+                      "viewBox": [
+                        0,
+                        0,
+                        32,
+                        24
+                      ],
+                      "fill": "#00000000",
+                      "width": 23,
+                      "height": 17,
+                      "stroke": "#FFFFFF",
+                      "strokeWidth": 6,
+                      "strokeLinejoin": "round",
+                      "strokeLinecap": "round"
+                    }
+                  ]
                 },
                 {
                   "type": "text",
@@ -33955,7 +35237,8 @@
                   "fill": "$text-muted",
                   "content": "Version 1.0.0 (Build 1)",
                   "fontFamily": "Plus Jakarta Sans",
-                  "fontSize": 13
+                  "fontSize": 13,
+                  "fontWeight": "normal"
                 }
               ]
             },
@@ -34009,7 +35292,8 @@
                       "fill": "$text-primary",
                       "content": "Privacy Policy",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -34060,7 +35344,8 @@
                       "fill": "$text-primary",
                       "content": "Terms of Service",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -34111,7 +35396,8 @@
                       "fill": "$text-primary",
                       "content": "Open Source Licenses",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -34177,7 +35463,8 @@
                       "fill": "$text-primary",
                       "content": "Rate Moventiq",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -34228,7 +35515,8 @@
                       "fill": "$text-primary",
                       "content": "Send Feedback",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "icon",
@@ -34373,7 +35661,8 @@
                       "width": 272,
                       "content": "This will also remove all linked tasks. This cannot be undone.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -34528,7 +35817,8 @@
                       "width": 272,
                       "content": "This will also remove all linked tasks. This cannot be undone.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -34683,7 +35973,8 @@
                       "width": 272,
                       "content": "This task will be permanently removed.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -34847,7 +36138,8 @@
                       "width": 272,
                       "content": "This task will be permanently removed.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -36654,7 +37946,8 @@
                       "width": "fill_container",
                       "content": "Add your first location to start getting tasks when you arrive.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -36809,7 +38102,8 @@
                       "width": "fill_container",
                       "content": "Add your first location to start getting tasks when you arrive.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -36964,7 +38258,8 @@
                       "width": "fill_container",
                       "content": "Add a task to this place. It will appear when you arrive.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -37128,7 +38423,8 @@
                       "width": "fill_container",
                       "content": "Add a task to this place. It will appear when you arrive.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -37283,7 +38579,8 @@
                       "width": "fill_container",
                       "content": "Tasks will surface automatically when you arrive somewhere you saved.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -37438,7 +38735,8 @@
                       "width": "fill_container",
                       "content": "Tasks will surface automatically when you arrive somewhere you saved.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -37675,7 +38973,8 @@
                       "width": "fill_container",
                       "content": "We couldn’t get a GPS signal. Move to an open area and try again.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -37802,7 +39101,8 @@
                       "width": "fill_container",
                       "content": "We couldn’t get a GPS signal. Move to an open area and try again.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -37929,7 +39229,8 @@
                       "width": "fill_container",
                       "content": "We couldn’t reach the server. Check your connection and retry.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -38056,7 +39357,8 @@
                       "width": "fill_container",
                       "content": "We couldn’t reach the server. Check your connection and retry.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -38184,7 +39486,8 @@
                           "fill": "#94A3B8",
                           "content": "Enter a name",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 15
+                          "fontSize": 15,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -38309,7 +39612,8 @@
                           "fill": "#64748B",
                           "content": "Enter a name",
                           "fontFamily": "Plus Jakarta Sans",
-                          "fontSize": 15
+                          "fontSize": 15,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -38525,7 +39829,8 @@
                       "width": "fill_container",
                       "content": "One task is waiting for you here.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -38766,7 +40071,8 @@
                       "width": "fill_container",
                       "content": "3 tasks are waiting for you here.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -39089,7 +40395,8 @@
                       "width": "fill_container",
                       "content": "Nice work — nothing left here.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -39349,7 +40656,8 @@
                       "width": "fill_container",
                       "content": "One task is waiting for you here.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -39604,7 +40912,8 @@
                       "width": "fill_container",
                       "content": "3 tasks are waiting for you here.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -39941,7 +41250,8 @@
                       "width": "fill_container",
                       "content": "Nice work — nothing left here.",
                       "fontFamily": "Plus Jakarta Sans",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",

@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "A1B2C3D4-E5F6-7890-ABCD-EF1234567890",
+      "name" : "Test Scheme Action",
+      "options" : {
+        "targetForVariableExpansion" : {
+          "containerPath" : "container:iosApp.xcodeproj",
+          "identifier" : "F06F3A9063612C6CCCDEBC85",
+          "name" : "iosApp"
+        }
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:iosApp.xcodeproj",
+        "identifier" : "334455667788990011223344",
+        "name" : "iosAppTests"
+      }
+    },
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:iosApp.xcodeproj",
+        "identifier" : "778899001122334455667788",
+        "name" : "iosAppUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

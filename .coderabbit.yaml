@@ -1,0 +1,124 @@
+# Moventiq — CodeRabbit review config
+# Keep in sync with .cursor/skills/moventiq-code-review/SKILL.md
+# Docs: https://docs.coderabbit.ai/reference/configuration
+
+language: "en-US"
+
+tone_instructions: >-
+  Be direct and concise. One sentence for why. Include a concrete fix or code
+  snippet when suggesting changes. Do not add poems or praise. Match Moventiq
+  severity labels: critical, major, minor, nit. Prefer one comment per root
+  cause. Suppress minor/nit unless the issue is Moventiq-specific and in the diff.
+
+reviews:
+  profile: "chill"
+  high_level_summary: true
+  high_level_summary_in_walkthrough: true
+  poem: false
+  collapse_walkthrough: false
+  request_changes_workflow: false
+  review_status: true
+  changed_files_summary: true
+  assess_linked_issues: false
+  related_issues: false
+  related_prs: false
+
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    drafts: false
+
+  learnings:
+    scope: auto
+
+  path_filters:
+    - "!**/build/**"
+    - "!**/.gradle/**"
+    - "!**/DerivedData/**"
+    - "!**/*.xcodeproj/xcuserdata/**"
+    - "!**/gradle/wrapper/**"
+    - "!**/brand-assets/**"
+    - "!**/*.pen"
+    - "!**/*.xcresult/**"
+    - "!**/reports/tests/**"
+
+  instructions: |
+    Moventiq: local-only KMP app (Compose + SwiftUI + Room in :sharedLogic).
+    Use AGENT.md, ARCHITECTURE.md, MVP.md, DESIGN.md for context.
+    Review ONLY changed lines and their direct call sites — do not re-audit unchanged files.
+    Target 1–5 actionable inline comments per PR on chill profile.
+
+    CRITICAL (always inline, block merge):
+    - UI imports Room DAO, Entity, or Database types
+    - Platform APIs in sharedLogic commonMain domain/data
+    - MVP scope creep: profile, auth, sign-in, avatar, PRO badge, cloud sync, integrations, "Delete account"
+    - Hardcoded hex colors, raw dp spacing, or font sizes in UI
+    - New *Content or shipped screen missing light AND dark preview
+    - Business logic or repository calls inside @Composable / SwiftUI View body
+    - New use case or ViewModel with zero unit tests
+    - New UI in deprecated :sharedUI
+
+    MAJOR (inline when clear and in diff):
+    - ViewModel > ~200 lines mixing mapping and domain logic
+    - Preview uses real ViewModel, Koin, or Room
+    - Icon-only control missing contentDescription / accessibility label
+    - Touch target < 44dp
+    - Geofence API in commonMain; location change without geofence sync
+    - ViewModel constructed inside @Composable (including androidTest setContent)
+    - Duplicate FAB on screen (TabBar FAB only)
+
+    MINOR / NIT (walkthrough bullet only — no inline comment on chill):
+    - Test naming, missing testTag, single-theme preview, PreviewParameterProvider gaps
+
+    Do NOT comment on:
+    - Unchanged code, lock files, generated output, assets under brand-assets/
+    - AGP/SDK XML v4 warnings, Gradle --tests on connectedDebugAndroidTest
+    - Style/naming already enforced by detekt/ktlint/SwiftLint (when wired)
+    - Duplicate findings — merge into one comment per root cause
+    - Subjective refactors with no bug or architecture impact
+
+  path_instructions:
+    - path: "sharedLogic/**"
+      instructions: |
+        Domain never imports Room or platform APIs.
+        New use cases: commonTest happy path + edge case.
+        Repositories: androidHostTest or iosTest with in-memory Room.
+        Flag geofence side effects when locations change.
+
+    - path: "androidApp/**/ui/**"
+      instructions: |
+        Screen/Content/ViewModel/UiState/Event split. *Content stateless.
+        @Preview light + dark with fake UiState. testTag matches iOS accessibility IDs.
+        Branding/timing in *Branding objects.
+
+    - path: "iosApp/**"
+      instructions: |
+        View + ContentView + ViewModel + UiState. #Preview light + dark.
+        @Observable @MainActor ViewModels; no inout struct mutation from async.
+
+    - path: "androidApp/src/test/**"
+      instructions: |
+        snake_case {subject}_{outcome}_{condition}. MainDispatcherRule + turbine for ViewModels.
+
+    - path: "androidApp/src/androidTest/**"
+      instructions: |
+        Behavior tests only. Hoist ViewModel before setContent. createComposeRule v2.
+        Instrumentation filter via -Pandroid.testInstrumentationRunnerArguments.package (not --tests).
+
+    - path: "iosApp/iosAppTests/**"
+      instructions: |
+        snake_case naming. @MainActor + poll with timeout for real-time delays.
+
+    - path: "iosApp/iosAppUITests/**"
+      instructions: |
+        launchArguments for timing. descendants(matching: .any). accessibilityElement(children: .contain).
+
+  pre_merge_checks:
+    custom_checks:
+      - name: "Moventiq architecture & tests"
+        mode: warning
+        instructions: |
+          Fail if the PR adds a new use case or ViewModel without unit tests.
+          Fail if the PR adds a new *Content or shipped screen without light+dark previews.
+          Fail if any UI file imports androidx.room or DAO types.
+          Fail if MVP out-of-scope features (auth, profile, cloud) are introduced.

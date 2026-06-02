@@ -12,6 +12,31 @@ Strategy table: [ARCHITECTURE.md](../../../ARCHITECTURE.md) §13.
 
 **Not in scope:** Compose UI tests, XCUITest — see `moventiq-ui-tests`.
 
+## Test naming
+
+Use **snake_case** with **2–3 segments** separated by a single `_`:
+
+```text
+{subject}_{outcome}_{condition}
+```
+
+| Segment | Unit test | Example |
+|---|---|---|
+| subject | method, event, property, or state | `initial_state`, `on_event_content_drawn`, `enter_window` |
+| outcome | expected result | `is_visible_and_not_complete`, `transitions_to_exiting_then_complete` |
+| condition | given/when context | `when_phase_is_exiting`, `elapsed` — omit for default/happy path |
+
+Examples: `initial_state_is_visible_and_not_complete`, `on_event_content_drawn_does_not_change_state`, `enter_window_elapsed_transitions_to_exiting_then_complete`.
+
+**How to rename**
+
+1. **Android Studio / Cursor:** place caret on the test name → **Refactor → Rename** (⇧F6). Updates the `@Test` method only; class/file names stay `{TypeUnderTest}Test`.
+2. **Gradle filter** after rename: `./gradlew :androidApp:testDebugUnitTest --tests "com.mohamedfaridelsherbini.moventiq.ui.splash.SplashViewModelTest.enter_window_elapsed_*"`
+3. Do **not** use Kotlin backtick names (`` `given x when y` ``) — harder to filter in CI and inconsistent with Moventiq UI tests.
+4. Class name = `{TypeUnderTest}Test` (e.g. `SplashViewModelTest`); one class per production type.
+
+Cross-ref: UI test naming in `moventiq-ui-tests`.
+
 ## Scope by layer
 
 | Layer | Module | Source set | What to test |
@@ -45,7 +70,7 @@ class CreateTaskUseCaseTest {
     private val useCase = CreateTask(taskRepo, settingsRepo)
 
     @Test
-    fun createsTaskWithDefaultPriorityFromSettings() = runTest {
+    fun createTask_setsDefaultPriorityFromSettings() = runTest {
         useCase(CreateTaskParams(title = "Buy milk", locationId = "loc-1"))
         assertEquals(1, taskRepo.upserted.size)
         assertEquals(Priority.MEDIUM, taskRepo.upserted.first().priority)
@@ -89,7 +114,7 @@ No Koin in unit tests — construct ViewModel with fake use cases directly:
 
 ```kotlin
 @Test
-fun onCompleteTask_updatesState() = runTest {
+fun onCompleteTask_marksTaskCompleted() = runTest {
     val vm = HomeViewModel(fakeObserveTasks, fakeCompleteTask, /* … */)
     vm.onEvent(HomeEvent.CompleteTask("task-1"))
 
