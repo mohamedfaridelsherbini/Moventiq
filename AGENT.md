@@ -1,168 +1,147 @@
 # AGENT.md — Moventiq engineering guide
 
-Guidance for AI agents and developers working in this repository. Read this with [MVP.md](MVP.md) (what to build), [ARCHITECTURE.md](ARCHITECTURE.md) (how modules/layers/DB are structured), and [DESIGN.md](DESIGN.md) (visual source of truth).
+Guidance for AI agents and developers. Read with [MVP.md](MVP.md), [ARCHITECTURE.md](ARCHITECTURE.md), [DESIGN.md](DESIGN.md), and [RESOURCES.md](RESOURCES.md) (external references).
 
-**Agent skills & rules:** `.cursor/skills/` (workflows) and `.cursor/rules/` (always-on guardrails). Run skills in order via **`moventiq-pipeline`** (verify · implement · review · data).
+**Skills & rules:** `.cursor/skills/`, `.cursor/rules/`. Run **`moventiq-pipeline`** (verify · implement · review · data) before merge.
 
 ---
 
 ## 1. What this is
 
-**Moventiq** is a location-aware productivity app — tasks are linked to places and surface on arrival via geofencing. Brand promise: *"The right task. At the right place."*
+**Moventiq** — location-aware productivity. Tasks link to places; geofencing surfaces them on arrival. *"The right task. At the right place."*
 
-This is a **Kotlin Multiplatform** project: **native UIs** (Android Compose, iOS SwiftUI) over **shared logic + Room 3**.
+**Kotlin Multiplatform** with **native UIs** (Android Compose, iOS SwiftUI) and **feature-first shared modules**.
 
-**MVP is local-only:** no profile page, no sign-in, no cloud sync. All locations/tasks/settings persist in Room on device. The Settings tab is **app preferences**, not a user profile.
-
-See [ARCHITECTURE.md](ARCHITECTURE.md) for the full module diagram, package layout, Room schema, navigation graphs, and migration plan.
+**MVP is local-only:** no profile, sign-in, or cloud. Settings = app preferences only. See [MVP.md](MVP.md).
 
 ---
 
 ## 2. Architecture & modules
 
-| Module | Path | Responsibility |
+### Target (feature-first)
+
+| Area | Path | Role |
 |---|---|---|
-| `:androidApp` | `androidApp/` | Jetpack Compose UI, Navigation, Koin, Android geofencing/notifications |
-| `:iosApp` | `iosApp/` | SwiftUI UI, NavigationStack, CoreLocation, links `SharedLogic.framework` |
-| `:sharedLogic` | `sharedLogic/` | Domain, use cases, **Room 3** DB, repositories, `expect`/`actual` platform APIs |
-| `:sharedUI` | `sharedUI/` | *(deprecated — remove after native UI migration)* |
+| `:androidApp` | `androidApp/` | Compose UI, navigation, **platform ViewModels**, Koin app module |
+| `:iosApp` | `iosApp/` | SwiftUI, **platform ViewModels**, `SharedLogic.framework` |
+| `shared/core/*` | `shared/core/` | database, geofencing, notifications, network (future), common |
+| `shared/feature/*` | `shared/feature/` | home, tasks, locations, arrival, settings (domain/data/presentation) |
+| `:sharedLogic` | `sharedLogic/` | **Interim monolith** — migrate into `shared/` per [ARCHITECTURE.md](ARCHITECTURE.md) §14 |
+| `:sharedUI` | `sharedUI/` | **Deprecated** — do not add code |
 
-**Base package:** `com.mohamedfaridelsherbini.moventiq`
-**Source sets:** `commonMain` (shared), `androidMain`/`iosMain` (platform), `commonTest`/`androidHostTest`/`iosTest`.
+### Layering
 
-### Layering rule
 ```
-androidApp (Compose, ViewModels)  ─depends on→  sharedLogic (Room, repos, use cases)
-iosApp (SwiftUI, ViewModels)      ─depends on→  sharedLogic (via SharedLogic.framework)
+androidApp / iosApp (native UI + ViewModels)
+        ↓ use cases only
+shared/feature/*/domain
+        ↓
+shared/feature/*/data  →  shared/core/database
+shared/core/geofencing, notifications, location
 ```
-UI never talks to Room DAOs directly — ViewModels call use cases in `sharedLogic`.
+
+**Rules:** UI never imports DAOs. Domain never imports Room/SQLDelight/Ktor. Features do not depend on each other’s `data`.
+
+**Package:** `com.mohamedfaridelsherbini.moventiq`
 
 ---
 
-## 3. Tech stack (from `gradle/libs.versions.toml`)
+## 3. Tech stack
 
-- Kotlin **2.3.21**, Compose Multiplatform **1.11.0**, Material3 **1.11.0-alpha07**
-- **Koin 4.0.3** — DI in `:sharedLogic` (`koin-core`) and `:androidApp` (`koin-android`, `koin-compose-viewmodel`)
-- AGP **9.0.1**, minSdk **24**, compile/target **36**
-- Lifecycle ViewModel/runtime Compose, `compose.components.resources`
-- Add new deps to the **version catalog** (`gradle/libs.versions.toml`), never hardcode versions in module `build.gradle.kts`.
+| Layer | Technology |
+|---|---|
+| Shared | Kotlin Multiplatform, Coroutines, Flow, **Koin**, kotlinx.serialization |
+| Persistence (MVP) | **Room 3** → `core/database` |
+| Persistence (scale) | SQLDelight (optional migration) |
+| Network (post-MVP) | **Ktor** → `core/network` |
+| Android | Jetpack Compose, Material 3, Navigation Compose |
+| iOS | SwiftUI, NavigationStack |
+
+Versions: `gradle/libs.versions.toml` only — never hardcode in module `build.gradle.kts`.
+
+**Koin (KMP):** [Kotlin Multiplatform setup](https://insert-koin.io/docs/reference/koin-core/kmp-setup/) — full link list in [RESOURCES.md](RESOURCES.md)
 
 ---
 
 ## 4. Build / run / test
 
 ```bash
-# Android debug build
 ./gradlew :androidApp:assembleDebug
+./gradlew :sharedLogic:testAndroidHostTest :sharedLogic:iosSimulatorArm64Test
+./gradlew :androidApp:testDebugUnitTest
+./gradlew :androidApp:pixel6Api36DebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.package=com.mohamedfaridelsherbini.moventiq.ui.splash
 
-# Run unit tests
-./gradlew :sharedUI:testAndroidHostTest :sharedLogic:testAndroidHostTest
-./gradlew :sharedLogic:iosSimulatorArm64Test
-
-# iOS: open iosApp/ in Xcode and run
+cd iosApp && xcodebuild test -project iosApp.xcodeproj -scheme iosApp \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' CODE_SIGNING_ALLOWED=NO
 ```
-Gradle config-cache and build-cache are on. Prefer IDE run configs for day-to-day.
+
+iOS: open `iosApp/` in Xcode. Use **shared** scheme in `xcshareddata/xcschemes/` (not empty `xcuserdata` overrides).
 
 ---
 
 ## 5. Design system → code
 
-Tokens live in `DESIGN.md` (YAML front-matter) and are the canonical values. Implement them once as a Compose theme in `sharedUI` and **never hardcode hex/spacing in screens**.
+Tokens: **DESIGN.md** only — no hardcoded hex/spacing in screens.
 
-### Color tokens (map to a `MoventiqColors` + `MaterialTheme`)
-| Token | Light | Dark |
-|---|---|---|
-| primary | `#4F46E5` | `#4F46E5` |
-| secondary | `#2563EB` | `#2563EB` |
-| accent (cyan) | `#06B6D4` | `#06B6D4` |
-| success / warning / error | `#10B981` / `#F59E0B` / `#EF4444` | same |
-| bg | `#F8FAFC` | `#0F172A` |
-| card | `#FFFFFF` | `#1E293B` |
-| text-primary | `#0F172A` | `#F8FAFC` |
-| text-secondary | `#475569` | `#94A3B8` |
-| text-muted | `#64748B` | `#64748B` |
-| hairline (border) | `#E2E8F0` | `#334155` |
-| primary-container | `#EEF2FF` | (tinted) |
+| Layer | Android | iOS | Shared |
+|---|---|---|---|
+| Numeric tokens | `MoventiqTheme` | `MoventiqTheme` | `core/designsystem` |
+| Components | `androidApp/.../components/` | `iosApp/.../Components/` | — |
+| Screens | `androidApp/.../screens/` | `iosApp/.../Screens/` | — |
 
-Provide light/dark via a `MoventiqTheme(darkTheme) { }` wrapper exposing `MaterialTheme` + an extended `LocalMoventiqColors`/`LocalMoventiqSpacing`.
-
-### Typography
-- Font: **Plus Jakarta Sans** (SemiBold/Bold for headings). Bundle via `compose.components.resources`.
-- Scale: `display-lg, h1, h2, title, body-md, body-sm, caption` (see `DESIGN.md`).
-
-### Shape / spacing / radius
-- Radius scale: `sm, md, lg, xl, full` → map to `Shapes`.
-- Spacing scale: `xs…xxl`. 8pt rhythm.
-
-### Components (designed in `.pen` → build as composables in `sharedUI/.../ui/components/`)
-| Design component | Composable |
-|---|---|
-| `Component/TabBar` | `MoventiqBottomBar` (Home·Tasks·FAB·Places·Settings, floating, states) |
-| `Component/PrimaryButton` / `SecondaryButton` | `PrimaryButton`, `SecondaryButton` |
-| `Component/TaskRow` | `TaskRow` (checkbox, title, location tag, swipe edit/delete, drag handle) |
-| `Component/TaskChip` | `TaskChip` |
-| `Component/LocationCard` | `LocationCard` (status pill, radius, count, last-trigger) |
-| `Component/LocationBanner` | `ActiveLocationCard` (live status, triggered preview) |
-| `Component/StatusBar` | system bar / scaffold inset (usually OS-provided) |
-| `Component/MoventiqSymbol` | brand mark (vector assets in `androidApp/src/main/res/`) |
-
-### Screens (`sharedUI/.../ui/<feature>/`)
-`splash, onboarding, permission, firstLocationSetup, home, locations, locationDetail (tasks), createLocation, createTask, arrival, settings`. Each = a stateless `XScreen(state, onEvent)` + a `XViewModel` (in `sharedLogic` or a `sharedUI` viewmodel layer).
-
-> Launcher icons and brand drawables live in `androidApp/src/main/res/` and the iOS asset catalog. The local `brand-assets/` export folder is gitignored.
+Both **light and dark** for every shipped screen.
 
 ---
 
-## 6. Geofencing (the core feature)
+## 6. Geofencing
 
-Define an `expect` interface in `sharedLogic/commonMain`, implement per platform:
+| Piece | Owner |
+|---|---|
+| Contract + OS sync | `shared/core/geofencing` (`GeofenceRegistry`, `GeofenceEventSource`) |
+| Location persistence | `shared/feature/locations` |
+| ENTER handling + arrival UX | `shared/feature/arrival` |
+| Android receiver | `androidApp` + `core/geofencing` androidMain |
+| iOS monitoring | `iosApp` + `core/geofencing` iosMain |
 
-```kotlin
-// commonMain
-interface GeofenceManager {
-    suspend fun sync(locations: List<Location>)   // register active, remove stale
-    val events: Flow<GeofenceEvent>               // ENTER/EXIT with locationId
-}
-```
-- **Android** (`androidMain` + `:androidApp`): `com.google.android.gms.location.GeofencingClient`, `PendingIntent` → `BroadcastReceiver`, re-register on `BOOT_COMPLETED`. Requires `ACCESS_FINE_LOCATION` + `ACCESS_BACKGROUND_LOCATION` (API 29+).
-- **iOS** (`iosMain` + `:iosApp`): `CLLocationManager` region monitoring (`CLCircularRegion`), `UNUserNotificationCenter` for notifications, "Always" authorization.
+On ENTER → update `lastTriggeredAt`, show Arrival, notify (respect settings).
 
-On ENTER → mark `lastTriggeredAt`, surface triggered (incomplete, linked) tasks via notification + the `Arrival` screen.
+**Interim:** `GeofenceManager` expect in `:sharedLogic` — move to `core/geofencing`.
 
 ---
 
 ## 7. Conventions
 
-- **State:** unidirectional. `data class XState`, `sealed interface XEvent`, ViewModel exposes `StateFlow<XState>`. Screens are stateless and preview-able.
-- **Persistence:** **Room 3** in `:sharedLogic` (entities/DAOs in `commonMain`, platform builders in `androidMain`/`iosMain`). Repositories return `Flow`. See [ARCHITECTURE.md](ARCHITECTURE.md) §5 for schema.
-- **No profile UI:** do not add avatar, email, PRO badge, sign-in, or "Delete account". Use "Clear all data" in Settings → Privacy for a full local reset.
-- **Naming:** screens `FooScreen`, viewmodels `FooViewModel`, composable components PascalCase, token accessors via `MoventiqTheme`.
-- **No hardcoded colors/dimens** in UI — always theme tokens.
-- **Accessibility:** every interactive node ≥44dp, `Modifier.semantics`/contentDescription on icon-only controls, AA contrast.
-- **Both themes** must be implemented for every screen (design ships light + dark).
-- Keep `commonMain` platform-agnostic; push platform calls behind `expect`/`actual`.
+- **State:** `XUiState`, `XEvent` / `XAction`, `StateFlow` in platform ViewModels.
+- **Persistence:** Room in shared data layer; repositories expose `Flow`.
+- **No profile UI** — no avatar, email, sign-in, cloud sync.
+- **Accessibility:** ≥44dp targets, semantics on icon-only controls.
+- **commonMain:** platform-agnostic; `expect`/`actual` in `core/*` only.
+- **Splash / onboarding:** app-local (`androidApp` / `iosApp`), not `shared/feature`.
 
 ---
 
-## 8. Working with the design file
+## 8. Design file
 
-- `Moventiq.pen` is the **encrypted Pencil design source**. Do **not** open/edit it with text/Read tools — use the Pencil MCP tools only.
-- Treat the rendered screens as the visual spec; treat `DESIGN.md` tokens as the numeric spec. If they ever conflict, `DESIGN.md` wins for values, the `.pen` wins for layout/composition.
-- Maps in the design are high-fidelity *mockups*. In code, drop a real `MapView` / Google Maps SDK (Android) or `MKMapView` (iOS) and bind the radius control to the geofence circle.
+- `Moventiq.pen` — Pencil MCP only (encrypted).
+- Layout from `.pen`; numeric tokens from `DESIGN.md`.
 
 ---
 
-## 9. Definition of done (per change)
+## 9. Definition of done
 
-- Builds: `./gradlew :androidApp:assembleDebug` green.
-- Tests pass for touched modules.
-- New UI matches `.pen` within tokens, in **light and dark**.
-- No hardcoded design values; no platform APIs leaked into `commonMain` UI.
-- Accessibility: labels + touch targets verified.
-- Update `MVP.md` milestone checkboxes / this file if conventions change.
+- `./gradlew :androidApp:assembleDebug` green
+- Tests pass for touched modules
+- UI matches `.pen` + tokens, light + dark
+- New logic has unit tests; new UI has previews + behavior tests where applicable
+- Update docs if conventions change
 
 ---
 
 ## 10. Current state
 
-Repo is a fresh KMP template (`Greeting`/`Platform` boilerplate in `sharedLogic`, starter `App.kt` in `sharedUI`). The **design is complete**; implementation starts at `MVP.md` → Milestone M0 (theme + components + nav scaffold). Replace the template boilerplate as features land.
+- **Done:** Splash (Android + iOS), Koin bootstrap (`sharedLogic/di`), theme scaffolding.
+- **Next (M1):** Room schema, feature packages (tasks, locations, settings) inside `:sharedLogic` or extracted modules.
+- **Design:** complete in `.pen` / `DESIGN.md`.
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for full folder trees, diagrams, and migration steps.

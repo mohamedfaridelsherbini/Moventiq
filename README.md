@@ -1,35 +1,52 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# Moventiq
 
-* [/iosApp](./iosApp/iosApp) contains an iOS application. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+**The right task. At the right place.** — Location-aware productivity for Android and iOS.
 
-* [/sharedLogic](./sharedLogic/src) is for the code that will be shared between app targets in the project.
-  The most important subfolder is [commonMain](./sharedLogic/src/commonMain/kotlin). If preferred, you
-  can add code to the platform-specific folders here too.
+## Architecture
 
-* [/sharedUI](./sharedUI/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./sharedUI/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./sharedUI/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./sharedUI/src/jvmMain/kotlin)
-    folder is the appropriate location.
+- **Native UI:** Jetpack Compose (Android), SwiftUI (iOS)
+- **Shared logic:** Kotlin Multiplatform, **feature-first** modules (`shared/feature/*`, `shared/core/*`)
+- **Offline-first:** local database (Room 3 for MVP; SQLDelight optional at scale)
+- **DI:** [Koin KMP](https://insert-koin.io/docs/reference/koin-core/kmp-setup/)
 
-### Running the apps
+Full design: [ARCHITECTURE.md](ARCHITECTURE.md) · Product: [MVP.md](MVP.md) · Agents: [AGENT.md](AGENT.md)
 
-Use the run configurations provided by the run widget in your IDE's toolbar. You can also use these commands and options:
+## Repository layout
 
-- Android app: `./gradlew :androidApp:assembleDebug`
-- iOS app: open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+| Path | Role |
+|---|---|
+| `androidApp/` | Compose app, navigation, platform ViewModels |
+| `iosApp/` | SwiftUI app, links `SharedLogic.framework` |
+| `sharedLogic/` | **Interim** shared KMP (migrating to `shared/`) |
+| `sharedUI/` | Deprecated — do not use |
 
-### Running tests
+**Target structure** (see ARCHITECTURE.md):
 
-Use the run button in your IDE's editor gutter, or run tests using Gradle tasks:
+```
+shared/core/      common, database, geofencing, notifications, …
+shared/feature/   home, tasks, locations, arrival, settings
+```
 
-- Android tests: `./gradlew :sharedUI:testAndroidHostTest :sharedLogic:testAndroidHostTest`
-- iOS tests: `./gradlew :sharedLogic:iosSimulatorArm64Test`
+## Run
 
----
+```bash
+./gradlew :androidApp:assembleDebug
+```
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+iOS: open `iosApp/` in Xcode, run scheme **iosApp**.
+
+## Test
+
+```bash
+./gradlew :sharedLogic:testAndroidHostTest :sharedLogic:iosSimulatorArm64Test
+./gradlew :androidApp:pixel6Api36DebugAndroidTest
+cd iosApp && xcodebuild test -project iosApp.xcodeproj -scheme iosApp \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' CODE_SIGNING_ALLOWED=NO
+```
+
+## Docs
+
+- [ARCHITECTURE.md](ARCHITECTURE.md) — modules, dependencies, geofencing, testing
+- [DESIGN.md](DESIGN.md) — design tokens
+- [MVP.md](MVP.md) — scope and milestones
+- [RESOURCES.md](RESOURCES.md) — external references ([Koin KMP setup](https://insert-koin.io/docs/reference/koin-core/kmp-setup/), testing, CI)

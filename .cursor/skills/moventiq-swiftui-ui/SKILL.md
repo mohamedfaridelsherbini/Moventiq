@@ -9,29 +9,26 @@ description: >-
 
 Architecture and previews: `moventiq-ui-architecture`. Design: `moventiq-pencil-design`.
 
-Full layout: [ARCHITECTURE.md](../../../ARCHITECTURE.md) §7.
+Full layout: [ARCHITECTURE.md](../../../ARCHITECTURE.md) §8.
 
 ## Target structure (`iosApp/iosApp/`)
 
 ```
 App/
-  MoventiqApp.swift              @main, calls initKoin() from SharedLogic
-  AppDependencies.swift          resolves use cases from Koin / SharedLogic
+  MoventiqApp.swift              @main, AppDependencies.bootstrap()
+  AppDependencies.swift          KoinInitIosKt.doInitKoinIos()
 Navigation/
   RootView.swift
-  MainTabView.swift              Home · Tasks · + · Places · Settings
-Features/
-  Home/ Tasks/ Locations/ Settings/ Arrival/ Onboarding/
-UI/
-  Theme/                         MoventiqTheme, MoventiqTypography
-  Components/                    TaskRowView, LocationCardView, MoventiqBottomBar
-Platform/
-  GeofenceService.swift
-  NotificationService.swift
-  LocationPermissionService.swift
+  MainTabView.swift
+Screens/                         Home, Tasks, Locations, Arrival, Settings, Splash
+Components/
+Theme/
+DI/                              thin — graph in SharedLogic.framework
 Bridge/
   SharedLogic+Async.swift        Flow → AsyncStream
 ```
+
+OS geofence/notification **wrappers** stay thin; contracts live in `shared/core/geofencing` and `shared/core/notifications`.
 
 ## Stack
 
@@ -40,7 +37,8 @@ Bridge/
 | UI | SwiftUI (iOS 17+) |
 | Navigation | `NavigationStack` + `NavigationPath` |
 | State | `@Observable` ViewModels |
-| DB / logic | `SharedLogic.framework` (Room via KMP) |
+| DB / logic | `SharedLogic.framework` (`shared/feature/*`, `shared/core/database`) |
+| DI bootstrap | [Koin KMP setup](https://insert-koin.io/docs/reference/koin-core/kmp-setup/) · `KoinInitIosKt.doInitKoinIos()` · [RESOURCES.md](../../../RESOURCES.md) |
 | Geofencing | CoreLocation `CLCircularRegion` |
 | Notifications | UserNotifications |
 | Maps | MapKit (`Map`, circle overlay for radius) |

@@ -48,9 +48,11 @@ If a user can save "Supermarket", add "Buy milk", drive there, and get the task 
 |---|---|---|
 | Android (minSdk 24, target 36) | `:androidApp` | **Jetpack Compose** + Material 3 |
 | iOS | `:iosApp` | **SwiftUI** |
-| Shared logic + DB | `:sharedLogic` | Kotlin Multiplatform + **Room 3** |
+| Shared logic | `shared/feature/*` + `shared/core/*` | Kotlin Multiplatform, Koin, Coroutines, Flow |
+| Shared logic (interim) | `:sharedLogic` | Migrating to feature modules — **Room 3** for MVP DB |
+| Network (post-MVP) | `shared/core/network` | Ktor when sync/collaboration ships |
 
-> Full module/layer/package design: [ARCHITECTURE.md](ARCHITECTURE.md). `:sharedUI` (Compose Multiplatform) is deprecated — native UIs per platform.
+> Feature-first architecture, dependency rules, and folder trees: [ARCHITECTURE.md](ARCHITECTURE.md). `:sharedUI` is deprecated — native UIs per platform.
 
 ---
 
@@ -183,7 +185,7 @@ Settings persisted: theme (system/light/dark), arrival/reminder/sound toggles, q
 ## 9. Milestones
 
 1. **M0 — Foundations:** theme (tokens → Compose `MaterialTheme`), typography, design-system components (TabBar, buttons, cards, task row, status bar), navigation scaffold.
-2. **M1 — Data layer:** Location/Task models, local persistence, repositories, settings store (all in `:sharedLogic`).
+2. **M1 — Data layer:** Location/Task models, local persistence, repositories, settings store (`shared/feature/*` packages; interim `:sharedLogic` module).
 3. **M2 — CRUD UI:** Locations list/create/edit, Tasks list/create/edit, Home, Settings — wired to data.
 4. **M3 — Geofencing (Android):** permission flow, geofence registration, ENTER handling, arrival notification + Arrival screen.
 5. **M4 — Onboarding + polish:** splash, onboarding, first-location setup, empty states, dark-mode QA, accessibility pass.

@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage") // AGP managedDevices DSL is still @Incubating in AGP 9.
+
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -50,12 +52,13 @@ dependencies {
 
 android {
     namespace = "com.mohamedfaridelsherbini.moventiq"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    val compileSdkVersion = libs.versions.android.compileSdk.get().toInt()
+    compileSdk = compileSdkVersion
 
     defaultConfig {
         applicationId = "com.mohamedfaridelsherbini.moventiq"
         minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        targetSdk = compileSdkVersion
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -76,5 +79,15 @@ android {
     }
     testOptions {
         animationsDisabled = true
+        // https://developer.android.com/studio/test/gradle-managed-devices
+        managedDevices {
+            localDevices {
+                create("pixel6Api36") {
+                    device = "Pixel 6"
+                    apiLevel = 36
+                    systemImageSource = "google"
+                }
+            }
+        }
     }
 }

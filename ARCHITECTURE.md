@@ -1,8 +1,10 @@
 # Moventiq — Application Architecture
 
-> **Local-only MVP** · Android Jetpack Compose · iOS SwiftUI · Room 3 (KMP) · shared Kotlin business logic
+> **Location-aware productivity** · Android Jetpack Compose · iOS SwiftUI · Kotlin Multiplatform · offline-first · feature-first modules
 
-This document defines the target architecture for implementation. Visual specs live in `Moventiq.pen` / `DESIGN.md`. Product scope lives in `MVP.md`.
+Visual specs: `Moventiq.pen` / `DESIGN.md`. Product scope: `MVP.md`. Agent conventions: `AGENT.md`.
+
+**Koin (KMP):** [Kotlin Multiplatform setup](https://insert-koin.io/docs/reference/koin-core/kmp-setup/) · [RESOURCES.md](RESOURCES.md)
 
 ---
 
@@ -10,644 +12,451 @@ This document defines the target architecture for implementation. Visual specs l
 
 | Principle | Decision |
 |---|---|
-| Data | **Room 3** in `:sharedLogic` — single schema, Android + iOS |
-| Business logic | **Kotlin Multiplatform** — repositories, use cases, geofence API |
-| Android UI | **Jetpack Compose** + Material 3 in `:androidApp` |
-| iOS UI | **SwiftUI** in `:iosApp` |
-| Identity | **No profile, no auth** — device-local DB only |
-| State | Unidirectional — UI observes repositories / use cases |
-| Design tokens | Map `DESIGN.md` → platform themes (Compose `MoventiqTheme`, SwiftUI `MoventiqTheme`) |
+| Organization | **Feature-first** Gradle modules — not monolithic `domain/` / `data/` packages |
+| Business logic | **Kotlin shared** — use cases, repositories, state models in `shared/feature/*` |
+| UI | **100% native** — Compose (`:androidApp`), SwiftUI (`:iosApp`) |
+| Shared presentation | **State only** — `UiState`, `Action`, `Event`; optional KMP store; **no** Compose/SwiftUI in shared |
+| Data (MVP) | **Room 3** in `core/database` (today: interim `:sharedLogic`) |
+| Data (scale) | **SQLDelight** in `core/database` when splitting modules |
+| Network | **Ktor** in `core/network` — **deferred** until sync/collaboration (MVP is local-only) |
+| DI | **Koin** — per-feature modules + app bootstrap |
+| Identity | **No profile, no auth** — device-local only ([MVP.md](MVP.md)) |
+| Cross-feature | Domain events or shared read models — **no** feature→feature `data` dependencies |
 
-**Retire `:sharedUI` (Compose Multiplatform)** once native screens land. It was a bootstrap; MVP ships native UIs per platform.
+**Retire `:sharedUI`** — deprecated Compose Multiplatform bootstrap; do not add UI there.
 
 ---
 
-## 2. Module topology
+## 2. Current vs target modules
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        :androidApp                              │
-│  Compose UI · Navigation · Android ViewModels · Koin · GMS    │
-└────────────────────────────┬────────────────────────────────────┘
-                             │ depends on
-┌────────────────────────────▼────────────────────────────────────┐
-│                        :sharedLogic                             │
-│  Domain · UseCases · Repositories · Room DB · expect/actual      │
-│  (commonMain + androidMain + iosMain)                           │
-└────────────────────────────┬────────────────────────────────────┘
-                             │ exported as SharedLogic.framework
-┌────────────────────────────▼────────────────────────────────────┐
-│                         :iosApp                                 │
-│  SwiftUI · NavigationStack · @Observable VMs · CoreLocation     │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-| Module | Gradle / Xcode | Responsibility |
+| Phase | Gradle modules | Notes |
 |---|---|---|
-| `:sharedLogic` | KMP library → `SharedLogic.framework` | Room, repos, use cases, geofencing contract |
-| `:androidApp` | Android application | Compose screens, Android services, DI root |
-| `:iosApp` | Xcode project | SwiftUI screens, iOS services, links framework |
-| `:sharedUI` | *(deprecated)* | Remove after Android Compose migration |
-
----
-
-## 3. Layer model (sharedLogic)
+| **Now** | `:androidApp`, `:iosApp`, `:sharedLogic`, `:sharedUI` (deprecated) | Splash + Koin bootstrap in `sharedLogic/di` |
+| **Target** | `:androidApp`, `:iosApp`, `shared/core/*`, `shared/feature/*` | Split `sharedLogic` incrementally |
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│  presentation (platform)                                  │
-│  Android: Screen + ViewModel    iOS: View + ViewModel     │
-└─────────────────────────┬────────────────────────────────┘
-                          │ calls
-┌─────────────────────────▼────────────────────────────────┐
-│  domain                                                   │
-│  Location · Task · Settings · GeofenceEvent (pure models) │
-│  UseCases: CreateTask, SyncGeofences, OnArrival, …        │
-└─────────────────────────┬────────────────────────────────┘
-                          │ uses
-┌─────────────────────────▼────────────────────────────────┐
-│  data                                                     │
-│  LocationRepository · TaskRepository · SettingsStore    │
-│  Room DAOs · Entity mappers · GeofenceManager (expect)    │
-└──────────────────────────────────────────────────────────┘
-```
-
-**Dependency rule:** domain never imports Room or platform APIs. Data implements repository interfaces defined in domain.
-
----
-
-## 4. Package layout — `:sharedLogic`
-
-```
-com.mohamedfaridelsherbini.moventiq/
-├── domain/
-│   model/           Location, Task, Priority, ReminderType, AppSettings
-│   repository/      LocationRepository, TaskRepository, SettingsRepository (interfaces)
-│   usecase/
-│       location/    CreateLocation, UpdateLocation, DeleteLocation, ObserveLocations
-│       task/        CreateTask, CompleteTask, ObserveTasksByLocation, ObserveAllTasksGrouped
-│       geofence/    SyncGeofences, HandleGeofenceEnter
-│       settings/    UpdateSettings, ObserveSettings, ClearAllData
-│   util/            Result, AppError
-├── data/
-│   local/
-│       entity/      LocationEntity, TaskEntity, SettingsEntity
-│       dao/         LocationDao, TaskDao, SettingsDao
-│       MoventiqDatabase.kt
-│       Converters.kt          // Instant, enums
-│   mapper/          LocationMapper, TaskMapper
-│   repository/      LocationRepositoryImpl, TaskRepositoryImpl, …
-│   settings/        DataStore or Room-backed SettingsRepositoryImpl
-├── platform/
-│   GeofenceManager.kt         // expect
-│   NotificationScheduler.kt   // expect
-│   PermissionState.kt         // expect (optional)
-└── di/
-    SharedLogicModule.kt       // Koin module (commonMain + platform actuals)
-```
-
-### androidMain additions
-```
-platform/
-  GeofenceManager.android.kt    // GeofencingClient + BroadcastReceiver
-  NotificationScheduler.android.kt
-  DatabaseBuilder.android.kt    // Room.databaseBuilder(context, …)
-```
-
-### iosMain additions
-```
-platform/
-  GeofenceManager.ios.kt        // CLLocationManager region monitoring
-  NotificationScheduler.ios.kt  // UNUserNotificationCenter
-  DatabaseBuilder.ios.kt        // Room + BundledSQLiteDriver
+Moventiq/
+├── shared/
+│   ├── core/          common, network, database, preferences, location,
+│   │                  geofencing, notifications, analytics, designsystem
+│   ├── feature/       home, tasks, locations, arrival, settings
+│   └── platform/      optional Koin aggregators (android / ios)
+├── androidApp/
+├── iosApp/
+└── (future) wearApp/, widgetExt/, webApp/
 ```
 
 ---
 
-## 5. Room 3 database
+## 3. Module dependency diagram
 
-Single database **`moventiq.db`**, version 1, owned by `:sharedLogic`.
+```mermaid
+flowchart TB
+    subgraph apps["Applications"]
+        AA[androidApp]
+        IA[iosApp]
+    end
 
-### Dependencies (add to `gradle/libs.versions.toml`)
+    subgraph features["shared/feature"]
+        FH[home]
+        FT[tasks]
+        FL[locations]
+        FA[arrival]
+        FS[settings]
+    end
 
-```toml
-[versions]
-room = "2.7.0"          # Room KMP (Room 3 track via androidx.room)
-sqlite = "2.5.0"
+    subgraph core["shared/core"]
+        CC[common]
+        CN[network]
+        CD[database]
+        CP[preferences]
+        CL[location]
+        CG[geofencing]
+        CNo[notifications]
+        CAn[analytics]
+        CDe[designsystem]
+    end
 
-[libraries]
-androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
-androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+    AA --> FH & FT & FL & FA & FS
+    IA --> FH & FT & FL & FA & FS
+
+    FH --> FT & FL & FA & CC
+    FT --> CD & CC & CDe
+    FL --> CD & CC & CL & CG
+    FA --> FT & FL & CG & CNo & CC
+    FS --> CP & CD & CC
+
+    FT --> CN
+    FL --> CN
+    CN --> CC
+    CD --> CC
+    CP --> CC
+    CL --> CC
+    CG --> CL & CC
+    CNo --> CC
+    CAn --> CC
+    CDe --> CC
 ```
 
-Apply `ksp(libs.androidx.room.compiler)` on `:sharedLogic` for both targets.
+### Dependency rules (enforce in CI)
 
-### Schema
-
-```kotlin
-// ── locations ──
-@Entity(tableName = "locations")
-data class LocationEntity(
-    @PrimaryKey val id: String,           // UUID
-    val name: String,
-    val address: String?,
-    val latitude: Double,
-    val longitude: Double,
-    val radiusMeters: Int,                 // default 200
-    val icon: String,                      // "house", "briefcase", …
-    @ColumnInfo(name = "is_active") val isActive: Boolean,
-    @ColumnInfo(name = "created_at") val createdAt: Long,      // epoch millis
-    @ColumnInfo(name = "last_triggered_at") val lastTriggeredAt: Long?,
-)
-
-// ── tasks ──
-@Entity(
-    tableName = "tasks",
-    foreignKeys = [ForeignKey(
-        entity = LocationEntity::class,
-        parentColumns = ["id"],
-        childColumns = ["location_id"],
-        onDelete = ForeignKey.SET_NULL,
-    )],
-    indices = [Index("location_id"), Index("is_completed")],
-)
-data class TaskEntity(
-    @PrimaryKey val id: String,
-    val title: String,
-    val notes: String?,
-    @ColumnInfo(name = "location_id") val locationId: String?,
-    val priority: String,                    // NONE | LOW | MEDIUM | HIGH
-    @ColumnInfo(name = "due_at") val dueAt: Long?,
-    @ColumnInfo(name = "reminder_type") val reminderType: String,  // ON_ARRIVAL | TIME | NONE
-    @ColumnInfo(name = "is_completed") val isCompleted: Boolean,
-    @ColumnInfo(name = "sort_order") val sortOrder: Int,
-    @ColumnInfo(name = "created_at") val createdAt: Long,
-    @ColumnInfo(name = "completed_at") val completedAt: Long?,
-)
-
-// ── settings (single row, id = "app") ──
-@Entity(tableName = "settings")
-data class SettingsEntity(
-    @PrimaryKey val id: String = "app",
-    val theme: String,                     // SYSTEM | LIGHT | DARK
-    val arrivalAlerts: Boolean,
-    val taskReminders: Boolean,
-    val vibration: Boolean,
-    val quietHoursEnabled: Boolean,
-    @ColumnInfo(name = "quiet_start_minutes") val quietStartMinutes: Int,  // 22*60
-    @ColumnInfo(name = "quiet_end_minutes") val quietEndMinutes: Int,        // 7*60
-    @ColumnInfo(name = "default_radius_meters") val defaultRadiusMeters: Int,
-    @ColumnInfo(name = "default_priority") val defaultPriority: String,
-    @ColumnInfo(name = "default_reminder") val defaultReminder: String,
-    @ColumnInfo(name = "auto_complete_on_leave") val autoCompleteOnLeave: Boolean,
-)
-```
-
-### DAOs (Flow-first)
-
-```kotlin
-@Dao
-interface LocationDao {
-    @Query("SELECT * FROM locations ORDER BY name")
-    fun observeAll(): Flow<List<LocationEntity>>
-
-    @Query("SELECT * FROM locations WHERE id = :id")
-    fun observeById(id: String): Flow<LocationEntity?>
-
-    @Query("SELECT * FROM locations WHERE is_active = 1")
-    fun observeActive(): Flow<List<LocationEntity>>
-
-    @Insert(onConflict = REPLACE)
-    suspend fun upsert(entity: LocationEntity)
-
-    @Query("DELETE FROM locations WHERE id = :id")
-    suspend fun deleteById(id: String)
-
-    @Query("UPDATE locations SET last_triggered_at = :at WHERE id = :id")
-    suspend fun updateLastTriggered(id: String, at: Long)
-}
-
-@Dao
-interface TaskDao {
-    @Query("SELECT * FROM tasks WHERE location_id = :locationId AND is_completed = 0 ORDER BY sort_order")
-    fun observeActiveForLocation(locationId: String): Flow<List<TaskEntity>>
-
-    @Query("SELECT * FROM tasks WHERE is_completed = 0 ORDER BY sort_order")
-    fun observeAllActive(): Flow<List<TaskEntity>>
-
-    @Query("SELECT * FROM tasks WHERE id = :id")
-    fun observeById(id: String): Flow<TaskEntity?>
-
-    @Insert(onConflict = REPLACE)
-    suspend fun upsert(entity: TaskEntity)
-
-    @Query("DELETE FROM tasks WHERE id = :id")
-    suspend fun deleteById(id: String)
-
-    @Query("DELETE FROM tasks WHERE location_id = :locationId")
-    suspend fun deleteByLocationId(locationId: String)
-
-    @Query("UPDATE tasks SET is_completed = 1, completed_at = :at WHERE id = :id")
-    suspend fun markComplete(id: String, at: Long)
-}
-
-@Dao
-interface SettingsDao {
-    @Query("SELECT * FROM settings WHERE id = 'app'")
-    fun observe(): Flow<SettingsEntity?>
-
-    @Insert(onConflict = REPLACE)
-    suspend fun upsert(entity: SettingsEntity)
-}
-```
-
-### Database builder (platform actual)
-
-```kotlin
-// commonMain
-@Database(entities = [LocationEntity::class, TaskEntity::class, SettingsEntity::class], version = 1)
-@TypeConverters(Converters::class)
-abstract class MoventiqDatabase : RoomDatabase() {
-    abstract fun locationDao(): LocationDao
-    abstract fun taskDao(): TaskDao
-    abstract fun settingsDao(): SettingsDao
-}
-
-expect fun createDatabase(): MoventiqDatabase
-
-// androidMain — DatabaseBuilder.android.kt
-actual fun createDatabase(): MoventiqDatabase =
-    Room.databaseBuilder(context, MoventiqDatabase::class.java, "moventiq.db").build()
-
-// iosMain — BundledSQLiteDriver
-actual fun createDatabase(): MoventiqDatabase {
-    val driver = BundledSQLiteDriver()
-    return Room.databaseBuilder<MoventiqDatabase>(
-        name = DATABASE_PATH,
-        factory = { MoventiqDatabase::class.instantiateImpl() }
-    ).setDriver(driver).build()
-}
-```
-
-Geofences are **not** stored in Room — they are derived from active `LocationEntity` rows and registered with the OS via `GeofenceManager`.
+1. **Acyclic** module graph.
+2. `feature/*/domain` — zero imports from `data`, SQLDelight/Room, Ktor, platform APIs.
+3. `feature/*/data` — implements domain repos; may use `core/database`; must not import another feature’s `data`.
+4. `feature/*/presentation` — domain + use cases only (no DAOs).
+5. `core/*` — never depends on `feature/*`.
+6. **Apps** — UI + navigation + platform ViewModels; no business rules.
+7. **Features never depend on each other’s `data`** — use `domain` interfaces or `core/common` events.
 
 ---
 
-## 6. Android — Jetpack Compose
+## 4. Feature module layout
 
-### Package layout (`:androidApp`)
+Each `shared/feature/<name>/` is a KMP library:
 
 ```
-com.mohamedfaridelsherbini.moventiq/
+shared/feature/tasks/
+└── src/
+    ├── commonMain/kotlin/.../feature/tasks/
+    │   ├── domain/
+    │   │   ├── model/
+    │   │   ├── repository/
+    │   │   └── usecase/
+    │   ├── data/
+    │   │   ├── local/
+    │   │   ├── remote/          # future (Ktor)
+    │   │   ├── mapper/
+    │   │   └── repository/
+    │   ├── presentation/
+    │   │   ├── state/
+    │   │   ├── action/
+    │   │   ├── event/
+    │   │   └── viewmodel/       # optional KMP store
+    │   └── di/
+    │       └── TasksModule.kt
+    ├── androidMain/             # only if feature needs Android-specific data
+    └── iosMain/
+```
+
+| Feature | Responsibility |
+|---|---|
+| `home` | Dashboard, aggregates, insight chip |
+| `tasks` | Task CRUD, reorder, complete, link to location |
+| `locations` | Place CRUD, radius, active flag, triggers geofence sync |
+| `arrival` | Geofence ENTER handling, arrival session, notification payload |
+| `settings` | Appearance, notifications prefs, privacy, clear all data |
+
+---
+
+## 5. Core modules
+
+```
+shared/core/common/         Result, AppError, dispatchers, clocks, DomainEventBus
+shared/core/network/        Ktor client (future — calendar, teams, web)
+shared/core/database/       Room (MVP) → SQLDelight (target), drivers, migrations
+shared/core/preferences/    theme, quiet hours, notification toggles
+shared/core/location/       GeoCoordinate, LocationProvider, PermissionGateway (expect)
+shared/core/geofencing/     GeofenceRegistry, GeofenceEventSource, sync policy (expect)
+shared/core/notifications/  NotificationScheduler, channels (expect)
+shared/core/analytics/      AnalyticsTracker (no-op in MVP)
+shared/core/designsystem/   numeric tokens from DESIGN.md (not UI widgets)
+```
+
+### Geofencing ownership
+
+```
+feature/locations  → persist place + radius → request sync
+core/geofencing    → register OS regions, Flow<GeofenceEvent>, cap policy
+feature/arrival    → on ENTER: load tasks, UiState, schedule notification
+androidApp/iosApp  → receivers / delegates, deep links to Arrival route
+```
+
+### Notifications ownership
+
+| Layer | Role |
+|---|---|
+| `core/notifications` | OS channels, schedule/cancel, permission |
+| `feature/arrival` | **What** to show on ENTER |
+| `feature/settings` | User toggles, quiet hours |
+| Platform apps | Icons, tap → navigation |
+
+---
+
+## 6. Layer model (within a feature)
+
+```mermaid
+flowchart LR
+    subgraph platform_ui["Platform UI"]
+        Compose[Compose Screen]
+        SwiftUI[SwiftUI View]
+    end
+
+    subgraph shared_pres["feature/*/presentation"]
+        State[UiState / Action / Event]
+        Store[Store or KMP VM]
+    end
+
+    subgraph shared_dom["feature/*/domain"]
+        UC[Use Cases]
+        RepoI[Repository Interfaces]
+    end
+
+    subgraph shared_data["feature/*/data"]
+        RepoImpl[Repository Impl]
+        Local[Local DS]
+    end
+
+    subgraph core_infra["shared/core"]
+        DB[(database)]
+        Geo[geofencing]
+    end
+
+    Compose --> State
+    SwiftUI --> State
+    Compose --> UC
+    SwiftUI --> UC
+    UC --> RepoI
+    RepoImpl -.implements.-> RepoI
+    RepoImpl --> Local
+    Local --> DB
+    UC --> Geo
+```
+
+**Reads:** DAO/`Flow` → repository → domain → use case → platform ViewModel → UI.
+
+**Writes:** UI → ViewModel → use case → repository → DAO → optional `SyncGeofences`.
+
+---
+
+## 7. Android — `:androidApp`
+
+```
+androidApp/src/main/kotlin/com/mohamedfaridelsherbini/moventiq/
 ├── MoventiqApplication.kt
 ├── MainActivity.kt
-├── di/                          Koin modules (app + sharedLogic imports)
-├── navigation/
-│   MoventiqNavHost.kt
-│   Routes.kt
-│   BottomBar.kt                 // matches Component/TabBar
-├── ui/
-│   theme/                       MoventiqTheme, Color, Type, Shape (from DESIGN.md)
-│   components/                  TaskRow, LocationCard, ActiveLocationCard, …
-│   splash/
-│   onboarding/
-│   permission/
-│   home/
-│   tasks/                       AllTasksScreen, TaskDetailScreen, …
-│   locations/
-│   arrival/
-│   settings/
-│   search/
-├── service/
-│   GeofenceBroadcastReceiver.kt
-│   BootReceiver.kt
-└── notification/
-    ArrivalNotificationManager.kt
+├── navigation/              MoventiqNavHost, Routes, effects
+├── screens/                 splash, home, tasks, locations, arrival, settings, onboarding
+├── components/              TaskRow, LocationCard, MoventiqBottomBar
+├── theme/                   MoventiqTheme (DESIGN.md tokens)
+└── di/                      appModule (ViewModels), FeatureModules.kt
 ```
-
-### Stack
 
 | Concern | Library |
 |---|---|
-| UI | Compose BOM / Material 3 |
-| Navigation | Navigation Compose (`NavHost` + typed routes) |
-| ViewModel | `androidx.lifecycle:lifecycle-viewmodel-compose` |
-| DI | **Koin** — modules in `:sharedLogic` (data/domain) + `:androidApp` (ViewModels) |
-| Maps | Google Maps Compose (Create/Edit Location) |
-| Geofencing | Play Services Location |
-| Permissions | Accompanist Permissions or `ActivityResultContracts` |
-| Coroutines | `lifecycle-runtime-compose` collects `Flow` from repos |
+| UI | Compose + Material 3 |
+| Navigation | Navigation Compose |
+| ViewModel | `lifecycle-viewmodel-compose` |
+| DI | Koin (`koin-android`, `koin-compose-viewmodel`) |
+| Geofencing | Play Services Location (`:androidApp` receiver + `core/geofencing`) |
 
-### Screen pattern
-
-```kotlin
-@Composable
-fun HomeScreen(
-    viewModel: HomeViewModel = koinViewModel(),
-) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
-    HomeContent(state = state, onEvent = viewModel::onEvent)
-}
-
-class HomeViewModel(
-    private val observeLocations: ObserveActiveLocations,
-    private val observeTasks: ObserveAllActiveTasks,
-    private val geofenceEvents: GeofenceManager,
-) : ViewModel() {
-    private val _state = MutableStateFlow(HomeUiState())
-    val state: StateFlow<HomeUiState> = _state.asStateFlow()
-
-    fun onEvent(event: HomeEvent) { /* … */ }
-}
-
-// androidApp/di/AppModule.kt
-val appModule = module {
-    viewModel { HomeViewModel(get(), get(), get()) }
-}
-```
-
-ViewModels live in `:androidApp` (platform UI layer). They call **use cases** from `:sharedLogic`, never DAOs directly.
+ViewModels live in **`androidApp`**. They call **shared use cases**, never DAOs.
 
 ### Navigation graph
 
 ```
 splash → onboarding? → locationPermission → notificationPermission? → main
-main (Scaffold + BottomBar):
-  home
-  tasks (+ taskDetail/{id}, createTask, editTask/{id}, searchTasks)
-  places (+ createLocation, editLocation/{id}, locationTasks/{id}, searchPlaces)
-  settings (+ notifications, geofencing, appearance, privacy, about)
-arrival (full-screen overlay / separate destination on geofence event)
+main (Scaffold + BottomBar): home | tasks | places | settings
+arrival (full-screen on geofence ENTER)
 ```
 
 ---
 
-## 7. iOS — SwiftUI
-
-### Folder layout (`iosApp/iosApp/`)
+## 8. iOS — `:iosApp`
 
 ```
-App/
-  MoventiqApp.swift              @main, DI bootstrap
-  AppDependencies.swift          wires SharedLogic factories
-Navigation/
-  RootView.swift
-  MainTabView.swift              // Home · Tasks · + · Places · Settings
-Features/
-  Home/
-    HomeView.swift
-    HomeViewModel.swift
-  Tasks/
-  Locations/
-  Settings/
-  Arrival/
-  Onboarding/
-UI/
-  Theme/
-    MoventiqTheme.swift           // colors from DESIGN.md
-    MoventiqTypography.swift
-  Components/
-    TaskRowView.swift
-    LocationCardView.swift
-    MoventiqBottomBar.swift
-Platform/
-  GeofenceService.swift           // wraps Kotlin GeofenceManager or native CL
-  NotificationService.swift
-  LocationPermissionService.swift
-Bridge/
-  SharedLogic+Async.swift         // Flow → AsyncStream helpers (SKIE or hand-rolled)
+iosApp/iosApp/
+├── App/                     MoventiqApp, AppDependencies
+├── Navigation/              RootView, MainTabView
+├── Screens/                 Home, Tasks, Locations, Arrival, Settings, Splash
+├── Components/
+├── Theme/
+├── DI/                      thin — graph in SharedLogic.framework
+└── Bridge/                  SharedLogic+Async.swift (Flow → AsyncStream)
 ```
-
-### Stack
 
 | Concern | Framework |
 |---|---|
 | UI | SwiftUI (iOS 17+) |
-| Navigation | `NavigationStack` + `NavigationPath` |
-| State | `@Observable` ViewModels (Observation framework) |
-| DB | **SharedLogic.framework** (Room via KMP) |
-| Geofencing | CoreLocation (`CLCircularRegion`) |
-| Notifications | UserNotifications |
-| Maps | MapKit (`Map`, `Marker`, circle overlay for radius) |
+| Navigation | `NavigationStack` |
+| State | `@Observable` ViewModels |
+| Logic | `SharedLogic.framework` (KMP) |
+| Bootstrap | `KoinInitIosKt.doInitKoinIos()` |
 
-### ViewModel pattern
-
-```swift
-@Observable
-final class HomeViewModel {
-    private(set) var state = HomeUiState()
-
-    private let observeLocations: ObserveActiveLocations
-    private var tasks: Task<Void, Never>?
-
-    init(observeLocations: ObserveActiveLocations) {
-        self.observeLocations = observeLocations
-    }
-
-    func start() {
-        tasks = Task {
-            for await locations in observeLocations.invoke().asyncStream() {
-                await MainActor.run { state.locations = locations }
-            }
-        }
-    }
-}
-```
-
-Swift ViewModels call Kotlin **use cases** exported through `SharedLogic`. Use [SKIE](https://skie.touchlab.co/) or `AsyncStream` wrappers for `Flow` interop.
-
-### Tab structure (matches design)
-
-Same five destinations as Android — implement `MoventiqBottomBar` to match `Component/TabBar` in `Moventiq.pen`.
+Swift ViewModels call Kotlin **use cases** from `AppDependencies` / Koin.
 
 ---
 
-## 8. Geofencing flow (cross-platform)
+## 9. Platform interaction with shared code
 
 ```mermaid
 sequenceDiagram
-    participant UI as Platform UI
-    participant UC as SyncGeofences
-    participant Repo as LocationRepository
-    participant Room as Room DB
-    participant GM as GeofenceManager
-    participant OS as OS Geofence API
+    participant UI as Compose / SwiftUI
+    participant PVM as Platform ViewModel
+    participant UC as Use Case
+    participant Repo as Repository
+    participant DB as Database
+    participant Geo as GeofenceRegistry
 
-    UI->>UC: app start / location saved
-    UC->>Repo: observeActiveLocations()
-    Repo->>Room: SELECT active locations
-    Room-->>Repo: Flow List Location
-    Repo-->>UC: locations
-    UC->>GM: sync(locations)
-    GM->>OS: register/remove regions
-
-    OS-->>GM: ENTER event
-    GM-->>UI: GeofenceEvent(locationId)
-    UI->>UI: show Arrival screen + notification
-    UI->>Repo: updateLastTriggered(locationId)
+    UI->>PVM: UserAction
+    PVM->>UC: invoke()
+    UC->>Repo: Flow / suspend
+    Repo->>DB: SQL
+    UC->>Geo: sync regions
+    Repo-->>PVM: domain models
+    PVM-->>UI: UiState
 ```
 
-| Platform | Implementation |
-|---|---|
-| Android | `GeofencingClient`, `PendingIntent`, `BroadcastReceiver`, `BOOT_COMPLETED` |
-| iOS | `CLLocationManager.startMonitoring(for:)`, delegate callbacks, background modes |
+**Android:** `initKoin { androidContext(); modules(appModule, *featureModules) }`
+
+**iOS:** `AppDependencies.bootstrap()` → `KoinInitIosKt.doInitKoinIos()`
 
 ---
 
-## 9. Data flow (UI → DB)
+## 10. Technology stack
 
-```mermaid
-flowchart LR
-    subgraph android [Android]
-        Compose[Compose Screen]
-        AVM[ViewModel]
-    end
-    subgraph ios [iOS]
-        SwiftUI[SwiftUI View]
-        SVM[ViewModel]
-    end
-    subgraph shared [sharedLogic]
-        UC[UseCase]
-        Repo[Repository]
-        DAO[Room DAO]
-    end
-    Compose --> AVM
-    SwiftUI --> SVM
-    AVM --> UC
-    SVM --> UC
-    UC --> Repo
-    Repo --> DAO
-```
-
-**Reads:** DAO `Flow` → Repository maps Entity → Domain → UseCase → ViewModel → UI.
-
-**Writes:** UI event → ViewModel → UseCase → Repository → DAO suspend → optional `SyncGeofences`.
+| Area | MVP (now) | Target (scale) |
+|---|---|---|
+| Shared language | Kotlin Multiplatform | same |
+| Async | Coroutines, Flow | same |
+| DI | Koin 4.x | same |
+| Serialization | kotlinx.serialization | same |
+| Persistence | Room 3 (`:sharedLogic` → `core/database`) | SQLDelight optional migration |
+| HTTP | — | Ktor in `core/network` |
+| Android UI | Jetpack Compose, Material 3, Navigation Compose | + Wear, widgets |
+| iOS UI | SwiftUI, NavigationStack | + watchOS |
 
 ---
 
-## 10. DI bootstrap (Koin)
+## 11. DI (Koin)
 
-Gradle deps (see `gradle/libs.versions.toml`):
-
-- `:sharedLogic` — `koin-core` in `commonMain`; `koin-test` in `commonTest`
-- `:androidApp` — `koin-android`, `koin-compose`, `koin-compose-viewmodel`; `koin-test-junit4` in `androidTest`
-
-### sharedLogic (commonMain)
+Per [Koin KMP setup](https://insert-koin.io/docs/reference/koin-core/kmp-setup/):
 
 ```kotlin
-// sharedLogic/di/SharedLogicModule.kt
-val sharedLogicModule = module {
-    single { createDatabase() }
-    single { get<MoventiqDatabase>().locationDao() }
-    single { get<MoventiqDatabase>().taskDao() }
-    single { get<MoventiqDatabase>().settingsDao() }
-    single<LocationRepository> { LocationRepositoryImpl(get(), get()) }
-    factory { CreateTask(get(), get()) }
-    // … repositories, use cases, GeofenceManager via expect/actual
+// shared/core/... + shared/feature/*/di/
+expect val platformModule: Module
+
+fun initKoin(config: KoinAppDeclaration? = null): KoinApplication = startKoin {
+    modules(coreModules, platformModule, *featureModules)
+    config?.invoke(this)
 }
 ```
 
-### Android
-
 ```kotlin
-class MoventiqApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        startKoin {
-            androidContext(this@MoventiqApplication)
-            modules(sharedLogicModule, appModule)
-        }
-    }
+// androidApp — MoventiqApplication
+initKoin {
+    androidContext(this@MoventiqApplication)
+    modules(appModule) // ViewModels only
 }
 ```
-
-### iOS
 
 ```swift
-@main
-struct MoventiqApp: App {
-    init() {
-        KoinKt.doInitKoin()  // or SharedLogicFactory.startKoin() wrapper
-    }
-
-    var body: some Scene {
-        WindowGroup { RootView() }
-    }
-}
+// iosApp — AppDependencies.swift
+KoinInitIosKt.doInitKoinIos()
 ```
 
-Expose `initKoin()` from Kotlin (`sharedLogic/di/`) so iOS and Android share the same Koin graph for repositories and use cases. Swift ViewModels receive use cases via constructor injection from a small `AppDependencies` wrapper.
+**Interim:** `sharedLogic/di/KoinModules.kt`, `PlatformModule.android.kt`, `PlatformModule.ios.kt`.
 
 ---
 
-## 11. Design system mapping
+## 12. Testing strategy
 
-| Design (`.pen` / `DESIGN.md`) | Android Compose | SwiftUI |
+| Layer | Location | Tooling |
 |---|---|---|
-| `$primary` `#4F46E5` | `MoventiqColors.primary` | `Color.moventiqPrimary` |
-| `$bg` / `$card` | `MaterialTheme` + custom | `Background` / `Card` styles |
-| Plus Jakarta Sans | `FontFamily` via downloadable font | Custom font in bundle |
-| `Component/TabBar` | `MoventiqBottomBar()` | `MoventiqBottomBar` |
-| `Component/TaskRow` | `TaskRow()` | `TaskRowView` |
-| `Component/LocationCard` | `LocationCard()` | `LocationCardView` |
-| Light / dark | `MoventiqTheme(darkTheme)` | `@Environment(\.colorScheme)` + override |
+| Use cases | `feature/*/commonTest` | kotlin-test, fakes |
+| Repositories | `feature/*/commonTest` + host tests | in-memory DB |
+| SQL / Room | `core/database` | migration + query tests |
+| Geofence policy | `core/geofencing/commonTest` | fake registry |
+| Shared store | `feature/*/presentation` | Turbine |
+| Android UI | `androidApp/androidTest` | Compose Test, test doubles |
+| iOS UI | `iosAppUITests` | XCUITest, launch args |
 
-Each screen in `Moventiq.pen` maps 1:1 to a Compose `@Composable` and a SwiftUI `View`.
+```bash
+./gradlew :sharedLogic:testAndroidHostTest :sharedLogic:iosSimulatorArm64Test
+./gradlew :androidApp:testDebugUnitTest
+./gradlew :androidApp:pixel6Api36DebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.package=com.mohamedfaridelsherbini.moventiq.ui.splash
+cd iosApp && xcodebuild test -project iosApp.xcodeproj -scheme iosApp \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' CODE_SIGNING_ALLOWED=NO
+```
+
+No Koin in **unit** tests — construct use cases with fakes.
 
 ---
 
-## 12. Migration from current repo
+## 13. Future scale map
+
+| Capability | Placement |
+|---|---|
+| Widgets / Wear OS | `androidApp` flavor or `wearApp/` → same feature use cases |
+| Apple Watch | watchOS target → `feature/arrival`, `feature/tasks` |
+| AI suggestions | `feature/insights` or `core/ai` |
+| Calendar sync | `core/network` + `feature/integrations/calendar` |
+| Team collaboration | `core/network` + `feature/team` + auth in `core/common` |
+| Web | `sharedJs` / WASM + reuse `domain`/`data` |
+
+New surfaces are **apps** depending on **features**, not duplicated logic.
+
+---
+
+## 14. Migration plan (from `:sharedLogic` monolith)
 
 | Step | Action |
 |---|---|
-| M0 | Add Room 3 + schema to `:sharedLogic`; implement repositories & use cases |
-| M1 | Build Android theme + components in `:androidApp/ui` |
-| M2 | Implement Android screens (MVP order: Home → Places → Tasks → Settings) |
-| M3 | Android geofencing + notifications |
-| M4 | Build SwiftUI theme + components; link `SharedLogic.framework` |
-| M5 | Implement iOS screens + CoreLocation geofencing |
-| M6 | Remove `:sharedUI` module and update `settings.gradle.kts` |
+| M0 | Theme, components, nav scaffold (`androidApp`, `iosApp`) |
+| M1 | `core/database` schema + `feature/tasks`, `feature/locations`, `feature/settings` repos (can stay in `:sharedLogic` packages first) |
+| M2 | CRUD UI wired to use cases |
+| M3 | `core/geofencing` + `core/notifications` + `feature/arrival` |
+| M4 | Polish, onboarding, a11y |
+| M5 | iOS parity |
+| M6 | Extract Gradle modules under `shared/`; remove `:sharedUI` |
+| Post-MVP | `core/network` (Ktor), SQLDelight migration if needed |
 
-Update `MVP.md` §3 platform table when `:sharedUI` is removed.
-
----
-
-## 13. Testing strategy
-
-| Layer | Android | iOS | sharedLogic |
-|---|---|---|---|
-| DAO | `room-testing` in `androidHostTest` | In-memory Room in `iosTest` | — |
-| Repository | `androidHostTest` | `iosTest` | `commonTest` (fakes) |
-| UseCase | — | — | `commonTest` |
-| UI | Compose UI tests | XCTest + ViewInspector (optional) | — |
+**Package migration inside `:sharedLogic`:** move code to `feature/<name>/domain|data` packages before splitting Gradle modules.
 
 ---
 
-## 14. File checklist (M1 deliverables)
+## 15. Design system mapping
 
-**sharedLogic**
-- [ ] `MoventiqDatabase`, entities, DAOs, mappers
-- [ ] `LocationRepository`, `TaskRepository`, `SettingsRepository`
-- [ ] Core use cases (CRUD + observe)
-- [ ] `GeofenceManager` expect/actual stubs
-- [ ] `SharedLogicFactory`
+| Design (`DESIGN.md`) | Android | iOS |
+|---|---|---|
+| Tokens | `MoventiqTheme` + `LocalMoventiqColors` | `MoventiqTheme` |
+| TabBar | `MoventiqBottomBar` | `MoventiqBottomBar` |
+| TaskRow | `TaskRow` | `TaskRowView` |
+| LocationCard | `LocationCard` | `LocationCardView` |
 
-**androidApp**
-- [ ] `MoventiqTheme` + core components
-- [ ] `MoventiqNavHost` + `MainActivity`
-- [ ] Home, Locations, Tasks, Settings screens
+Numeric tokens: `core/designsystem` + platform themes.
 
-**iosApp**
-- [ ] `MoventiqTheme` + core components
-- [ ] `MainTabView` + navigation
-- [ ] Home, Locations, Tasks, Settings views
-- [ ] SharedLogic Flow bridge
+---
+
+## Appendix A — Room 3 schema (MVP)
+
+Single database **`moventiq.db`**, version 1. Owned by data layer (`core/database`; interim `:sharedLogic`).
+
+Geofences are **not** stored in Room — derived from active locations + `GeofenceRegistry`.
+
+### Entities (summary)
+
+- **locations** — id, name, address, lat/lng, radiusMeters, icon, isActive, createdAt, lastTriggeredAt
+- **tasks** — id, title, notes, locationId (FK), priority, dueAt, reminderType, isCompleted, sortOrder, timestamps
+- **settings** — single row `id = "app"` — theme, notification prefs, quiet hours, defaults
+
+Full entity definitions, DAO signatures, and `createDatabase()` expect/actual: see git history or implement per `moventiq-room-kmp` skill when landing M1.
+
+### Gradle (version catalog)
+
+```toml
+room = "2.7.0"
+sqlite = "2.5.0"
+koin = "4.0.3"
+```
+
+Apply `ksp(libs.androidx.room.compiler)` on the database module.
 
 ---
 
 ## Related docs
 
-- [MVP.md](MVP.md) — scope, screens, data model
-- [AGENT.md](AGENT.md) — agent conventions (update module table to reference this doc)
-- [DESIGN.md](DESIGN.md) — tokens and brand
+- [MVP.md](MVP.md) — scope, screens, milestones
+- [AGENT.md](AGENT.md) — conventions, commands
+- [DESIGN.md](DESIGN.md) — tokens
+- [RESOURCES.md](RESOURCES.md) — Koin KMP and other external references

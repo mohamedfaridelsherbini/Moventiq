@@ -7,21 +7,34 @@ description: >-
 
 # Moventiq geofencing (M3 / M5)
 
-Sequence diagram and data flow: [ARCHITECTURE.md](../../../ARCHITECTURE.md) §8–9. Contract: [AGENT.md](../../../AGENT.md) §6.
+Sequence and ownership: [ARCHITECTURE.md](../../../ARCHITECTURE.md) §5. Contract: [AGENT.md](../../../AGENT.md) §6.
 
-## Core contract (`sharedLogic/commonMain`)
+## Module ownership
+
+| Piece | Module |
+|---|---|
+| OS region register/sync | `shared/core/geofencing` |
+| Location candidates | `shared/feature/locations` |
+| ENTER → arrival UX | `shared/feature/arrival` |
+| Android receiver | `androidApp` + `core/geofencing` androidMain |
+| iOS CLRegion | `iosApp` + `core/geofencing` iosMain |
+
+## Core contract (`shared/core/geofencing` — interim: `sharedLogic`)
 
 ```kotlin
-interface GeofenceManager {
-    suspend fun sync(locations: List<Location>)   // register active, remove stale
-    val events: Flow<GeofenceEvent>               // ENTER/EXIT with locationId
+interface GeofenceRegistry {
+    suspend fun sync(regions: List<GeofenceRegion>)
+}
+
+interface GeofenceEventSource {
+    val events: Flow<GeofenceEvent>
 }
 
 data class GeofenceEvent(val locationId: String, val type: GeofenceEventType)
 enum class GeofenceEventType { ENTER, EXIT }
 ```
 
-Geofences are **not** stored in Room. `SyncGeofences` use case reads active locations from repository and calls `GeofenceManager.sync()`.
+Geofences are **not** stored in the database. `SyncGeofences` (locations or arrival feature) reads active locations and calls `GeofenceRegistry.sync()`.
 
 ## When to sync
 

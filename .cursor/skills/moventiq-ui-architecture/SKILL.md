@@ -12,8 +12,8 @@ description: >-
 
 | Layer | Location | Depends on |
 |---|---|---|
-| Domain | `:sharedLogic/domain` | Nothing platform-specific |
-| Data | `:sharedLogic/data` | Domain interfaces only |
+| Domain | `shared/feature/*/domain` (interim `:sharedLogic`) | Nothing platform-specific |
+| Data | `shared/feature/*/data` | Domain interfaces only |
 | Presentation | `:androidApp`, `:iosApp` | Use cases only — **never DAOs/Room** |
 
 ## SOLID (UI)
@@ -24,7 +24,7 @@ description: >-
 | Open/closed | Extend via `FooEvent` variants or component params, not screen forks |
 | Liskov | `*Content(state, onEvent)` same contract in preview, test, production |
 | Interface segregation | Small `sealed interface FooEvent`, not one mega-callback |
-| Dependency inversion | ViewModels inject use cases from `:sharedLogic`, not DAOs |
+| Dependency inversion | Platform ViewModels inject use cases from `shared/feature/*`, not DAOs |
 
 ## Mandatory file split
 

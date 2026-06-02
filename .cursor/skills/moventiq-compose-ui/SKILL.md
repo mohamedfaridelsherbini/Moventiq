@@ -9,7 +9,7 @@ description: >-
 
 Architecture and preview rules: `moventiq-ui-architecture`. Design spec: `moventiq-pencil-design`.
 
-Full layout: [ARCHITECTURE.md](../../../ARCHITECTURE.md) §6.
+Full layout: [ARCHITECTURE.md](../../../ARCHITECTURE.md) §7.
 
 ## Target structure (`androidApp/`)
 
@@ -17,21 +17,18 @@ Full layout: [ARCHITECTURE.md](../../../ARCHITECTURE.md) §6.
 com.mohamedfaridelsherbini.moventiq/
 ├── MoventiqApplication.kt
 ├── MainActivity.kt
-├── di/                    Koin modules (appModule + sharedLogicModule)
+├── di/                    appModule (ViewModels); feature Koin from shared
 ├── navigation/
 │   MoventiqNavHost.kt
 │   Routes.kt
-│   BottomBar.kt           // Component/TabBar
-├── ui/
-│   theme/                 MoventiqTheme from DESIGN.md
-│   components/            design-system composables
-│   home/ tasks/ locations/ settings/ arrival/ …
-├── service/
-│   GeofenceBroadcastReceiver.kt
-│   BootReceiver.kt
-└── notification/
-    ArrivalNotificationManager.kt
+├── screens/               splash, home, tasks, locations, arrival, settings
+├── components/            TaskRow, LocationCard, MoventiqBottomBar
+├── theme/                 MoventiqTheme from DESIGN.md
+├── service/               GeofenceBroadcastReceiver, BootReceiver
+└── notification/          tap → Arrival route
 ```
+
+**Business logic** lives in `shared/feature/*` — not in `androidApp`.
 
 **Do not** add new UI to `:sharedUI` — it is deprecated.
 
@@ -42,7 +39,7 @@ com.mohamedfaridelsherbini.moventiq/
 | UI | Compose + Material 3 |
 | Navigation | Navigation Compose (typed routes) |
 | ViewModel | `lifecycle-viewmodel-compose` |
-| DI | **Koin** (`koin-android`, `koin-compose-viewmodel`) |
+| DI | **Koin** (`koin-android`, `koin-compose-viewmodel`) — [KMP setup](https://insert-koin.io/docs/reference/koin-core/kmp-setup/), [RESOURCES.md](../../../RESOURCES.md) |
 | Maps | Google Maps Compose (Create/Edit Location) |
 | Permissions | `ActivityResultContracts` or Accompanist |
 | Flow collection | `collectAsStateWithLifecycle()` |
@@ -74,13 +71,13 @@ val appModule = module {
 Bootstrap in `MoventiqApplication`:
 
 ```kotlin
-startKoin {
+initKoin {
     androidContext(this@MoventiqApplication)
-    modules(sharedLogicModule, appModule)
+    modules(appModule) // ViewModels; shared feature modules from KoinInit
 }
 ```
 
-ViewModels live in `:androidApp`. They call **use cases** from `:sharedLogic`, never DAOs.
+ViewModels live in `:androidApp`. They call **use cases** from `shared/feature/*` (interim `:sharedLogic`), never DAOs.
 
 ## Theme (M0)
 

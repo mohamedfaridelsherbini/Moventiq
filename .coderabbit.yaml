@@ -5,10 +5,8 @@
 language: "en-US"
 
 tone_instructions: >-
-  Be direct and concise. One sentence for why. Include a concrete fix or code
-  snippet when suggesting changes. Do not add poems or praise. Match Moventiq
-  severity labels: critical, major, minor, nit. Prefer one comment per root
-  cause. Suppress minor/nit unless the issue is Moventiq-specific and in the diff.
+  Be direct: one-sentence why, concrete fix, no praise. Severity critical/major/minor/nit.
+  One root cause per comment. Inline only Moventiq issues in the diff.
 
 reviews:
   profile: "chill"
@@ -43,14 +41,16 @@ reviews:
     - "!**/reports/tests/**"
 
   instructions: |
-    Moventiq: local-only KMP app (Compose + SwiftUI + Room in :sharedLogic).
-    Use AGENT.md, ARCHITECTURE.md, MVP.md, DESIGN.md for context.
+    Moventiq: local-only KMP app — feature-first shared modules (Compose + SwiftUI).
+    Interim :sharedLogic; target shared/core + shared/feature. See ARCHITECTURE.md.
+    Use AGENT.md, MVP.md, DESIGN.md for context.
     Review ONLY changed lines and their direct call sites — do not re-audit unchanged files.
     Target 1–5 actionable inline comments per PR on chill profile.
 
     CRITICAL (always inline, block merge):
     - UI imports Room DAO, Entity, or Database types
-    - Platform APIs in sharedLogic commonMain domain/data
+    - Platform APIs in shared commonMain domain/data (sharedLogic or shared/feature)
+    - Feature module depending on another feature's data layer
     - MVP scope creep: profile, auth, sign-in, avatar, PRO badge, cloud sync, integrations, "Delete account"
     - Hardcoded hex colors, raw dp spacing, or font sizes in UI
     - New *Content or shipped screen missing light AND dark preview
@@ -80,10 +80,16 @@ reviews:
   path_instructions:
     - path: "sharedLogic/**"
       instructions: |
-        Domain never imports Room or platform APIs.
+        Feature-first: domain/data/presentation per feature; core for geofencing, database.
+        Domain never imports Room, SQLDelight, Ktor, or platform APIs.
         New use cases: commonTest happy path + edge case.
-        Repositories: androidHostTest or iosTest with in-memory Room.
+        Repositories: androidHostTest or iosTest with in-memory DB.
         Flag geofence side effects when locations change.
+
+    - path: "shared/**"
+      instructions: |
+        Enforce ARCHITECTURE.md dependency rules: core ↛ feature; feature ↛ feature data.
+        presentation layer: state/event only — no UI framework imports.
 
     - path: "androidApp/**/ui/**"
       instructions: |

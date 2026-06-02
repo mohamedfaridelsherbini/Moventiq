@@ -50,9 +50,13 @@ Run in this exact order:
 ./gradlew :androidApp:connectedDebugAndroidTest \
   -Pandroid.testInstrumentationRunnerArguments.package=com.mohamedfaridelsherbini.moventiq.<feature>
 
-# iOS (Mac only)
+# iOS (Mac only) — shared scheme in xcshareddata; delete xcuserdata/iosApp.xcscheme overrides
 cd iosApp && xcodebuild test -project iosApp.xcodeproj -scheme iosApp \
-  -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest'
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' CODE_SIGNING_ALLOWED=NO
+
+# Android UI (managed emulator — no physical device required)
+./gradlew :androidApp:pixel6Api36DebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.package=com.mohamedfaridelsherbini.moventiq.ui.splash
 
 # CI parity
 ./gradlew :sharedLogic:testAndroidHostTest :androidApp:assembleDebug

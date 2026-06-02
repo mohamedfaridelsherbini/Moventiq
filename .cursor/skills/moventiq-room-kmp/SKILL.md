@@ -1,43 +1,52 @@
 ---
 name: moventiq-room-kmp
 description: >-
-  Implements Room 3 KMP data layer in :sharedLogic — entities, DAOs, repositories,
-  use cases, and data tests. Use when adding persistence, migrations, or M1 data
-  layer work.
+  Implements persistence in Moventiq — Room 3 (MVP) in core/database or interim
+  :sharedLogic, feature data layers, repositories, use cases. Use for M1 data work.
 ---
 
-# Moventiq Room KMP (M1)
+# Moventiq data layer (M1)
 
-Full schema and DAO signatures: [ARCHITECTURE.md](../../../ARCHITECTURE.md) §5.
+Full architecture: [ARCHITECTURE.md](../../../ARCHITECTURE.md). Schema summary: Appendix A.
 
-## Package layout (`sharedLogic/`)
+## Target layout (feature-first)
 
 ```
-com.mohamedfaridelsherbini.moventiq/
-├── domain/
-│   model/           Location, Task, Priority, AppSettings
-│   repository/      LocationRepository, TaskRepository, SettingsRepository (interfaces)
-│   usecase/         CreateTask, ObserveLocations, SyncGeofences, ClearAllData, …
-│   util/            Result, AppError
-├── data/
-│   local/entity/    LocationEntity, TaskEntity, SettingsEntity
-│   local/dao/       LocationDao, TaskDao, SettingsDao
-│   local/           MoventiqDatabase.kt, Converters.kt
-│   mapper/          LocationMapper, TaskMapper
-│   repository/      *RepositoryImpl
-├── di/              sharedLogicModule (Koin)
-└── platform/        GeofenceManager (expect), DatabaseBuilder (actual)
+shared/core/database/           Room (MVP) or SQLDelight (scale), drivers, migrations
+shared/feature/tasks/data/      TaskLocalDataSource, TaskRepositoryImpl
+shared/feature/locations/data/  LocationLocalDataSource, LocationRepositoryImpl
+shared/feature/settings/data/ Settings store
 ```
+
+Each feature:
+
+```
+feature/<name>/
+├── domain/model|repository|usecase/
+└── data/local|mapper|repository/
+```
+
+## Interim (`:sharedLogic`)
+
+Until Gradle modules split, use packages:
+
+```
+com.mohamedfaridelsherbini.moventiq.feature.tasks.domain
+com.mohamedfaridelsherbini.moventiq.feature.tasks.data
+```
+
+Or legacy flat `domain/` + `data/` — migrate to feature packages before extracting modules.
 
 ## Dependency rules
 
-- **Domain** never imports Room, Android, or iOS APIs
-- **Data** implements domain repository interfaces
-- **UI** never imports DAOs — only use cases
+- **Domain** never imports Room, SQLDelight, Android, or iOS APIs
+- **Data** implements domain repository interfaces; uses `core/database` only
+- **UI** (apps) never imports DAOs — only use cases
+- **Features** do not import another feature's `data`
 
 ## Gradle setup
 
-Add to `gradle/libs.versions.toml` only (never hardcode in module files):
+Add to `gradle/libs.versions.toml` only:
 
 ```toml
 room = "2.7.0"
@@ -45,73 +54,36 @@ sqlite = "2.5.0"
 koin = "4.0.3"
 ```
 
-Apply on `:sharedLogic`:
-- `implementation(libs.koin.core)` in `commonMain`
-- `implementation(libs.koin.test)` in `commonTest`
-- `implementation(libs.androidx.room.runtime)`
-- `implementation(libs.androidx.sqlite.bundled)` (iOS)
-- `ksp(libs.androidx.room.compiler)`
+- `implementation(libs.koin.core)` in shared `commonMain`
+- Room + KSP on database module (`:sharedLogic` today → `shared/core/database`)
 
-## Database
-
-- Name: `moventiq.db`, version 1
-- Tables: `locations`, `tasks`, `settings` (single row id = `"app"`)
-- Geofences are **not** stored — derived from active locations, synced via `GeofenceManager`
-
-## DAO conventions
-
-- Read APIs return `Flow<>` (observe pattern)
-- Writes are `suspend fun`
-- FK: tasks → locations (`ON DELETE SET NULL`)
-- Default radius: 200m; settings seed on first launch
-
-## Platform builders
+## Koin
 
 ```kotlin
-// commonMain
-expect fun createDatabase(): MoventiqDatabase
-
-// androidMain — Room.databaseBuilder(context, …)
-// iosMain — BundledSQLiteDriver + Room.databaseBuilder
+// shared/feature/tasks/di/TasksModule.kt
+val tasksModule = module {
+    single<TaskRepository> { TaskRepositoryImpl(get(), get()) }
+    factory { CreateTask(get()) }
+}
 ```
 
-## Use cases (minimum set)
+Aggregated in `initKoin()` — see [RESOURCES.md](../../../RESOURCES.md) ([Koin KMP setup](https://insert-koin.io/docs/reference/koin-core/kmp-setup/)).
 
-| Use case | Purpose |
-|---|---|
-| `ObserveLocations` / `ObserveActiveLocations` | Flow of all / active places |
-| `CreateLocation` / `UpdateLocation` / `DeleteLocation` | Location CRUD |
-| `ObserveAllTasksGrouped` / `ObserveTasksByLocation` | Task lists |
-| `CreateTask` / `CompleteTask` / `DeleteTask` | Task CRUD |
-| `UpdateSettings` / `ObserveSettings` | App preferences |
-| `ClearAllData` | Privacy reset — wipe all tables |
-| `SyncGeofences` | Push active locations to OS |
-
-After location save/delete → call `SyncGeofences`.
-
-## Testing
-
-| Layer | Source set | Tool |
-|---|---|---|
-| Use case | `commonTest` | Fake repository implementations |
-| Repository / DAO | `androidHostTest` | `room-testing` in-memory DB |
-| Repository / DAO | `iosTest` | In-memory Room on simulator target |
+## Tests
 
 ```bash
 ./gradlew :sharedLogic:testAndroidHostTest
 ./gradlew :sharedLogic:iosSimulatorArm64Test
 ```
 
-## M1 checklist
+- DAO / migration: `androidHostTest` / `iosTest`
+- Repository: fakes in `commonTest` + integration in host tests
+- Use case: `commonTest` only
 
-- [ ] `MoventiqDatabase`, entities, DAOs, mappers
-- [ ] Repository interfaces + impls
-- [ ] Core use cases (CRUD + observe)
-- [ ] `GeofenceManager` expect/actual stubs
-- [ ] `sharedLogicModule` Koin module + `appModule` for ViewModels
-- [ ] Unit/integration tests for DAOs and use cases
+## Checklist
 
-## Related skills
-
-- Unit tests: `moventiq-unit-tests`
-- Geofence sync: `moventiq-geofencing`
+- [ ] Entities + DAOs in `core/database` (or interim `sharedLogic`)
+- [ ] Per-feature `*RepositoryImpl` + domain interfaces
+- [ ] Use cases in `feature/*/domain/usecase`
+- [ ] Feature Koin modules + `platformModule` actuals
+- [ ] No UI imports of DAOs

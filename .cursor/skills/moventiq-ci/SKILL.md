@@ -47,7 +47,8 @@ Matches Kotlin docs: no daemon in CI, parallel + build cache enabled.
 |---|---|---|---|
 | `test` | `ubuntu-latest` | — | `:sharedLogic:testAndroidHostTest` `:sharedUI:testAndroidHostTest` |
 | `build-android` | `ubuntu-latest` | `test` | `:androidApp:assembleDebug` |
-| `build-ios` | `macos-latest` | `test` | `:sharedLogic:iosSimulatorArm64Test`, `xcodebuild build` |
+| `build-ios` | `macos-latest` | `test` | `:sharedLogic:iosSimulatorArm64Test`, `xcodebuild test` |
+| `android-ui-test` | `ubuntu-latest` | `build-android` | `:androidApp:pixel6Api36DebugAndroidTest` |
 
 ### Why not `jvmTest` / `allTests` on Ubuntu?
 
@@ -57,7 +58,8 @@ Official Jetcaster sample uses `./gradlew jvmTest`. Moventiq has no root `jvmTes
 
 | Path | Gradle / Xcode target |
 |---|---|
-| `sharedLogic/` | `:sharedLogic` |
+| `sharedLogic/` | `:sharedLogic` (interim; → `shared/core`, `shared/feature`) |
+| `shared/core/`, `shared/feature/` | target KMP modules (when extracted) |
 | `androidApp/` | `:androidApp` |
 | `iosApp/` | scheme `iosApp`, project `iosApp/iosApp.xcodeproj` |
 | `sharedUI/` | deprecated — remove from CI when module is deleted |
@@ -98,6 +100,8 @@ Prefer a separate workflow or extra job — keep `build.yml` fast for PR gating.
 
 - [ ] `./gradlew :sharedLogic:testAndroidHostTest :sharedUI:testAndroidHostTest`
 - [ ] `./gradlew :androidApp:assembleDebug`
+- [ ] `./gradlew :androidApp:pixel6Api36DebugAndroidTest` (or CI `android-ui-test` job)
+- [ ] `xcodebuild test` on `iosApp` scheme (shared `xcshareddata`, not empty xcuserdata)
 - [ ] On Mac: `./gradlew :sharedLogic:iosSimulatorArm64Test`
 
 ## Related skills

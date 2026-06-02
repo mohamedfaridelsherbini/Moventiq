@@ -23,75 +23,12 @@
           "alignItems": "center",
           "children": [
             {
-              "type": "frame",
-              "id": "SwrnX",
+              "id": "i1MN1",
+              "type": "ref",
+              "ref": "wtvIu",
               "name": "Mark",
               "width": 56,
-              "height": 56,
-              "fill": "#00000000",
-              "layout": "none",
-              "children": [
-                {
-                  "type": "path",
-                  "id": "wmFJW",
-                  "x": 0,
-                  "y": 0,
-                  "name": "M-Stroke",
-                  "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                  "viewBox": [
-                    0,
-                    0,
-                    100,
-                    100
-                  ],
-                  "fill": "#00000000",
-                  "width": 100,
-                  "height": 100,
-                  "stroke": "$brand-indigo",
-                  "strokeWidth": 16,
-                  "strokeLinejoin": "round",
-                  "strokeLinecap": "round"
-                },
-                {
-                  "type": "path",
-                  "id": "DLWKS",
-                  "x": 33,
-                  "y": 12,
-                  "name": "Location-Pin",
-                  "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                  "fillRule": "evenodd",
-                  "viewBox": [
-                    0,
-                    0,
-                    24,
-                    24
-                  ],
-                  "fill": "#4f46e5ff",
-                  "width": 33,
-                  "height": 30
-                },
-                {
-                  "type": "path",
-                  "id": "E8imk",
-                  "x": 34,
-                  "y": 64,
-                  "name": "Check",
-                  "geometry": "M4 13l8 8 16-17",
-                  "viewBox": [
-                    0,
-                    0,
-                    32,
-                    24
-                  ],
-                  "fill": "#00000000",
-                  "width": 32,
-                  "height": 24,
-                  "stroke": "#4f46e5ff",
-                  "strokeWidth": 8,
-                  "strokeLinejoin": "round",
-                  "strokeLinecap": "round"
-                }
-              ]
+              "height": 56
             },
             {
               "type": "frame",
@@ -142,6 +79,569 @@
               "fontSize": 13,
               "fontWeight": "600",
               "letterSpacing": 1.5
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "yVd6R",
+          "name": "Brand Components",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 28,
+          "children": [
+            {
+              "type": "text",
+              "id": "Ma5Bp",
+              "name": "SectionLabel",
+              "fill": "#64748B",
+              "content": "BRAND COMPONENTS · SOURCE OF TRUTH",
+              "fontFamily": "Plus Jakarta Sans",
+              "fontSize": 12,
+              "fontWeight": "600",
+              "letterSpacing": 1.5
+            },
+            {
+              "type": "frame",
+              "id": "B9lpT",
+              "name": "Component Cards",
+              "width": "fill_container",
+              "gap": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "nDNvg",
+                  "name": "Symbol Card",
+                  "clip": true,
+                  "width": "fill_container",
+                  "height": 280,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 28,
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "b2Q4Ro",
+                      "name": "Caption",
+                      "width": "fill_container",
+                      "padding": [
+                        18,
+                        22
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "kdqfP",
+                          "name": "Label",
+                          "fill": "#94A3B8",
+                          "content": "MoventiqSymbol",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 12,
+                          "fontWeight": "600",
+                          "letterSpacing": 1.2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "RBPTc",
+                      "name": "Stage",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "id": "SSoO4",
+                          "type": "ref",
+                          "ref": "D3aDa",
+                          "name": "Component",
+                          "width": 100,
+                          "height": 100
+                        },
+                        {
+                          "type": "text",
+                          "id": "xYdQW",
+                          "name": "Meta",
+                          "fill": "#64748B",
+                          "content": "100×100 · Full color",
+                          "textAlign": "center",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 13,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Wtoi0",
+                  "name": "Mark Light Card",
+                  "clip": true,
+                  "width": "fill_container",
+                  "height": 280,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 28,
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "DiLNG",
+                      "name": "Caption",
+                      "width": "fill_container",
+                      "padding": [
+                        18,
+                        22
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Cvl82",
+                          "name": "Label",
+                          "fill": "#94A3B8",
+                          "content": "MoventiqMarkLight",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 12,
+                          "fontWeight": "600",
+                          "letterSpacing": 1.2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ePBWk",
+                      "name": "Stage",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "id": "XdH81",
+                          "type": "ref",
+                          "ref": "wtvIu",
+                          "name": "Component",
+                          "width": 60,
+                          "height": 60
+                        },
+                        {
+                          "type": "text",
+                          "id": "a6xJG",
+                          "name": "Meta",
+                          "fill": "#64748B",
+                          "content": "60×60 · Mono indigo",
+                          "textAlign": "center",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 13,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "n46neM",
+                  "name": "Mark Dark Card",
+                  "clip": true,
+                  "width": "fill_container",
+                  "height": 280,
+                  "fill": "#0F172A",
+                  "cornerRadius": 28,
+                  "stroke": "#243049",
+                  "strokeWidth": 1.5,
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "g7AwDq",
+                      "name": "Caption",
+                      "width": "fill_container",
+                      "padding": [
+                        18,
+                        22
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "YxpQa",
+                          "name": "Label",
+                          "fill": "#94A3B8",
+                          "content": "MoventiqMarkDark",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 12,
+                          "fontWeight": "600",
+                          "letterSpacing": 1.2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "LKDTz",
+                      "name": "Stage",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "id": "KEGQC",
+                          "type": "ref",
+                          "ref": "j8ZkGZ",
+                          "name": "Component",
+                          "width": 60,
+                          "height": 60
+                        },
+                        {
+                          "type": "text",
+                          "id": "qCUbD",
+                          "name": "Meta",
+                          "fill": "#64748B",
+                          "content": "60×60 · Mono white",
+                          "textAlign": "center",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 13,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "YIQF1",
+                  "name": "Mark Black Card",
+                  "clip": true,
+                  "width": "fill_container",
+                  "height": 280,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 28,
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Ga4pX",
+                      "name": "Caption",
+                      "width": "fill_container",
+                      "padding": [
+                        18,
+                        22
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tphlN",
+                          "name": "Label",
+                          "fill": "#94A3B8",
+                          "content": "MoventiqMarkBlack",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 12,
+                          "fontWeight": "600",
+                          "letterSpacing": 1.2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "arMeE",
+                      "name": "Stage",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "id": "D2i1r",
+                          "type": "ref",
+                          "ref": "P2hJ0",
+                          "name": "Component",
+                          "width": 60,
+                          "height": 60
+                        },
+                        {
+                          "type": "text",
+                          "id": "Erzgx",
+                          "name": "Meta",
+                          "fill": "#64748B",
+                          "content": "60×60 · Mono navy",
+                          "textAlign": "center",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 13,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Wesi3",
+              "name": "Size Scale",
+              "clip": true,
+              "width": "fill_container",
+              "fill": "#1E293B",
+              "cornerRadius": 28,
+              "stroke": "#243049",
+              "strokeWidth": 1.5,
+              "layout": "vertical",
+              "gap": 16,
+              "padding": [
+                24,
+                28
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "o9SKf",
+                  "name": "Scale Title",
+                  "fill": "#94A3B8",
+                  "content": "CANONICAL SIZE SCALE",
+                  "fontFamily": "Plus Jakarta Sans",
+                  "fontSize": 12,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.5
+                },
+                {
+                  "type": "frame",
+                  "id": "mVR7A",
+                  "name": "Scale Grid",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Z6zMI",
+                      "name": "Row Header",
+                      "width": "fill_container",
+                      "gap": 24,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "TXHeT",
+                          "name": "Col Context",
+                          "fill": "#64748B",
+                          "content": "Context",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "wG3z8",
+                          "name": "Col Size",
+                          "fill": "#64748B",
+                          "content": "Size",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "pUkWx",
+                          "name": "Col Component",
+                          "fill": "#64748B",
+                          "content": "Component",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "R7ioO",
+                      "name": "Row Header Mark",
+                      "width": "fill_container",
+                      "gap": 24,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ENBCC",
+                          "fill": "#E2E8F0",
+                          "content": "Board header",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Tt9x8",
+                          "fill": "#E2E8F0",
+                          "content": "56",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Zia0V",
+                          "fill": "#E2E8F0",
+                          "content": "MoventiqMarkLight",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "GdXWn",
+                      "name": "Row Lockup",
+                      "width": "fill_container",
+                      "gap": 24,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "I6OYu",
+                          "fill": "#E2E8F0",
+                          "content": "Primary lockup",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "XIiLU",
+                          "fill": "#E2E8F0",
+                          "content": "84 / 96",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "q2yQpM",
+                          "fill": "#E2E8F0",
+                          "content": "MoventiqSymbol",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Pz3bi",
+                      "name": "Row Icon",
+                      "width": "fill_container",
+                      "gap": 24,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "w0TsLX",
+                          "fill": "#E2E8F0",
+                          "content": "Icon showcase",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "yBVcc",
+                          "fill": "#E2E8F0",
+                          "content": "128",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "iDqKz",
+                          "fill": "#E2E8F0",
+                          "content": "MoventiqSymbol",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Y3hd20",
+                      "name": "Row App Icon",
+                      "width": "fill_container",
+                      "gap": 24,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "e1F12a",
+                          "fill": "#E2E8F0",
+                          "content": "App icon tile",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "q2QUof",
+                          "fill": "#E2E8F0",
+                          "content": "96–100",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "h24l6",
+                          "fill": "#E2E8F0",
+                          "content": "MoventiqMarkDark on gradient",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "P0yxB",
+                      "name": "Row Favicon",
+                      "width": "fill_container",
+                      "gap": 24,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "UDOAl",
+                          "fill": "#E2E8F0",
+                          "content": "Favicon",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "mE5e2",
+                          "fill": "#E2E8F0",
+                          "content": "16–64",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Y7coGX",
+                          "fill": "#E2E8F0",
+                          "content": "MoventiqMarkDark",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -204,75 +704,32 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "frame",
-                          "id": "IA1ow",
+                          "id": "Weep5",
+                          "type": "ref",
+                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 84,
                           "height": 84,
-                          "fill": "#00000000",
-                          "layout": "none",
-                          "children": [
-                            {
-                              "type": "path",
-                              "id": "pOltE",
-                              "x": 0,
-                              "y": 0,
-                              "name": "M-Stroke",
-                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                              "viewBox": [
-                                0,
-                                0,
-                                100,
-                                100
-                              ],
-                              "fill": "#00000000",
-                              "width": 100,
-                              "height": 100,
-                              "stroke": "$brand-indigo",
-                              "strokeWidth": 16,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                          "descendants": {
+                            "L0A6p": {
+                              "width": 84,
+                              "height": 84,
+                              "strokeWidth": 13
                             },
-                            {
-                              "type": "path",
-                              "id": "eYmeg",
-                              "x": 33,
-                              "y": 12,
-                              "name": "Location-Pin",
-                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                              "fillRule": "evenodd",
-                              "viewBox": [
-                                0,
-                                0,
-                                24,
-                                24
-                              ],
-                              "fill": "#4f46e5ff",
-                              "width": 33,
-                              "height": 30
+                            "XpLNp": {
+                              "width": 28,
+                              "height": 25,
+                              "x": 28,
+                              "y": 10
                             },
-                            {
-                              "type": "path",
-                              "id": "O5vs7",
-                              "x": 34,
-                              "y": 64,
-                              "name": "Check",
-                              "geometry": "M4 13l8 8 16-17",
-                              "viewBox": [
-                                0,
-                                0,
-                                32,
-                                24
-                              ],
-                              "fill": "#00000000",
-                              "width": 32,
-                              "height": 24,
-                              "stroke": "#4f46e5ff",
-                              "strokeWidth": 8,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                            "JMO33": {
+                              "width": 27,
+                              "height": 20,
+                              "x": 29,
+                              "y": 54,
+                              "strokeWidth": 7
                             }
-                          ]
+                          }
                         },
                         {
                           "type": "text",
@@ -344,75 +801,32 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "frame",
-                          "id": "uvFGy",
+                          "id": "B4i1X",
+                          "type": "ref",
+                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 96,
                           "height": 96,
-                          "fill": "#00000000",
-                          "layout": "none",
-                          "children": [
-                            {
-                              "type": "path",
-                              "id": "idogg",
-                              "x": 0,
-                              "y": 0,
-                              "name": "M-Stroke",
-                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                              "viewBox": [
-                                0,
-                                0,
-                                100,
-                                100
-                              ],
-                              "fill": "#00000000",
-                              "width": 100,
-                              "height": 100,
-                              "stroke": "$brand-indigo",
-                              "strokeWidth": 16,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                          "descendants": {
+                            "L0A6p": {
+                              "width": 96,
+                              "height": 96,
+                              "strokeWidth": 15
                             },
-                            {
-                              "type": "path",
-                              "id": "m13usQ",
-                              "x": 33,
-                              "y": 12,
-                              "name": "Location-Pin",
-                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                              "fillRule": "evenodd",
-                              "viewBox": [
-                                0,
-                                0,
-                                24,
-                                24
-                              ],
-                              "fill": "#4f46e5ff",
-                              "width": 33,
-                              "height": 30
-                            },
-                            {
-                              "type": "path",
-                              "id": "GZuqA",
-                              "x": 34,
-                              "y": 64,
-                              "name": "Check",
-                              "geometry": "M4 13l8 8 16-17",
-                              "viewBox": [
-                                0,
-                                0,
-                                32,
-                                24
-                              ],
-                              "fill": "#00000000",
+                            "XpLNp": {
                               "width": 32,
-                              "height": 24,
-                              "stroke": "#4f46e5ff",
-                              "strokeWidth": 8,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                              "height": 29,
+                              "x": 32,
+                              "y": 12
+                            },
+                            "JMO33": {
+                              "width": 31,
+                              "height": 23,
+                              "x": 33,
+                              "y": 61,
+                              "strokeWidth": 8
                             }
-                          ]
+                          }
                         },
                         {
                           "type": "text",
@@ -514,75 +928,35 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "frame",
-                          "id": "znMn5",
+                          "id": "eSIVz",
+                          "type": "ref",
+                          "ref": "j8ZkGZ",
                           "name": "Mark",
                           "width": 100,
                           "height": 100,
-                          "fill": "#00000000",
-                          "layout": "none",
-                          "children": [
-                            {
-                              "type": "path",
-                              "id": "gm5hi",
-                              "x": 0,
-                              "y": 0,
-                              "name": "M-Stroke",
-                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                              "viewBox": [
-                                0,
-                                0,
-                                100,
-                                100
-                              ],
-                              "fill": "#00000000",
+                          "descendants": {
+                            "L0A6p": {
                               "width": 100,
                               "height": 100,
-                              "stroke": "#FFFFFF",
-                              "strokeWidth": 16,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                              "strokeWidth": 17,
+                              "stroke": "#FFFFFF"
                             },
-                            {
-                              "type": "path",
-                              "id": "gXVKm",
+                            "XpLNp": {
+                              "width": 33,
+                              "height": 30,
                               "x": 33,
                               "y": 12,
-                              "name": "Location-Pin",
-                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                              "fillRule": "evenodd",
-                              "viewBox": [
-                                0,
-                                0,
-                                24,
-                                24
-                              ],
-                              "fill": "#FFFFFF",
-                              "width": 33,
-                              "height": 30
+                              "fill": "#FFFFFF"
                             },
-                            {
-                              "type": "path",
-                              "id": "KWoxe",
-                              "x": 34,
-                              "y": 64,
-                              "name": "Check",
-                              "geometry": "M4 13l8 8 16-17",
-                              "viewBox": [
-                                0,
-                                0,
-                                32,
-                                24
-                              ],
-                              "fill": "#00000000",
+                            "JMO33": {
                               "width": 32,
-                              "height": 24,
-                              "stroke": "#FFFFFF",
+                              "height": 23,
+                              "x": 33,
+                              "y": 63,
                               "strokeWidth": 8,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                              "stroke": "#FFFFFF"
                             }
-                          ]
+                          }
                         }
                       ]
                     },
@@ -642,75 +1016,35 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "frame",
-                          "id": "jjwLv",
+                          "id": "pbevm",
+                          "type": "ref",
+                          "ref": "j8ZkGZ",
                           "name": "Mark",
                           "width": 96,
                           "height": 96,
-                          "fill": "#00000000",
-                          "layout": "none",
-                          "children": [
-                            {
-                              "type": "path",
-                              "id": "v94E6d",
-                              "x": 0,
-                              "y": 0,
-                              "name": "M-Stroke",
-                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                              "viewBox": [
-                                0,
-                                0,
-                                100,
-                                100
-                              ],
-                              "fill": "#00000000",
-                              "width": 100,
-                              "height": 100,
-                              "stroke": "#FFFFFF",
+                          "descendants": {
+                            "L0A6p": {
+                              "width": 96,
+                              "height": 96,
                               "strokeWidth": 16,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                              "stroke": "#FFFFFF"
                             },
-                            {
-                              "type": "path",
-                              "id": "u6JXkP",
-                              "x": 33,
-                              "y": 12,
-                              "name": "Location-Pin",
-                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                              "fillRule": "evenodd",
-                              "viewBox": [
-                                0,
-                                0,
-                                24,
-                                24
-                              ],
-                              "fill": "#FFFFFF",
-                              "width": 33,
-                              "height": 30
-                            },
-                            {
-                              "type": "path",
-                              "id": "mCtAA",
-                              "x": 34,
-                              "y": 64,
-                              "name": "Check",
-                              "geometry": "M4 13l8 8 16-17",
-                              "viewBox": [
-                                0,
-                                0,
-                                32,
-                                24
-                              ],
-                              "fill": "#00000000",
+                            "XpLNp": {
                               "width": 32,
-                              "height": 24,
-                              "stroke": "#FFFFFF",
+                              "height": 29,
+                              "x": 32,
+                              "y": 11,
+                              "fill": "#FFFFFF"
+                            },
+                            "JMO33": {
+                              "width": 30,
+                              "height": 22,
+                              "x": 32,
+                              "y": 61,
                               "strokeWidth": 8,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                              "stroke": "#FFFFFF"
                             }
-                          ]
+                          }
                         }
                       ]
                     },
@@ -770,75 +1104,35 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "frame",
-                          "id": "bsZQ2",
+                          "id": "GoGfg",
+                          "type": "ref",
+                          "ref": "j8ZkGZ",
                           "name": "Mark",
                           "width": 100,
                           "height": 100,
-                          "fill": "#00000000",
-                          "layout": "none",
-                          "children": [
-                            {
-                              "type": "path",
-                              "id": "yW5by",
-                              "x": 0,
-                              "y": 0,
-                              "name": "M-Stroke",
-                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                              "viewBox": [
-                                0,
-                                0,
-                                100,
-                                100
-                              ],
-                              "fill": "#00000000",
+                          "descendants": {
+                            "L0A6p": {
                               "width": 100,
                               "height": 100,
-                              "stroke": "#FFFFFF",
-                              "strokeWidth": 16,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                              "strokeWidth": 17,
+                              "stroke": "#FFFFFF"
                             },
-                            {
-                              "type": "path",
-                              "id": "PVS4A",
+                            "XpLNp": {
+                              "width": 33,
+                              "height": 30,
                               "x": 33,
                               "y": 12,
-                              "name": "Location-Pin",
-                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                              "fillRule": "evenodd",
-                              "viewBox": [
-                                0,
-                                0,
-                                24,
-                                24
-                              ],
-                              "fill": "#FFFFFF",
-                              "width": 33,
-                              "height": 30
+                              "fill": "#FFFFFF"
                             },
-                            {
-                              "type": "path",
-                              "id": "ozZAY",
-                              "x": 34,
-                              "y": 64,
-                              "name": "Check",
-                              "geometry": "M4 13l8 8 16-17",
-                              "viewBox": [
-                                0,
-                                0,
-                                32,
-                                24
-                              ],
-                              "fill": "#00000000",
+                            "JMO33": {
                               "width": 32,
-                              "height": 24,
-                              "stroke": "#FFFFFF",
+                              "height": 23,
+                              "x": 33,
+                              "y": 63,
                               "strokeWidth": 8,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                              "stroke": "#FFFFFF"
                             }
-                          ]
+                          }
                         }
                       ]
                     },
@@ -898,75 +1192,35 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "frame",
-                          "id": "y96jnZ",
+                          "id": "U8t9h2",
+                          "type": "ref",
+                          "ref": "j8ZkGZ",
                           "name": "Mark",
                           "width": 96,
                           "height": 96,
-                          "fill": "#00000000",
-                          "layout": "none",
-                          "children": [
-                            {
-                              "type": "path",
-                              "id": "T1zqzC",
-                              "x": 0,
-                              "y": 0,
-                              "name": "M-Stroke",
-                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                              "viewBox": [
-                                0,
-                                0,
-                                100,
-                                100
-                              ],
-                              "fill": "#00000000",
-                              "width": 100,
-                              "height": 100,
-                              "stroke": "#FFFFFF",
+                          "descendants": {
+                            "L0A6p": {
+                              "width": 96,
+                              "height": 96,
                               "strokeWidth": 16,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                              "stroke": "#FFFFFF"
                             },
-                            {
-                              "type": "path",
-                              "id": "Y81WEU",
-                              "x": 33,
-                              "y": 12,
-                              "name": "Location-Pin",
-                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                              "fillRule": "evenodd",
-                              "viewBox": [
-                                0,
-                                0,
-                                24,
-                                24
-                              ],
-                              "fill": "#FFFFFF",
-                              "width": 33,
-                              "height": 30
-                            },
-                            {
-                              "type": "path",
-                              "id": "ZsVqi",
-                              "x": 34,
-                              "y": 64,
-                              "name": "Check",
-                              "geometry": "M4 13l8 8 16-17",
-                              "viewBox": [
-                                0,
-                                0,
-                                32,
-                                24
-                              ],
-                              "fill": "#00000000",
+                            "XpLNp": {
                               "width": 32,
-                              "height": 24,
-                              "stroke": "#FFFFFF",
+                              "height": 29,
+                              "x": 32,
+                              "y": 11,
+                              "fill": "#FFFFFF"
+                            },
+                            "JMO33": {
+                              "width": 30,
+                              "height": 22,
+                              "x": 32,
+                              "y": 61,
                               "strokeWidth": 8,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                              "stroke": "#FFFFFF"
                             }
-                          ]
+                          }
                         }
                       ]
                     },
@@ -1035,75 +1289,35 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "frame",
-                              "id": "XcBnM",
+                              "id": "r5ASeX",
+                              "type": "ref",
+                              "ref": "j8ZkGZ",
                               "name": "Mark",
                               "width": 40,
                               "height": 40,
-                              "fill": "#00000000",
-                              "layout": "none",
-                              "children": [
-                                {
-                                  "type": "path",
-                                  "id": "Q5efB",
-                                  "x": 0,
-                                  "y": 0,
-                                  "name": "M-Stroke",
-                                  "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                                  "viewBox": [
-                                    0,
-                                    0,
-                                    100,
-                                    100
-                                  ],
-                                  "fill": "#00000000",
-                                  "width": 100,
-                                  "height": 100,
-                                  "stroke": "#FFFFFF",
-                                  "strokeWidth": 16,
-                                  "strokeLinejoin": "round",
-                                  "strokeLinecap": "round"
+                              "descendants": {
+                                "L0A6p": {
+                                  "width": 40,
+                                  "height": 40,
+                                  "strokeWidth": 7,
+                                  "stroke": "#FFFFFF"
                                 },
-                                {
-                                  "type": "path",
-                                  "id": "Bssap",
-                                  "x": 33,
-                                  "y": 12,
-                                  "name": "Location-Pin",
-                                  "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                                  "fillRule": "evenodd",
-                                  "viewBox": [
-                                    0,
-                                    0,
-                                    24,
-                                    24
-                                  ],
-                                  "fill": "#FFFFFF",
-                                  "width": 33,
-                                  "height": 30
+                                "XpLNp": {
+                                  "width": 13,
+                                  "height": 12,
+                                  "x": 13,
+                                  "y": 5,
+                                  "fill": "#FFFFFF"
                                 },
-                                {
-                                  "type": "path",
-                                  "id": "q2l0l",
-                                  "x": 34,
-                                  "y": 64,
-                                  "name": "Check",
-                                  "geometry": "M4 13l8 8 16-17",
-                                  "viewBox": [
-                                    0,
-                                    0,
-                                    32,
-                                    24
-                                  ],
-                                  "fill": "#00000000",
-                                  "width": 32,
-                                  "height": 24,
-                                  "stroke": "#FFFFFF",
-                                  "strokeWidth": 8,
-                                  "strokeLinejoin": "round",
-                                  "strokeLinecap": "round"
+                                "JMO33": {
+                                  "width": 13,
+                                  "height": 9,
+                                  "x": 13,
+                                  "y": 25,
+                                  "strokeWidth": 3,
+                                  "stroke": "#FFFFFF"
                                 }
-                              ]
+                              }
                             }
                           ]
                         },
@@ -1143,75 +1357,35 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "frame",
-                              "id": "ua25p",
+                              "id": "bnGFn",
+                              "type": "ref",
+                              "ref": "j8ZkGZ",
                               "name": "Mark",
                               "width": 21,
                               "height": 21,
-                              "fill": "#00000000",
-                              "layout": "none",
-                              "children": [
-                                {
-                                  "type": "path",
-                                  "id": "lyp8p",
-                                  "x": 0,
-                                  "y": 0,
-                                  "name": "M-Stroke",
-                                  "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                                  "viewBox": [
-                                    0,
-                                    0,
-                                    100,
-                                    100
-                                  ],
-                                  "fill": "#00000000",
-                                  "width": 100,
-                                  "height": 100,
-                                  "stroke": "#FFFFFF",
-                                  "strokeWidth": 16,
-                                  "strokeLinejoin": "round",
-                                  "strokeLinecap": "round"
+                              "descendants": {
+                                "L0A6p": {
+                                  "width": 21,
+                                  "height": 21,
+                                  "strokeWidth": 4,
+                                  "stroke": "#FFFFFF"
                                 },
-                                {
-                                  "type": "path",
-                                  "id": "iYGor",
-                                  "x": 33,
-                                  "y": 12,
-                                  "name": "Location-Pin",
-                                  "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                                  "fillRule": "evenodd",
-                                  "viewBox": [
-                                    0,
-                                    0,
-                                    24,
-                                    24
-                                  ],
-                                  "fill": "#FFFFFF",
-                                  "width": 33,
-                                  "height": 30
+                                "XpLNp": {
+                                  "width": 7,
+                                  "height": 6,
+                                  "x": 7,
+                                  "y": 2,
+                                  "fill": "#FFFFFF"
                                 },
-                                {
-                                  "type": "path",
-                                  "id": "dWDQI",
-                                  "x": 34,
-                                  "y": 64,
-                                  "name": "Check",
-                                  "geometry": "M4 13l8 8 16-17",
-                                  "viewBox": [
-                                    0,
-                                    0,
-                                    32,
-                                    24
-                                  ],
-                                  "fill": "#00000000",
-                                  "width": 32,
-                                  "height": 24,
-                                  "stroke": "#FFFFFF",
-                                  "strokeWidth": 8,
-                                  "strokeLinejoin": "round",
-                                  "strokeLinecap": "round"
+                                "JMO33": {
+                                  "width": 7,
+                                  "height": 5,
+                                  "x": 7,
+                                  "y": 13,
+                                  "strokeWidth": 2,
+                                  "stroke": "#FFFFFF"
                                 }
-                              ]
+                              }
                             }
                           ]
                         },
@@ -1251,75 +1425,35 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "frame",
-                              "id": "ePNvi",
+                              "id": "F4gj6",
+                              "type": "ref",
+                              "ref": "j8ZkGZ",
                               "name": "Mark",
                               "width": 11,
                               "height": 11,
-                              "fill": "#00000000",
-                              "layout": "none",
-                              "children": [
-                                {
-                                  "type": "path",
-                                  "id": "t2ZPod",
-                                  "x": 0,
-                                  "y": 0,
-                                  "name": "M-Stroke",
-                                  "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                                  "viewBox": [
-                                    0,
-                                    0,
-                                    100,
-                                    100
-                                  ],
-                                  "fill": "#00000000",
-                                  "width": 100,
-                                  "height": 100,
-                                  "stroke": "#FFFFFF",
-                                  "strokeWidth": 16,
-                                  "strokeLinejoin": "round",
-                                  "strokeLinecap": "round"
+                              "descendants": {
+                                "L0A6p": {
+                                  "width": 11,
+                                  "height": 11,
+                                  "strokeWidth": 2,
+                                  "stroke": "#FFFFFF"
                                 },
-                                {
-                                  "type": "path",
-                                  "id": "gzj4Z",
-                                  "x": 33,
-                                  "y": 12,
-                                  "name": "Location-Pin",
-                                  "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                                  "fillRule": "evenodd",
-                                  "viewBox": [
-                                    0,
-                                    0,
-                                    24,
-                                    24
-                                  ],
-                                  "fill": "#FFFFFF",
-                                  "width": 33,
-                                  "height": 30
+                                "XpLNp": {
+                                  "width": 4,
+                                  "height": 3,
+                                  "x": 4,
+                                  "y": 1,
+                                  "fill": "#FFFFFF"
                                 },
-                                {
-                                  "type": "path",
-                                  "id": "G1Ktn",
-                                  "x": 34,
-                                  "y": 64,
-                                  "name": "Check",
-                                  "geometry": "M4 13l8 8 16-17",
-                                  "viewBox": [
-                                    0,
-                                    0,
-                                    32,
-                                    24
-                                  ],
-                                  "fill": "#00000000",
-                                  "width": 32,
-                                  "height": 24,
-                                  "stroke": "#FFFFFF",
-                                  "strokeWidth": 8,
-                                  "strokeLinejoin": "round",
-                                  "strokeLinecap": "round"
+                                "JMO33": {
+                                  "width": 3,
+                                  "height": 3,
+                                  "x": 4,
+                                  "y": 7,
+                                  "strokeWidth": 1,
+                                  "stroke": "#FFFFFF"
                                 }
-                              ]
+                              }
                             }
                           ]
                         }
@@ -1393,7 +1527,7 @@
                           "id": "kZjLw",
                           "name": "Label",
                           "fill": "#94A3B8",
-                          "content": "PRIMARY · SOLID",
+                          "content": "PRIMARY · FULL COLOR",
                           "fontFamily": "Plus Jakarta Sans",
                           "fontSize": 12,
                           "fontWeight": "600",
@@ -1407,80 +1541,37 @@
                       "name": "Stage",
                       "width": "fill_container",
                       "height": "fill_container",
-                      "gap": 16,
+                      "gap": 20,
                       "justifyContent": "center",
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "frame",
-                          "id": "V1kb7S",
+                          "id": "o78ikr",
+                          "type": "ref",
+                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 60,
                           "height": 60,
-                          "fill": "#00000000",
-                          "layout": "none",
-                          "children": [
-                            {
-                              "type": "path",
-                              "id": "p4cKh",
-                              "x": 0,
-                              "y": 0,
-                              "name": "M-Stroke",
-                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                              "viewBox": [
-                                0,
-                                0,
-                                100,
-                                100
-                              ],
-                              "fill": "#00000000",
-                              "width": 100,
-                              "height": 100,
-                              "stroke": "$brand-indigo",
-                              "strokeWidth": 16,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                          "descendants": {
+                            "L0A6p": {
+                              "width": 60,
+                              "height": 60,
+                              "strokeWidth": 10
                             },
-                            {
-                              "type": "path",
-                              "id": "mBYMj",
-                              "x": 33,
-                              "y": 12,
-                              "name": "Location-Pin",
-                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                              "fillRule": "evenodd",
-                              "viewBox": [
-                                0,
-                                0,
-                                24,
-                                24
-                              ],
-                              "fill": "#4f46e5ff",
-                              "width": 33,
-                              "height": 30
+                            "XpLNp": {
+                              "width": 20,
+                              "height": 18,
+                              "x": 20,
+                              "y": 7
                             },
-                            {
-                              "type": "path",
-                              "id": "Wgubv",
-                              "x": 34,
-                              "y": 64,
-                              "name": "Check",
-                              "geometry": "M4 13l8 8 16-17",
-                              "viewBox": [
-                                0,
-                                0,
-                                32,
-                                24
-                              ],
-                              "fill": "#00000000",
-                              "width": 32,
-                              "height": 24,
-                              "stroke": "#4f46e5ff",
-                              "strokeWidth": 8,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                            "JMO33": {
+                              "width": 19,
+                              "height": 14,
+                              "x": 20,
+                              "y": 38,
+                              "strokeWidth": 5
                             }
-                          ]
+                          }
                         },
                         {
                           "type": "text",
@@ -1538,80 +1629,40 @@
                       "name": "Stage",
                       "width": "fill_container",
                       "height": "fill_container",
-                      "gap": 16,
+                      "gap": 20,
                       "justifyContent": "center",
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "frame",
-                          "id": "VRKYn",
+                          "id": "gmlW9",
+                          "type": "ref",
+                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 60,
                           "height": 60,
-                          "fill": "#00000000",
-                          "layout": "none",
-                          "children": [
-                            {
-                              "type": "path",
-                              "id": "jPL6E",
-                              "x": 0,
-                              "y": 0,
-                              "name": "M-Stroke",
-                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                              "viewBox": [
-                                0,
-                                0,
-                                100,
-                                100
-                              ],
-                              "fill": "#00000000",
-                              "width": 100,
-                              "height": 100,
+                          "descendants": {
+                            "L0A6p": {
                               "stroke": "#818CF8",
-                              "strokeWidth": 16,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                              "width": 60,
+                              "height": 60,
+                              "strokeWidth": 10
                             },
-                            {
-                              "type": "path",
-                              "id": "shNU6",
-                              "x": 33,
-                              "y": 12,
-                              "name": "Location-Pin",
-                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                              "fillRule": "evenodd",
-                              "viewBox": [
-                                0,
-                                0,
-                                24,
-                                24
-                              ],
+                            "XpLNp": {
                               "fill": "#22D3EE",
-                              "width": 33,
-                              "height": 30
+                              "width": 20,
+                              "height": 18,
+                              "x": 20,
+                              "y": 7
                             },
-                            {
-                              "type": "path",
-                              "id": "aCLQs",
-                              "x": 34,
-                              "y": 64,
-                              "name": "Check",
-                              "geometry": "M4 13l8 8 16-17",
-                              "viewBox": [
-                                0,
-                                0,
-                                32,
-                                24
-                              ],
-                              "fill": "#00000000",
-                              "width": 32,
-                              "height": 24,
+                            "JMO33": {
                               "stroke": "#22D3EE",
-                              "strokeWidth": 8,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                              "width": 19,
+                              "height": 14,
+                              "x": 20,
+                              "y": 38,
+                              "strokeWidth": 5
                             }
-                          ]
+                          }
                         },
                         {
                           "type": "text",
@@ -1668,80 +1719,17 @@
                       "name": "Stage",
                       "width": "fill_container",
                       "height": "fill_container",
-                      "gap": 16,
+                      "gap": 20,
                       "justifyContent": "center",
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "frame",
-                          "id": "VU4d7",
+                          "id": "KFbHy",
+                          "type": "ref",
+                          "ref": "P2hJ0",
                           "name": "Mark",
                           "width": 60,
-                          "height": 60,
-                          "fill": "#00000000",
-                          "layout": "none",
-                          "children": [
-                            {
-                              "type": "path",
-                              "id": "J2Was3",
-                              "x": 0,
-                              "y": 0,
-                              "name": "M-Stroke",
-                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                              "viewBox": [
-                                0,
-                                0,
-                                100,
-                                100
-                              ],
-                              "fill": "#00000000",
-                              "width": 100,
-                              "height": 100,
-                              "stroke": "#0F172A",
-                              "strokeWidth": 16,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
-                            },
-                            {
-                              "type": "path",
-                              "id": "mWvgM",
-                              "x": 33,
-                              "y": 12,
-                              "name": "Location-Pin",
-                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                              "fillRule": "evenodd",
-                              "viewBox": [
-                                0,
-                                0,
-                                24,
-                                24
-                              ],
-                              "fill": "#0F172A",
-                              "width": 33,
-                              "height": 30
-                            },
-                            {
-                              "type": "path",
-                              "id": "N2J2J",
-                              "x": 34,
-                              "y": 64,
-                              "name": "Check",
-                              "geometry": "M4 13l8 8 16-17",
-                              "viewBox": [
-                                0,
-                                0,
-                                32,
-                                24
-                              ],
-                              "fill": "#00000000",
-                              "width": 32,
-                              "height": 24,
-                              "stroke": "#0F172A",
-                              "strokeWidth": 8,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
-                            }
-                          ]
+                          "height": 60
                         },
                         {
                           "type": "text",
@@ -1799,80 +1787,17 @@
                       "name": "Stage",
                       "width": "fill_container",
                       "height": "fill_container",
-                      "gap": 16,
+                      "gap": 20,
                       "justifyContent": "center",
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "frame",
-                          "id": "C5GOvV",
+                          "id": "b6r0z",
+                          "type": "ref",
+                          "ref": "j8ZkGZ",
                           "name": "Mark",
                           "width": 60,
-                          "height": 60,
-                          "fill": "#00000000",
-                          "layout": "none",
-                          "children": [
-                            {
-                              "type": "path",
-                              "id": "uULEy",
-                              "x": 0,
-                              "y": 0,
-                              "name": "M-Stroke",
-                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                              "viewBox": [
-                                0,
-                                0,
-                                100,
-                                100
-                              ],
-                              "fill": "#00000000",
-                              "width": 100,
-                              "height": 100,
-                              "stroke": "#FFFFFF",
-                              "strokeWidth": 16,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
-                            },
-                            {
-                              "type": "path",
-                              "id": "rY6vz",
-                              "x": 33,
-                              "y": 12,
-                              "name": "Location-Pin",
-                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                              "fillRule": "evenodd",
-                              "viewBox": [
-                                0,
-                                0,
-                                24,
-                                24
-                              ],
-                              "fill": "#FFFFFF",
-                              "width": 33,
-                              "height": 30
-                            },
-                            {
-                              "type": "path",
-                              "id": "mvkZs",
-                              "x": 34,
-                              "y": 64,
-                              "name": "Check",
-                              "geometry": "M4 13l8 8 16-17",
-                              "viewBox": [
-                                0,
-                                0,
-                                32,
-                                24
-                              ],
-                              "fill": "#00000000",
-                              "width": 32,
-                              "height": 24,
-                              "stroke": "#FFFFFF",
-                              "strokeWidth": 8,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
-                            }
-                          ]
+                          "height": 60
                         },
                         {
                           "type": "text",
@@ -1928,35 +1853,19 @@
                       "name": "Stage",
                       "width": "fill_container",
                       "height": "fill_container",
-                      "gap": 16,
+                      "gap": 20,
                       "justifyContent": "center",
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "frame",
-                          "id": "puSRZ",
+                          "id": "ykRKr",
+                          "type": "ref",
+                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 60,
                           "height": 60,
-                          "fill": "#00000000",
-                          "layout": "none",
-                          "children": [
-                            {
-                              "type": "path",
-                              "id": "zw25u",
-                              "x": 0,
-                              "y": 0,
-                              "name": "M-Stroke",
-                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                              "viewBox": [
-                                0,
-                                0,
-                                100,
-                                100
-                              ],
-                              "fill": "#00000000",
-                              "width": 100,
-                              "height": 100,
+                          "descendants": {
+                            "L0A6p": {
                               "stroke": {
                                 "type": "gradient",
                                 "gradientType": "linear",
@@ -1980,50 +1889,24 @@
                                   }
                                 ]
                               },
-                              "strokeWidth": 16,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                              "width": 60,
+                              "height": 60,
+                              "strokeWidth": 10
                             },
-                            {
-                              "type": "path",
-                              "id": "S6JsO",
-                              "x": 33,
-                              "y": 12,
-                              "name": "Location-Pin",
-                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                              "fillRule": "evenodd",
-                              "viewBox": [
-                                0,
-                                0,
-                                24,
-                                24
-                              ],
-                              "fill": "#4f46e5ff",
-                              "width": 33,
-                              "height": 30
+                            "XpLNp": {
+                              "width": 20,
+                              "height": 18,
+                              "x": 20,
+                              "y": 7
                             },
-                            {
-                              "type": "path",
-                              "id": "y0a14l",
-                              "x": 34,
-                              "y": 64,
-                              "name": "Check",
-                              "geometry": "M4 13l8 8 16-17",
-                              "viewBox": [
-                                0,
-                                0,
-                                32,
-                                24
-                              ],
-                              "fill": "#00000000",
-                              "width": 32,
-                              "height": 24,
-                              "stroke": "#4f46e5ff",
-                              "strokeWidth": 8,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                            "JMO33": {
+                              "width": 19,
+                              "height": 14,
+                              "x": 20,
+                              "y": 38,
+                              "strokeWidth": 5
                             }
-                          ]
+                          }
                         },
                         {
                           "type": "text",
@@ -2095,75 +1978,32 @@
                   "alignItems": "center",
                   "children": [
                     {
-                      "type": "frame",
-                      "id": "HixpX",
+                      "id": "Gge3p",
+                      "type": "ref",
+                      "ref": "D3aDa",
                       "name": "Mark",
                       "width": 128,
                       "height": 128,
-                      "fill": "#00000000",
-                      "layout": "none",
-                      "children": [
-                        {
-                          "type": "path",
-                          "id": "UZ0jg",
-                          "x": 0,
-                          "y": 0,
-                          "name": "M-Stroke",
-                          "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                          "viewBox": [
-                            0,
-                            0,
-                            100,
-                            100
-                          ],
-                          "fill": "#00000000",
-                          "width": 100,
-                          "height": 100,
-                          "stroke": "$brand-indigo",
-                          "strokeWidth": 16,
-                          "strokeLinejoin": "round",
-                          "strokeLinecap": "round"
+                      "descendants": {
+                        "L0A6p": {
+                          "width": 128,
+                          "height": 128,
+                          "strokeWidth": 21
                         },
-                        {
-                          "type": "path",
-                          "id": "Xrtwx",
-                          "x": 33,
-                          "y": 12,
-                          "name": "Location-Pin",
-                          "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                          "fillRule": "evenodd",
-                          "viewBox": [
-                            0,
-                            0,
-                            24,
-                            24
-                          ],
-                          "fill": "#4f46e5ff",
-                          "width": 33,
-                          "height": 30
+                        "XpLNp": {
+                          "width": 42,
+                          "height": 38,
+                          "x": 42,
+                          "y": 15
                         },
-                        {
-                          "type": "path",
-                          "id": "BIGOc",
-                          "x": 34,
-                          "y": 64,
-                          "name": "Check",
-                          "geometry": "M4 13l8 8 16-17",
-                          "viewBox": [
-                            0,
-                            0,
-                            32,
-                            24
-                          ],
-                          "fill": "#00000000",
-                          "width": 32,
-                          "height": 24,
-                          "stroke": "#4f46e5ff",
-                          "strokeWidth": 8,
-                          "strokeLinejoin": "round",
-                          "strokeLinecap": "round"
+                        "JMO33": {
+                          "width": 41,
+                          "height": 31,
+                          "x": 44,
+                          "y": 82,
+                          "strokeWidth": 10
                         }
-                      ]
+                      }
                     }
                   ]
                 }
@@ -2222,75 +2062,32 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "frame",
-                          "id": "p15YP1",
+                          "id": "KvWXq",
+                          "type": "ref",
+                          "ref": "D3aDa",
                           "name": "Mark",
                           "width": 34,
                           "height": 34,
-                          "fill": "#00000000",
-                          "layout": "none",
-                          "children": [
-                            {
-                              "type": "path",
-                              "id": "CrQIF",
-                              "x": 0,
-                              "y": 0,
-                              "name": "M-Stroke",
-                              "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                              "viewBox": [
-                                0,
-                                0,
-                                100,
-                                100
-                              ],
-                              "fill": "#00000000",
-                              "width": 100,
-                              "height": 100,
-                              "stroke": "$brand-indigo",
-                              "strokeWidth": 16,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                          "descendants": {
+                            "L0A6p": {
+                              "width": 34,
+                              "height": 34,
+                              "strokeWidth": 5
                             },
-                            {
-                              "type": "path",
-                              "id": "HyFzA",
-                              "x": 33,
-                              "y": 12,
-                              "name": "Location-Pin",
-                              "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                              "fillRule": "evenodd",
-                              "viewBox": [
-                                0,
-                                0,
-                                24,
-                                24
-                              ],
-                              "fill": "#4f46e5ff",
-                              "width": 33,
-                              "height": 30
+                            "XpLNp": {
+                              "width": 11,
+                              "height": 10,
+                              "x": 11,
+                              "y": 4
                             },
-                            {
-                              "type": "path",
-                              "id": "yZoD8",
-                              "x": 34,
-                              "y": 64,
-                              "name": "Check",
-                              "geometry": "M4 13l8 8 16-17",
-                              "viewBox": [
-                                0,
-                                0,
-                                32,
-                                24
-                              ],
-                              "fill": "#00000000",
-                              "width": 32,
-                              "height": 24,
-                              "stroke": "#4f46e5ff",
-                              "strokeWidth": 8,
-                              "strokeLinejoin": "round",
-                              "strokeLinecap": "round"
+                            "JMO33": {
+                              "width": 11,
+                              "height": 8,
+                              "x": 12,
+                              "y": 22,
+                              "strokeWidth": 3
                             }
-                          ]
+                          }
                         },
                         {
                           "type": "text",
@@ -2465,7 +2262,7 @@
           "children": [
             {
               "type": "frame",
-              "id": "ItEQC",
+              "id": "Ne8TU",
               "name": "Logo",
               "width": 140,
               "height": 140,
@@ -2474,7 +2271,7 @@
               "children": [
                 {
                   "type": "path",
-                  "id": "zOqmU",
+                  "id": "GqvkX",
                   "x": 0,
                   "y": 0,
                   "name": "M-Stroke",
@@ -2495,7 +2292,7 @@
                 },
                 {
                   "type": "path",
-                  "id": "n0sdNW",
+                  "id": "p4GgZ",
                   "x": 46,
                   "y": 17,
                   "name": "Location-Pin",
@@ -2513,7 +2310,7 @@
                 },
                 {
                   "type": "path",
-                  "id": "R8Z9el",
+                  "id": "S7bvd",
                   "x": 48,
                   "y": 90,
                   "name": "Check",
@@ -2644,7 +2441,11 @@
               },
               {
                 "color": "#4F46E500",
-                "position": 1
+                "position": 0.79
+              },
+              {
+                "color": "#4f46e594",
+                "position": 0.33
               }
             ]
           },
@@ -2661,7 +2462,7 @@
           "children": [
             {
               "type": "frame",
-              "id": "N7fln",
+              "id": "sphJf",
               "name": "Logo",
               "width": 140,
               "height": 140,
@@ -2670,7 +2471,7 @@
               "children": [
                 {
                   "type": "path",
-                  "id": "H1J81m",
+                  "id": "w98KE",
                   "x": 0,
                   "y": 0,
                   "name": "M-Stroke",
@@ -2691,7 +2492,7 @@
                 },
                 {
                   "type": "path",
-                  "id": "D2DcON",
+                  "id": "r1yT4J",
                   "x": 46,
                   "y": 17,
                   "name": "Location-Pin",
@@ -2709,7 +2510,7 @@
                 },
                 {
                   "type": "path",
-                  "id": "q90t2",
+                  "id": "CB1l6",
                   "x": 48,
                   "y": 90,
                   "name": "Check",
@@ -13202,6 +13003,78 @@
           "fontFamily": "Plus Jakarta Sans",
           "fontSize": 15,
           "fontWeight": "500"
+        },
+        {
+          "id": "wtvIu",
+          "type": "ref",
+          "reusable": true,
+          "ref": "D3aDa",
+          "name": "Component/MoventiqMarkLight",
+          "width": 60,
+          "height": 60,
+          "layout": "none",
+          "fill": "#00000000",
+          "x": 746,
+          "y": 1712,
+          "descendants": {
+            "L0A6p": {
+              "width": 60,
+              "height": 60,
+              "strokeWidth": 10,
+              "stroke": "$brand-indigo"
+            },
+            "XpLNp": {
+              "width": 20,
+              "height": 18,
+              "x": 20,
+              "y": 7,
+              "fill": "$brand-indigo"
+            },
+            "JMO33": {
+              "width": 19,
+              "height": 14,
+              "x": 20,
+              "y": 38,
+              "strokeWidth": 5,
+              "stroke": "$brand-indigo"
+            }
+          }
+        },
+        {
+          "id": "j8ZkGZ",
+          "type": "ref",
+          "reusable": true,
+          "ref": "D3aDa",
+          "name": "Component/MoventiqMarkDark",
+          "width": 60,
+          "height": 60,
+          "layout": "none",
+          "fill": "#00000000",
+          "x": 746,
+          "y": 1792,
+          "descendants": {
+            "L0A6p": {
+              "width": 60,
+              "height": 60,
+              "strokeWidth": 10,
+              "stroke": "#FFFFFF"
+            },
+            "XpLNp": {
+              "width": 20,
+              "height": 18,
+              "x": 20,
+              "y": 7,
+              "fill": "#FFFFFF"
+            },
+            "JMO33": {
+              "width": 19,
+              "height": 14,
+              "x": 20,
+              "y": 38,
+              "strokeWidth": 5,
+              "stroke": "#FFFFFF"
+            }
+          }
         }
       ]
     },
@@ -34635,82 +34508,22 @@
               "alignItems": "center",
               "children": [
                 {
-                  "type": "frame",
-                  "id": "ppor7",
+                  "id": "N8PMOv",
+                  "type": "ref",
+                  "ref": "wtvIu",
                   "name": "Logo",
-                  "width": 72,
-                  "height": 72,
-                  "fill": "#00000000",
-                  "layout": "none",
-                  "children": [
-                    {
-                      "type": "path",
-                      "id": "FUKp8",
-                      "x": 0,
-                      "y": 0,
-                      "name": "M-Stroke",
-                      "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                      "viewBox": [
-                        0,
-                        0,
-                        100,
-                        100
-                      ],
-                      "fill": "#00000000",
-                      "width": 72,
-                      "height": 72,
-                      "stroke": "#4F46E5",
-                      "strokeWidth": 11,
-                      "strokeLinejoin": "round",
-                      "strokeLinecap": "round"
-                    },
-                    {
-                      "type": "path",
-                      "id": "sCGGZ",
-                      "x": 24,
-                      "y": 9,
-                      "name": "Location-Pin",
-                      "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                      "fillRule": "evenodd",
-                      "viewBox": [
-                        0,
-                        0,
-                        24,
-                        24
-                      ],
-                      "fill": "#4F46E5",
-                      "width": 24,
-                      "height": 22
-                    },
-                    {
-                      "type": "path",
-                      "id": "K72Hcs",
-                      "x": 25,
-                      "y": 46,
-                      "name": "Check",
-                      "geometry": "M4 13l8 8 16-17",
-                      "viewBox": [
-                        0,
-                        0,
-                        32,
-                        24
-                      ],
-                      "fill": "#00000000",
-                      "width": 23,
-                      "height": 17,
-                      "stroke": "#4F46E5",
-                      "strokeWidth": 6,
-                      "strokeLinejoin": "round",
-                      "strokeLinecap": "round"
-                    }
-                  ]
+                  "width": 60,
+                  "height": 60
                 },
                 {
                   "type": "text",
                   "id": "xNxej",
                   "name": "App Name",
                   "fill": "$text-primary",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
                   "content": "Moventiq",
+                  "textAlign": "center",
                   "fontFamily": "Plus Jakarta Sans",
                   "fontSize": 18,
                   "fontWeight": "700"
@@ -34720,7 +34533,10 @@
                   "id": "kla6d",
                   "name": "Version",
                   "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
                   "content": "Version 1.0.0 (Build 1)",
+                  "textAlign": "center",
                   "fontFamily": "Plus Jakarta Sans",
                   "fontSize": 13,
                   "fontWeight": "normal"
@@ -35150,82 +34966,22 @@
               "alignItems": "center",
               "children": [
                 {
-                  "type": "frame",
-                  "id": "UOrcf",
+                  "id": "Hi5WJ",
+                  "type": "ref",
+                  "ref": "j8ZkGZ",
                   "name": "Logo",
-                  "width": 72,
-                  "height": 72,
-                  "fill": "#00000000",
-                  "layout": "none",
-                  "children": [
-                    {
-                      "type": "path",
-                      "id": "BvzGY",
-                      "x": 0,
-                      "y": 0,
-                      "name": "M-Stroke",
-                      "geometry": "M18 80l0-50 32 28 32-28 0 50",
-                      "viewBox": [
-                        0,
-                        0,
-                        100,
-                        100
-                      ],
-                      "fill": "#00000000",
-                      "width": 72,
-                      "height": 72,
-                      "stroke": "#FFFFFF",
-                      "strokeWidth": 11,
-                      "strokeLinejoin": "round",
-                      "strokeLinecap": "round"
-                    },
-                    {
-                      "type": "path",
-                      "id": "v9MJn",
-                      "x": 24,
-                      "y": 9,
-                      "name": "Location-Pin",
-                      "geometry": "M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z m0 9.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z",
-                      "fillRule": "evenodd",
-                      "viewBox": [
-                        0,
-                        0,
-                        24,
-                        24
-                      ],
-                      "fill": "#FFFFFF",
-                      "width": 24,
-                      "height": 22
-                    },
-                    {
-                      "type": "path",
-                      "id": "F8Qex",
-                      "x": 25,
-                      "y": 46,
-                      "name": "Check",
-                      "geometry": "M4 13l8 8 16-17",
-                      "viewBox": [
-                        0,
-                        0,
-                        32,
-                        24
-                      ],
-                      "fill": "#00000000",
-                      "width": 23,
-                      "height": 17,
-                      "stroke": "#FFFFFF",
-                      "strokeWidth": 6,
-                      "strokeLinejoin": "round",
-                      "strokeLinecap": "round"
-                    }
-                  ]
+                  "width": 60,
+                  "height": 60
                 },
                 {
                   "type": "text",
                   "id": "aa8Bu",
                   "name": "App Name",
                   "fill": "$text-primary",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
                   "content": "Moventiq",
+                  "textAlign": "center",
                   "fontFamily": "Plus Jakarta Sans",
                   "fontSize": 18,
                   "fontWeight": "700"
@@ -35235,7 +34991,10 @@
                   "id": "hFFrT",
                   "name": "Version",
                   "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
                   "content": "Version 1.0.0 (Build 1)",
+                  "textAlign": "center",
                   "fontFamily": "Plus Jakarta Sans",
                   "fontSize": 13,
                   "fontWeight": "normal"
@@ -43184,6 +42943,42 @@
           ]
         }
       ]
+    },
+    {
+      "id": "P2hJ0",
+      "type": "ref",
+      "reusable": true,
+      "ref": "D3aDa",
+      "name": "Component/MoventiqMarkBlack",
+      "width": 60,
+      "height": 60,
+      "layout": "none",
+      "fill": "#00000000",
+      "x": 746,
+      "y": 1952,
+      "descendants": {
+        "L0A6p": {
+          "width": 60,
+          "height": 60,
+          "strokeWidth": 10,
+          "stroke": "#0F172A"
+        },
+        "XpLNp": {
+          "width": 20,
+          "height": 18,
+          "x": 20,
+          "y": 7,
+          "fill": "#0F172A"
+        },
+        "JMO33": {
+          "width": 19,
+          "height": 14,
+          "x": 20,
+          "y": 38,
+          "strokeWidth": 5,
+          "stroke": "#0F172A"
+        }
+      }
     }
   ],
   "themes": {

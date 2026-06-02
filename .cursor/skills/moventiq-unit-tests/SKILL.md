@@ -41,11 +41,11 @@ Cross-ref: UI test naming in `moventiq-ui-tests`.
 
 | Layer | Module | Source set | What to test |
 |---|---|---|---|
-| Use case | `:sharedLogic` | `commonTest` | Given/when/then with fake repos |
-| Mapper | `:sharedLogic` | `commonTest` | Entity ↔ domain mapping |
-| Repository | `:sharedLogic` | `androidHostTest` | Room integration |
-| Repository | `:sharedLogic` | `iosTest` | In-memory Room |
-| DAO | `:sharedLogic` | `androidHostTest` / `iosTest` | Queries, FK, Flow emissions |
+| Use case | `shared/feature/*` or `:sharedLogic` | `commonTest` | Given/when/then with fake repos |
+| Mapper | `shared/feature/*/data` | `commonTest` | Entity ↔ domain mapping |
+| Repository | `shared/feature/*` | `androidHostTest` / `iosTest` | Room integration |
+| DAO | `shared/core/database` | `androidHostTest` / `iosTest` | Queries, FK, Flow |
+| Shared store | `shared/feature/*/presentation` | `commonTest` | Turbine on state |
 | ViewModel | `:androidApp` | `test` | Event → state with fake use cases |
 | ViewModel | `:iosApp` | `*Tests` | Same with fake use cases |
 
