@@ -29,15 +29,13 @@ final class SplashViewModel {
     private func startSplashSequence() {
         splashTask?.cancel()
         splashTask = Task {
-            let enterNs = UInt64(enterWindow * 1_000_000_000)
-            let exitNs = UInt64(exitDuration * 1_000_000_000)
-            if enterNs > 0 {
-                try? await Task.sleep(nanoseconds: enterNs)
+            if enterWindow > 0 {
+                try? await Task.sleep(for: .seconds(enterWindow))
             }
             guard !Task.isCancelled else { return }
             state.phase = .exiting
-            if exitNs > 0 {
-                try? await Task.sleep(nanoseconds: exitNs)
+            if exitDuration > 0 {
+                try? await Task.sleep(for: .seconds(exitDuration))
             }
             guard !Task.isCancelled else { return }
             state.isComplete = true

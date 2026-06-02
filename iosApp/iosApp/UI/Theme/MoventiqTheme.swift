@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 extension Color {
     static let moventiqPrimary = Color(red: 0.310, green: 0.275, blue: 0.898)

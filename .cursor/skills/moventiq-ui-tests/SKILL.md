@@ -24,17 +24,17 @@ Use **snake_case** with **2–3 segments**:
 | Segment | Content | Example |
 |---|---|---|
 | feature | screen or flow scope | `splash`, `app`, `home`, `tasks` |
-| visibleBehavior | what the user sees (not implementation) | `showsWordmark`, `navigatesToHome` |
-| condition | context | `inDarkTheme`, `afterEnterAnimation`, `whenExiting`, `beforeNavigationCompletes` |
+| visibleBehavior | what the user sees (not implementation) | `shows_wordmark`, `navigates_to_home` |
+| condition | context | `in_dark_theme`, `after_enter_animation`, `when_exiting`, `before_navigation_completes` |
 
-Examples: `splash_showsScreenRoot`, `splash_showsBrandText_inDarkTheme`, `app_navigatesToHome_afterSplashCompletes`.
+Examples: `splash_shows_screen_root`, `splash_shows_brand_text_in_dark_theme`, `app_navigates_to_home_after_splash_completes`.
 
 **How to rename**
 
 1. **Refactor → Rename** (⇧F6) on the `@Test` method — same as unit tests.
 2. Run one instrumented test (see **Commands** — `--tests` does **not** work on `connectedDebugAndroidTest`).
 3. Prefer **behavior** verbs (`shows`, `navigates`, `displays`) over implementation (`renders`, `emits`, `callsViewModel`).
-4. Match `testTag` nouns where helpful: `splash_showsWordmark_*` ↔ `SplashTestTags.WORDMARK`.
+4. Match `testTag` nouns where helpful: `splash_shows_wordmark_*` ↔ `SplashTestTags.WORDMARK`.
 
 Cross-ref: unit test naming in `moventiq-unit-tests`.
 
@@ -104,7 +104,7 @@ class HomeContentTest {
     }
 
     @Test
-    fun home_showsEmptyState_whenNoTasks() {
+    fun home_shows_empty_state_when_no_tasks() {
         composeTestRule.setContent { TestHost(HomeUiState.previewEmpty()) }
         composeTestRule.onNodeWithTag("home_empty_state").assertIsDisplayed()
     }
@@ -124,7 +124,7 @@ class SplashFlowTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun app_navigatesToHome_afterSplashCompletes() {
+    fun app_navigates_to_home_after_splash_completes() {
         val splashViewModel = SplashViewModel(
             enterWindowMs = 0L,
             exitDurationMs = 0L,
@@ -183,7 +183,7 @@ Gradle `--tests` filters **JVM unit tests only** (`testDebugUnitTest`). Instrume
 
 # Android UI tests — single method (Class#methodName)
 ./gradlew :androidApp:connectedDebugAndroidTest \
-  -Pandroid.testInstrumentationRunnerArguments.class=com.mohamedfaridelsherbini.moventiq.ui.splash.SplashContentTest#splash_showsWordmark_whenExiting
+  -Pandroid.testInstrumentationRunnerArguments.class=com.mohamedfaridelsherbini.moventiq.ui.splash.SplashContentTest#splash_shows_wordmark_when_exiting
 ```
 
 # iOS — use shared scheme + test plan (iosApp/iosApp.xctestplan)
@@ -205,13 +205,13 @@ Use a simulator name from `xcrun simctl list devices available`. Prefer the shar
 
 Targets: `iosAppUITests/` (flows), `iosAppTests/` (ViewModels). Match Android `testTag` names via `accessibilityIdentifier` on SwiftUI views.
 
-Use launch arguments for deterministic splash timing (see `RootView.makeSplashViewModel()`):
+Use launch arguments for deterministic splash timing (see `SplashViewModelFactory.makeSplashViewModel()`):
 
 - `-UITestInstantSplash` — zero delay, navigates to home immediately
 - `-UITestLongSplash` — keeps splash visible for UI assertions
 
 ```swift
-func test_app_navigatesToHome_afterSplashCompletes() {
+func test_app_navigates_to_home_after_splash_completes() {
     let app = XCUIApplication()
     app.launchArguments.append("-UITestInstantSplash")
     app.launch()

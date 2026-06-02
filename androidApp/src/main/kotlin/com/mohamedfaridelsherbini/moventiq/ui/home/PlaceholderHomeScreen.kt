@@ -1,5 +1,6 @@
 package com.mohamedfaridelsherbini.moventiq.ui.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +17,7 @@ fun PlaceholderHomeScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.background)
             .testTag(HomeTestTags.SCREEN),
         contentAlignment = Alignment.Center,
     ) {

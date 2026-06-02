@@ -36,7 +36,6 @@ class SplashFlowTest {
         }
 
         composeTestRule.waitForIdle()
-        composeTestRule.mainClock.advanceTimeBy(1_000)
         composeTestRule.waitUntil(timeoutMillis = 5_000) {
             composeTestRule
                 .onAllNodesWithTag(HomeTestTags.SCREEN)

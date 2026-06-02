@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mohamedfaridelsherbini.moventiq.ui.splash.SplashBranding
+import com.mohamedfaridelsherbini.moventiq.ui.splash.SplashPhase
+import com.mohamedfaridelsherbini.moventiq.ui.splash.SplashUiState
 import com.mohamedfaridelsherbini.moventiq.ui.splash.SplashViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.concurrent.atomic.AtomicBoolean
@@ -25,7 +27,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        splashScreen.setKeepOnScreenCondition { keepSystemSplashOn.get() }
+        splashScreen.setKeepOnScreenCondition {
+            shouldKeepSystemSplashOn(keepSystemSplashOn.get(), splashViewModel.state.value)
+        }
 
         splashScreen.setOnExitAnimationListener { splashScreenViewProvider ->
             val splashView = splashScreenViewProvider.view
@@ -46,3 +50,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+/** Keeps the Android 12+ system splash up only while Compose splash is still in [SplashPhase.Visible]. */
+internal fun shouldKeepSystemSplashOn(
+    keepSystemSplashOn: Boolean,
+    state: SplashUiState,
+): Boolean = keepSystemSplashOn && !state.isComplete && state.phase == SplashPhase.Visible

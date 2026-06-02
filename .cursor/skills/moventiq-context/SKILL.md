@@ -26,6 +26,8 @@ Create Location → Create Task → Link to Location → Arrive → Task appears
 
 Agent skills and rules: `.cursor/skills/`, `.cursor/rules/`.
 
+**Run skills in order:** `moventiq-pipeline` (verify · implement · review · data).
+
 ## Modules
 
 | Module | Path | Role |
@@ -79,6 +81,7 @@ Agent skills and rules: `.cursor/skills/`, `.cursor/rules/`.
 
 | Task | Skill |
 |---|---|
+| **Run all skills in order** | `moventiq-pipeline` |
 | Design file | `moventiq-pencil-design` |
 | Room / data | `moventiq-room-kmp` |
 | Android UI | `moventiq-compose-ui` |

@@ -2,7 +2,7 @@
 
 Guidance for AI agents and developers working in this repository. Read this with [MVP.md](MVP.md) (what to build), [ARCHITECTURE.md](ARCHITECTURE.md) (how modules/layers/DB are structured), and [DESIGN.md](DESIGN.md) (visual source of truth).
 
-**Agent skills & rules:** `.cursor/skills/` (workflows) and `.cursor/rules/` (always-on guardrails).
+**Agent skills & rules:** `.cursor/skills/` (workflows) and `.cursor/rules/` (always-on guardrails). Run skills in order via **`moventiq-pipeline`** (verify · implement · review · data).
 
 ---
 

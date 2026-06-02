@@ -40,7 +40,9 @@ final class SplashViewModelTests: XCTestCase {
     func test_zeroDelay_completesImmediately() async throws {
         let viewModel = SplashViewModel(enterWindow: 0, exitDuration: 0)
 
-        try await Task.sleep(nanoseconds: 1_000_000)
+        try await waitUntil(timeout: 0.5) {
+            viewModel.state.isComplete
+        }
         XCTAssertEqual(viewModel.state.phase, .exiting)
         XCTAssertTrue(viewModel.state.isComplete)
     }

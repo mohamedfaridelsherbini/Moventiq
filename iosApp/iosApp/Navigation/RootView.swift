@@ -1,11 +1,7 @@
 import SwiftUI
 
 struct RootView: View {
-    @State private var splashViewModel: SplashViewModel
-
-    init(splashViewModel: SplashViewModel = RootView.makeSplashViewModel()) {
-        _splashViewModel = State(initialValue: splashViewModel)
-    }
+    let splashViewModel: SplashViewModel
 
     var body: some View {
         Group {
@@ -26,7 +22,8 @@ struct RootView: View {
     }
 }
 
-extension RootView {
+enum SplashViewModelFactory {
+    @MainActor
     static func makeSplashViewModel() -> SplashViewModel {
         let arguments = ProcessInfo.processInfo.arguments
         if arguments.contains("-UITestInstantSplash") {
@@ -40,5 +37,5 @@ extension RootView {
 }
 
 #Preview("Root — Splash") {
-    RootView()
+    RootView(splashViewModel: SplashViewModel(enterWindow: 60, exitDuration: 60))
 }

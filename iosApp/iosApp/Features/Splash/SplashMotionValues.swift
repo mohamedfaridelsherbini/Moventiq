@@ -16,32 +16,36 @@ final class SplashMotionController {
     var screenScale: CGFloat = 1
 
     func animateEnter() async {
-        withAnimation(.easeInOut(duration: SplashBranding.backgroundFadeDuration)) {
-            backgroundProgress = 1
-        }
-        withAnimation(.easeInOut(duration: SplashBranding.markEnterDuration)) {
-            markAlpha = 1
-        }
-        withAnimation(.easeInOut(duration: SplashBranding.markEnterDuration + 0.12)) {
-            markScale = 1
-        }
+        do {
+            withAnimation(.easeInOut(duration: SplashBranding.backgroundFadeDuration)) {
+                backgroundProgress = 1
+            }
+            withAnimation(.easeInOut(duration: SplashBranding.markEnterDuration)) {
+                markAlpha = 1
+            }
+            withAnimation(.easeInOut(duration: SplashBranding.markEnterDuration + 0.12)) {
+                markScale = 1
+            }
 
-        try? await Task.sleep(nanoseconds: UInt64(SplashBranding.glowEnterDelay * 1_000_000_000))
-        withAnimation(.easeOut(duration: SplashBranding.glowEnterDuration)) {
-            glowAlpha = 1
-            glowScale = 1
-        }
+            try await Task.sleep(for: .seconds(SplashBranding.glowEnterDelay))
+            withAnimation(.easeOut(duration: SplashBranding.glowEnterDuration)) {
+                glowAlpha = 1
+                glowScale = 1
+            }
 
-        try? await Task.sleep(nanoseconds: UInt64(SplashBranding.wordmarkEnterDelay * 1_000_000_000))
-        withAnimation(.easeInOut(duration: SplashBranding.wordmarkEnterDuration)) {
-            wordmarkAlpha = 1
-            wordmarkOffset = 0
-        }
+            try await Task.sleep(for: .seconds(SplashBranding.wordmarkEnterDelay))
+            withAnimation(.easeInOut(duration: SplashBranding.wordmarkEnterDuration)) {
+                wordmarkAlpha = 1
+                wordmarkOffset = 0
+            }
 
-        try? await Task.sleep(nanoseconds: UInt64(SplashBranding.taglineEnterDelay * 1_000_000_000))
-        withAnimation(.easeInOut(duration: SplashBranding.taglineEnterDuration)) {
-            taglineAlpha = 1
-            taglineOffset = 0
+            try await Task.sleep(for: .seconds(SplashBranding.taglineEnterDelay))
+            withAnimation(.easeInOut(duration: SplashBranding.taglineEnterDuration)) {
+                taglineAlpha = 1
+                taglineOffset = 0
+            }
+        } catch {
+            // Task cancelled — stop the enter sequence
         }
     }
 

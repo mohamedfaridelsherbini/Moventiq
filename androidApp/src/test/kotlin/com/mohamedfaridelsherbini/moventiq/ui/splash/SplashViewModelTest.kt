@@ -33,6 +33,8 @@ class SplashViewModelTest {
             exitDurationMs = 200L,
         )
 
+        viewModel.onEvent(SplashEvent.ContentDrawn)
+
         viewModel.state.test {
             assertEquals(SplashUiState(), awaitItem())
             advanceTimeBy(100)
@@ -53,6 +55,7 @@ class SplashViewModelTest {
             exitDurationMs = 0L,
         )
 
+        viewModel.onEvent(SplashEvent.ContentDrawn)
         advanceTimeBy(1)
         assertTrue(viewModel.state.value.isComplete)
         assertEquals(SplashPhase.Exiting, viewModel.state.value.phase)
@@ -61,6 +64,8 @@ class SplashViewModelTest {
     @Test
     fun defaultEnterWindow_transitionsToExitingThenComplete() = runTest {
         val viewModel = SplashViewModel()
+
+        viewModel.onEvent(SplashEvent.ContentDrawn)
 
         viewModel.state.test {
             assertEquals(SplashUiState(), awaitItem())

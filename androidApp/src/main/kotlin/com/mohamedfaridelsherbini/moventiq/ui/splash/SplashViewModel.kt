@@ -15,19 +15,22 @@ class SplashViewModel(
 ) : ViewModel() {
     private val _state = MutableStateFlow(SplashUiState())
     val state: StateFlow<SplashUiState> = _state.asStateFlow()
+    private var isStarted = false
 
-    init {
+    fun onEvent(event: SplashEvent) {
+        when (event) {
+            SplashEvent.ContentDrawn -> startSplashSequenceIfNeeded()
+        }
+    }
+
+    private fun startSplashSequenceIfNeeded() {
+        if (isStarted) return
+        isStarted = true
         viewModelScope.launch {
             delay(enterWindowMs)
             _state.update { it.copy(phase = SplashPhase.Exiting) }
             delay(exitDurationMs)
             _state.update { it.copy(isComplete = true) }
-        }
-    }
-
-    fun onEvent(event: SplashEvent) {
-        when (event) {
-            SplashEvent.ContentDrawn -> Unit
         }
     }
 }

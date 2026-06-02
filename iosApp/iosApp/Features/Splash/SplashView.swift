@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SplashView: View {
-    @Bindable var viewModel: SplashViewModel
+    let viewModel: SplashViewModel
 
     var body: some View {
         SplashContentView(

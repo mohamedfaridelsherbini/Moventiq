@@ -4,7 +4,7 @@ import SwiftUI
     MoventiqTheme(darkTheme: false) {
         SplashContentView(
             state: .preview(),
-            onEvent: { _ in },
+            onEvent: { _ in }
         )
     }
 }
@@ -13,7 +13,7 @@ import SwiftUI
     MoventiqTheme(darkTheme: true) {
         SplashContentView(
             state: .preview(),
-            onEvent: { _ in },
+            onEvent: { _ in }
         )
     }
 }
@@ -22,7 +22,7 @@ import SwiftUI
     MoventiqTheme(darkTheme: false) {
         SplashContentView(
             state: .preview(phase: .exiting),
-            onEvent: { _ in },
+            onEvent: { _ in }
         )
     }
 }
@@ -31,7 +31,7 @@ import SwiftUI
     MoventiqTheme(darkTheme: true) {
         SplashContentView(
             state: .preview(phase: .exiting),
-            onEvent: { _ in },
+            onEvent: { _ in }
         )
     }
 }
