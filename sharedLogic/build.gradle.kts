@@ -16,7 +16,7 @@ kotlin {
         }
     }
     
-    androidLibrary {
+    android {
        namespace = "com.mohamedfaridelsherbini.moventiq.sharedLogic"
        compileSdk = providers.gradleProperty("android.compileSdk").get().toInt()
        minSdk = providers.gradleProperty("android.minSdk").get().toInt()
