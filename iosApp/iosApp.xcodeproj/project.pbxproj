@@ -66,13 +66,6 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		BAD85A679B11E715CA1EA00B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		112233445566778899001122 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -81,6 +74,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		223344556677889900112233 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BAD85A679B11E715CA1EA00B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -114,29 +114,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F06F3A9063612C6CCCDEBC85 /* iosApp */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CA71EB855FD3B1F891526A36 /* Build configuration list for PBXNativeTarget "iosApp" */;
-			buildPhases = (
-				655E7B6107A9EADBD5FB6C28 /* Compile Kotlin Framework */,
-				E25772EEEE3DDAC03E1A9081 /* Sources */,
-				BAD85A679B11E715CA1EA00B /* Frameworks */,
-				2DF39B6BEC4814B2AA3E6536 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				88C2EF149AAE185F21D16B01 /* iosApp */,
-			);
-			name = iosApp;
-			packageProductDependencies = (
-			);
-			productName = iosApp;
-			productReference = A72ACD23D622D468FE825906 /* Moventiq.app */;
-			productType = "com.apple.product-type.application";
-		};
 		334455667788990011223344 /* iosAppTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 445566778899001122334455 /* Build configuration list for PBXNativeTarget "iosAppTests" */;
@@ -181,6 +158,29 @@
 			productReference = DD4444444444444444444444 /* iosAppUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		F06F3A9063612C6CCCDEBC85 /* iosApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CA71EB855FD3B1F891526A36 /* Build configuration list for PBXNativeTarget "iosApp" */;
+			buildPhases = (
+				655E7B6107A9EADBD5FB6C28 /* Compile Kotlin Framework */,
+				E25772EEEE3DDAC03E1A9081 /* Sources */,
+				BAD85A679B11E715CA1EA00B /* Frameworks */,
+				2DF39B6BEC4814B2AA3E6536 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				88C2EF149AAE185F21D16B01 /* iosApp */,
+			);
+			name = iosApp;
+			packageProductDependencies = (
+			);
+			productName = iosApp;
+			productReference = A72ACD23D622D468FE825906 /* Moventiq.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -189,11 +189,8 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 2650;
 				TargetAttributes = {
-					F06F3A9063612C6CCCDEBC85 = {
-						CreatedOnToolsVersion = 16.2;
-					};
 					334455667788990011223344 = {
 						CreatedOnToolsVersion = 16.2;
 						TestTargetID = F06F3A9063612C6CCCDEBC85;
@@ -201,6 +198,9 @@
 					778899001122334455667788 = {
 						CreatedOnToolsVersion = 16.2;
 						TestTargetID = F06F3A9063612C6CCCDEBC85;
+					};
+					F06F3A9063612C6CCCDEBC85 = {
+						CreatedOnToolsVersion = 16.2;
 					};
 				};
 			};
@@ -224,36 +224,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXSourcesBuildPhase section */
-		556677889900112233445566 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		990011223344556677889900 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		667788990011223344556677 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F06F3A9063612C6CCCDEBC85 /* iosApp */;
-			targetProxy = AA1111111111111111111111 /* PBXContainerItemProxy */;
-		};
-		001122334455667788990011 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F06F3A9063612C6CCCDEBC85 /* iosApp */;
-			targetProxy = BB2222222222222222222222 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXResourcesBuildPhase section */
 		2DF39B6BEC4814B2AA3E6536 /* Resources */ = {
@@ -288,6 +258,20 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		556677889900112233445566 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		990011223344556677889900 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E25772EEEE3DDAC03E1A9081 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -296,6 +280,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		001122334455667788990011 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F06F3A9063612C6CCCDEBC85 /* iosApp */;
+			targetProxy = BB2222222222222222222222 /* PBXContainerItemProxy */;
+		};
+		667788990011223344556677 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F06F3A9063612C6CCCDEBC85 /* iosApp */;
+			targetProxy = AA1111111111111111111111 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		4B7B6E8170084A90BCB8361B /* Debug */ = {
@@ -335,6 +332,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "${TEAM_ID}";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -358,6 +356,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -366,13 +365,11 @@
 		65BF6A209DAE4BABD92757D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
-				DEVELOPMENT_TEAM = "${TEAM_ID}";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
@@ -428,6 +425,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "${TEAM_ID}";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -444,6 +442,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -452,13 +451,11 @@
 		80B905293A306F641F39D4BB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
-				DEVELOPMENT_TEAM = "${TEAM_ID}";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
@@ -482,7 +479,6 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "${TEAM_ID}";
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -504,7 +500,6 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "${TEAM_ID}";
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -525,7 +520,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "${TEAM_ID}";
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -546,7 +540,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "${TEAM_ID}";
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -575,15 +568,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CA71EB855FD3B1F891526A36 /* Build configuration list for PBXNativeTarget "iosApp" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				65BF6A209DAE4BABD92757D5 /* Debug */,
-				80B905293A306F641F39D4BB /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		445566778899001122334455 /* Build configuration list for PBXNativeTarget "iosAppTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -598,6 +582,15 @@
 			buildConfigurations = (
 				CCDDEEFF0011223344556677 /* Debug */,
 				DDEEFF001122334455667788 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CA71EB855FD3B1F891526A36 /* Build configuration list for PBXNativeTarget "iosApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				65BF6A209DAE4BABD92757D5 /* Debug */,
+				80B905293A306F641F39D4BB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
