@@ -7,6 +7,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mohamedfaridelsherbini.moventiq.MoventiqApp
 import com.mohamedfaridelsherbini.moventiq.ui.home.HomeTestTags
+import com.mohamedfaridelsherbini.moventiq.ui.onboarding.CompletedOnboardingStatusStore
+import com.mohamedfaridelsherbini.moventiq.ui.onboarding.OnboardingViewModel
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,10 +29,14 @@ class SplashFlowTest {
             enterWindowMs = 0L,
             exitDurationMs = 0L,
         )
+        val onboardingViewModel = OnboardingViewModel(
+            CompletedOnboardingStatusStore,
+        )
 
         composeTestRule.setContent {
             MoventiqApp(
                 splashViewModel = splashViewModel,
+                onboardingViewModel = onboardingViewModel,
                 onSplashDrawn = {},
             )
         }
@@ -51,10 +57,14 @@ class SplashFlowTest {
             enterWindowMs = 60_000L,
             exitDurationMs = 60_000L,
         )
+        val onboardingViewModel = OnboardingViewModel(
+            CompletedOnboardingStatusStore,
+        )
 
         composeTestRule.setContent {
             MoventiqApp(
                 splashViewModel = splashViewModel,
+                onboardingViewModel = onboardingViewModel,
                 onSplashDrawn = {},
             )
         }

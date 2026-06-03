@@ -1,0 +1,13 @@
+/* Onboarding — keys mirror Android strings.xml */
+"onboarding_skip" = "Skip";
+"onboarding_continue" = "Continue";
+"onboarding_get_started" = "Get started";
+
+"onboarding_1_headline" = "Create tasks linked to places";
+"onboarding_1_body" = "Add a to-do and pin it to a spot — home, work, the gym, anywhere it belongs.";
+
+"onboarding_2_headline" = "Moventiq detects when you arrive";
+"onboarding_2_body" = "With lightweight geofencing, it quietly notices the moment you reach a saved place.";
+
+"onboarding_3_headline" = "The right tasks appear automatically";
+"onboarding_3_body" = "No searching, no digging. Your place-based tasks surface exactly when they matter.";

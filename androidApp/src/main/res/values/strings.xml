@@ -1,4 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Moventiq</string>
     <string name="splash_tagline">The right task, at the right place</string>
+
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_continue">Continue</string>
+    <string name="onboarding_get_started">Get started</string>
+
+    <string name="onboarding_1_headline">Create tasks linked to places</string>
+    <string name="onboarding_1_body">Add a to-do and pin it to a spot — home, work, the gym, anywhere it belongs.</string>
+
+    <string name="onboarding_2_headline">Moventiq detects when you arrive</string>
+    <string name="onboarding_2_body">With lightweight geofencing, it quietly notices the moment you reach a saved place.</string>
+
+    <string name="onboarding_3_headline">The right tasks appear automatically</string>
+    <string name="onboarding_3_body">No searching, no digging. Your place-based tasks surface exactly when they matter.</string>
 </resources>

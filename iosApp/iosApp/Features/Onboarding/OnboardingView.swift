@@ -1,10 +1,10 @@
 import SwiftUI
 
-struct SplashView: View {
-    let viewModel: SplashViewModel
+struct OnboardingView: View {
+    @Bindable var viewModel: OnboardingViewModel
 
     var body: some View {
-        SplashContentView(
+        OnboardingContentView(
             state: viewModel.state,
             onEvent: viewModel.handle
         )

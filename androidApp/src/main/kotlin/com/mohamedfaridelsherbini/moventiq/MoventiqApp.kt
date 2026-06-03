@@ -15,63 +15,91 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mohamedfaridelsherbini.moventiq.navigation.MoventiqNavHost
+import com.mohamedfaridelsherbini.moventiq.ui.onboarding.OnboardingScreen
+import com.mohamedfaridelsherbini.moventiq.ui.onboarding.OnboardingViewModel
 import com.mohamedfaridelsherbini.moventiq.ui.splash.SplashBranding
 import com.mohamedfaridelsherbini.moventiq.ui.splash.SplashScreen
 import com.mohamedfaridelsherbini.moventiq.ui.splash.SplashViewModel
 import com.mohamedfaridelsherbini.moventiq.ui.theme.MoventiqTheme
+import org.koin.compose.viewmodel.koinViewModel
+
+private enum class AppPhase {
+    Splash,
+    Onboarding,
+    Main,
+}
 
 @Composable
 fun MoventiqApp(
     splashViewModel: SplashViewModel,
     onSplashDrawn: () -> Unit,
     modifier: Modifier = Modifier,
+    onboardingViewModel: OnboardingViewModel = koinViewModel(),
 ) {
     val splashState by splashViewModel.state.collectAsStateWithLifecycle()
+    val onboardingState by onboardingViewModel.state.collectAsStateWithLifecycle()
+
+    val phase = when {
+        !splashState.isComplete -> AppPhase.Splash
+        onboardingState.shouldShowOnboarding -> AppPhase.Onboarding
+        else -> AppPhase.Main
+    }
 
     MoventiqTheme {
         AnimatedContent(
-            targetState = !splashState.isComplete,
+            targetState = phase,
             modifier = modifier.fillMaxSize(),
             transitionSpec = {
-                fadeIn(
-                    animationSpec = tween(
-                        durationMillis = SplashBranding.APP_CROSSFADE_DURATION_MS,
-                        easing = FastOutSlowInEasing,
-                    ),
-                ) + scaleIn(
-                    initialScale = 0.98f,
-                    animationSpec = tween(
-                        durationMillis = SplashBranding.APP_CROSSFADE_DURATION_MS,
-                        easing = FastOutSlowInEasing,
-                    ),
-                ) + slideInVertically(
-                    animationSpec = tween(
-                        durationMillis = SplashBranding.APP_CROSSFADE_DURATION_MS,
-                        easing = FastOutSlowInEasing,
-                    ),
-                    initialOffsetY = { it / 12 },
-                ) togetherWith fadeOut(
-                    animationSpec = tween(
-                        durationMillis = SplashBranding.SPLASH_EXIT_DURATION_MS,
-                        easing = FastOutSlowInEasing,
-                    ),
-                ) + scaleOut(
-                    targetScale = SplashBranding.MARK_EXIT_SCALE,
-                    animationSpec = tween(
-                        durationMillis = SplashBranding.SPLASH_EXIT_DURATION_MS,
-                        easing = FastOutSlowInEasing,
-                    ),
-                )
+                when {
+                    initialState == AppPhase.Splash -> {
+                        fadeIn(
+                            animationSpec = tween(
+                                durationMillis = SplashBranding.APP_CROSSFADE_DURATION_MS,
+                                easing = FastOutSlowInEasing,
+                            ),
+                        ) + scaleIn(
+                            initialScale = 0.98f,
+                            animationSpec = tween(
+                                durationMillis = SplashBranding.APP_CROSSFADE_DURATION_MS,
+                                easing = FastOutSlowInEasing,
+                            ),
+                        ) + slideInVertically(
+                            animationSpec = tween(
+                                durationMillis = SplashBranding.APP_CROSSFADE_DURATION_MS,
+                                easing = FastOutSlowInEasing,
+                            ),
+                            initialOffsetY = { it / 12 },
+                        ) togetherWith fadeOut(
+                            animationSpec = tween(
+                                durationMillis = SplashBranding.SPLASH_EXIT_DURATION_MS,
+                                easing = FastOutSlowInEasing,
+                            ),
+                        ) + scaleOut(
+                            targetScale = SplashBranding.MARK_EXIT_SCALE,
+                            animationSpec = tween(
+                                durationMillis = SplashBranding.SPLASH_EXIT_DURATION_MS,
+                                easing = FastOutSlowInEasing,
+                            ),
+                        )
+                    }
+                    else -> {
+                        fadeIn(
+                            tween(durationMillis = SplashBranding.APP_CROSSFADE_DURATION_MS),
+                        ) togetherWith fadeOut(
+                            tween(durationMillis = SplashBranding.APP_CROSSFADE_DURATION_MS),
+                        )
+                    }
+                }
             },
-            label = "splashToMain",
-        ) { splashActive ->
-            if (splashActive) {
-                SplashScreen(
+            label = "appPhase",
+        ) { currentPhase ->
+            when (currentPhase) {
+                AppPhase.Splash -> SplashScreen(
                     viewModel = splashViewModel,
                     onContentDrawn = onSplashDrawn,
                 )
-            } else {
-                MoventiqNavHost()
+                AppPhase.Onboarding -> OnboardingScreen(viewModel = onboardingViewModel)
+                AppPhase.Main -> MoventiqNavHost()
             }
         }
     }
