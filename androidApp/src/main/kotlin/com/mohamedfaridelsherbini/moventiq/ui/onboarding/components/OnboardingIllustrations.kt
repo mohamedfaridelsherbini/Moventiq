@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -45,7 +46,7 @@ fun OnboardingIllustration(
         modifier = modifier
             .fillMaxWidth()
             .height(IllustrationHeight)
-            .width(IllustrationMaxWidth)
+            .widthIn(max = IllustrationMaxWidth)
             .clip(RoundedCornerShape(spacing.xl))
             .background(colors.primaryContainer),
         contentAlignment = Alignment.Center,

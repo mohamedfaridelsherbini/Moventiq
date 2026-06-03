@@ -52,9 +52,18 @@ enum SplashViewModelFactory {
     }
 }
 
+// #Preview light + dark
 #Preview("Root — Splash") {
     RootView(
         splashViewModel: SplashViewModel(enterWindow: 60, exitDuration: 60),
         onboardingViewModel: OnboardingViewModel(statusStore: OnboardingPreferences()),
     )
+}
+
+#Preview("Root — Splash (Dark)") {
+    RootView(
+        splashViewModel: SplashViewModel(enterWindow: 60, exitDuration: 60),
+        onboardingViewModel: OnboardingViewModel(statusStore: OnboardingPreferences()),
+    )
+    .preferredColorScheme(.dark)
 }

@@ -2,6 +2,7 @@ package com.mohamedfaridelsherbini.moventiq.ui.onboarding
 
 import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
@@ -100,7 +101,14 @@ class OnboardingFlowTest {
         }
         composeTestRule.onNodeWithText(context.getString(R.string.onboarding_1_headline)).assertIsDisplayed()
         composeTestRule.onNodeWithTag(OnboardingTestTags.CONTINUE).performClick()
-        composeTestRule.onNodeWithText(context.getString(R.string.onboarding_2_headline)).assertIsDisplayed()
+        val page2Headline = context.getString(R.string.onboarding_2_headline)
+        composeTestRule.waitUntil(timeoutMillis = 5_000) {
+            composeTestRule
+                .onAllNodes(hasText(page2Headline))
+                .fetchSemanticsNodes()
+                .isNotEmpty()
+        }
+        composeTestRule.onNodeWithText(page2Headline).assertIsDisplayed()
     }
 
     @Test

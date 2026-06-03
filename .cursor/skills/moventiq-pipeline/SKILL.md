@@ -42,7 +42,8 @@ Run in this exact order:
 Invoke: `@moventiq-code-review review my diff` — local skill built on CodeRabbit + Gemini review concepts (see skill § Design philosophy).
 | 6 | `moventiq-ci` | Run CI-equivalent commands locally | **GATE** |
 
-Skip step 2 with ⏭️ when the diff has **no UI** (`androidApp/…/ui`, `iosApp/…/Features`, `Components`, `Theme`).
+Skip step 2 with ⏭️ when the diff has **no UI** — none of these path globs match:
+`androidApp/src/main/kotlin/**/ui/**`, `iosApp/iosApp/Features/**`, `iosApp/iosApp/UI/Components/**`, `iosApp/iosApp/UI/Theme/**`.
 
 ### verify — commands (after skills 3–4)
 
@@ -76,8 +77,8 @@ Run in this exact order:
 | # | Skill | When to skip |
 |---|---|---|
 | 1 | `moventiq-context` | Never |
-| 2 | `moventiq-pencil-design` | Skip if no UI / no `.pen` changes |
-| 3 | `moventiq-ui-architecture` | Skip if no UI |
+| 2 | `moventiq-pencil-design` | Skip if no UI / no `.pen` changes (see UI path globs above) |
+| 3 | `moventiq-ui-architecture` | Skip if no UI (see UI path globs above) |
 | 4 | `moventiq-room-kmp` | Skip if no data layer |
 | 5 | `moventiq-compose-ui` | Skip if not Android UI |
 | 6 | `moventiq-swiftui-ui` | Skip if not iOS UI |

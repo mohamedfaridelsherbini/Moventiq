@@ -76,7 +76,7 @@ private struct AutoSurfaceIllustration: View {
                     .fill(colors.primary)
                     .frame(width: 48, height: 48)
                     .overlay(Circle().strokeBorder(colors.textOnPrimary, lineWidth: 3))
-                SparkleIcon()
+                SparkleIcon(tint: colors.textOnPrimary)
             }
             .shadow(color: colors.primary.opacity(0.3), radius: 8, y: 6)
             .offset(x: 91, y: -78)
@@ -251,6 +251,8 @@ private struct MapPinIcon: View {
 }
 
 private struct SparkleIcon: View {
+    let tint: Color
+
     var body: some View {
         Canvas { context, canvasSize in
             let center = CGPoint(x: canvasSize.width / 2, y: canvasSize.height / 2)
@@ -268,10 +270,10 @@ private struct SparkleIcon: View {
             diagonalTwo.move(to: CGPoint(x: center.x - arm * 0.7, y: center.y + arm * 0.7))
             diagonalTwo.addLine(to: CGPoint(x: center.x + arm * 0.7, y: center.y - arm * 0.7))
             let stroke = StrokeStyle(lineWidth: 2.5, lineCap: .round)
-            context.stroke(horizontal, with: .color(.white), style: stroke)
-            context.stroke(vertical, with: .color(.white), style: stroke)
-            context.stroke(diagonalOne, with: .color(.white), style: stroke)
-            context.stroke(diagonalTwo, with: .color(.white), style: stroke)
+            context.stroke(horizontal, with: .color(tint), style: stroke)
+            context.stroke(vertical, with: .color(tint), style: stroke)
+            context.stroke(diagonalOne, with: .color(tint), style: stroke)
+            context.stroke(diagonalTwo, with: .color(tint), style: stroke)
         }
         .frame(width: 24, height: 24)
     }

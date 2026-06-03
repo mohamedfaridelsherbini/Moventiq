@@ -83,7 +83,11 @@ fun MoventiqApp(
                         )
                     }
                     else -> {
-                        fadeIn(tween(300)) togetherWith fadeOut(tween(300))
+                        fadeIn(
+                            tween(durationMillis = SplashBranding.APP_CROSSFADE_DURATION_MS),
+                        ) togetherWith fadeOut(
+                            tween(durationMillis = SplashBranding.APP_CROSSFADE_DURATION_MS),
+                        )
                     }
                 }
             },

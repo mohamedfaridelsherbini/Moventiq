@@ -247,6 +247,16 @@ Moventiq-specific recurring feedback (see prior reviews). Full detail in git his
 |---|---|---|
 | Hardcoded hex / raw dp / font sizes | **critical** | `MoventiqTheme`, `LocalMoventiqColors`, `LocalMoventiqSpacing`, [DESIGN.md](../../../DESIGN.md) |
 | `4.dp`, `8.dp`, `24.dp`, `48.dp` when token exists | **minor** | `spacing.xs/sm/lg/xxl` |
+| iOS dark surface / text-on-dark | **major** | `moventiqSurfaceDark` = `#111827`; dark `textPrimary` = `text-on-dark` (`#FFFFFF`) — do not repurpose light `moventiqTextPrimary` |
+| `fillMaxWidth()` then fixed `.width(dp)` | **minor** | Use `.widthIn(max = …)` so the cap applies |
+
+### Instrumented UI tests (pager)
+
+After `performClick()` on a pager CTA, **wait** for the next page headline/tag (`waitUntil` / poll) before `assertIsDisplayed()` — `HorizontalPager.animateScrollToPage` races immediate assertions.
+
+### Pipeline UI-diff gate
+
+Use explicit path globs (see `moventiq-pipeline` skill): `androidApp/src/main/kotlin/**/ui/**`, `iosApp/iosApp/Features/**`, `iosApp/iosApp/UI/Components/**`, `iosApp/iosApp/UI/Theme/**`.
 
 ### ViewModel initial state
 

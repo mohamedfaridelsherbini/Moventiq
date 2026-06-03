@@ -10,7 +10,8 @@ extension Color {
     static let moventiqBackgroundLight = Color.white
     static let moventiqBackgroundDark = Color(red: 0.059, green: 0.090, blue: 0.165)
     static let moventiqSurfaceLight = Color(red: 0.973, green: 0.980, blue: 0.988)
-    static let moventiqSurfaceDark = Color(red: 0.043, green: 0.063, blue: 0.125)
+    static let moventiqSurfaceDark = Color(red: 17.0 / 255.0, green: 24.0 / 255.0, blue: 39.0 / 255.0)
+    static let moventiqTextOnDark = Color.white
     static let moventiqSurfaceDarkElevated = Color(red: 0.118, green: 0.161, blue: 0.231)
     static let moventiqTextPrimary = Color(red: 0.059, green: 0.090, blue: 0.165)
     static let moventiqTextSecondary = Color(red: 0.278, green: 0.333, blue: 0.412)
@@ -142,7 +143,7 @@ struct MoventiqColors {
         foreground: .moventiqBackgroundLight,
         surface: .moventiqSurfaceDark,
         surfaceElevated: .moventiqSurfaceDarkElevated,
-        textPrimary: .moventiqSurfaceLight,
+        textPrimary: .moventiqTextOnDark,
         textSecondary: .moventiqTextMutedDark,
         textMuted: .moventiqTextMuted,
         primary: .moventiqPrimaryDark,
