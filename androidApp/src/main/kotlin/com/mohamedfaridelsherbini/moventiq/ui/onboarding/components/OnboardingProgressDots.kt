@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.unit.dp
 import com.mohamedfaridelsherbini.moventiq.ui.onboarding.OnboardingTestTags
 import com.mohamedfaridelsherbini.moventiq.ui.theme.moventiqColors
 import com.mohamedfaridelsherbini.moventiq.ui.theme.moventiqSpacing
@@ -34,9 +33,9 @@ fun OnboardingProgressDots(
             val active = index == currentPage
             Box(
                 modifier = Modifier
-                    .height(8.dp)
-                    .width(if (active) 24.dp else 8.dp)
-                    .clip(if (active) RoundedCornerShape(999.dp) else CircleShape)
+                    .height(spacing.sm)
+                    .width(if (active) spacing.lg else spacing.sm)
+                    .clip(if (active) RoundedCornerShape(spacing.xxl) else CircleShape)
                     .background(if (active) colors.primary else colors.progressInactive),
             )
         }

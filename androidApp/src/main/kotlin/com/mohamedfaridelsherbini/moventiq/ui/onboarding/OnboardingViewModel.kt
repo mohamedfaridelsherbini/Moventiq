@@ -9,20 +9,17 @@ import kotlinx.coroutines.flow.update
 class OnboardingViewModel(
     private val statusStore: OnboardingStatusStore,
 ) : ViewModel() {
-    private val _state = MutableStateFlow(OnboardingUiState())
+    private val _state = MutableStateFlow(
+        OnboardingUiState(hasCompletedOnboarding = statusStore.hasCompletedOnboarding()),
+    )
     val state: StateFlow<OnboardingUiState> = _state.asStateFlow()
-
-    init {
-        val completed = statusStore.hasCompletedOnboarding()
-        _state.update { it.copy(hasCompletedOnboarding = completed) }
-    }
 
     fun onEvent(event: OnboardingEvent) {
         when (event) {
             is OnboardingEvent.PageChanged -> {
-                if (event.page in 0 until OnboardingPage.COUNT) {
-                    _state.update { it.copy(currentPage = event.page) }
-                }
+                if (event.page !in 0 until OnboardingPage.COUNT) return
+                if (event.page == _state.value.currentPage) return
+                _state.update { it.copy(currentPage = event.page) }
             }
             OnboardingEvent.Continue -> {
                 val page = _state.value.currentPage

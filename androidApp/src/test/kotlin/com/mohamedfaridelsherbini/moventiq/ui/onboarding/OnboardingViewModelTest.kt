@@ -53,6 +53,16 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun pageChanged_isNoOpWhenPageUnchanged() {
+        val viewModel = OnboardingViewModel(FakeOnboardingStatusStore())
+
+        viewModel.onEvent(OnboardingEvent.PageChanged(1))
+        viewModel.onEvent(OnboardingEvent.PageChanged(1))
+
+        assertEquals(1, viewModel.state.value.currentPage)
+    }
+
+    @Test
     fun pageChanged_ignoresOutOfRangeIndex() {
         val viewModel = OnboardingViewModel(FakeOnboardingStatusStore())
 

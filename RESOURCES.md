@@ -95,6 +95,21 @@ Moventiq uses **native UI** (Compose + SwiftUI) and shared logic in `:sharedLogi
 
 ---
 
+## Local code review (Cursor skill)
+
+Built on **CodeRabbit + Gemini concepts**, implemented locally in one skill — no bot config files in repo.
+
+| Resource | URL / path | Use when |
+|---|---|---|
+| **Moventiq code review skill** | `.cursor/skills/moventiq-code-review/SKILL.md` | `@moventiq-code-review review my diff` — chill walkthrough + path rules |
+| **Pipeline review step** | `.cursor/skills/moventiq-pipeline/SKILL.md` | `run moventiq-pipeline review` or verify step 5 |
+| **Cursor Agent Skills** | [cursor.com/docs/context/skills](https://cursor.com/docs/context/skills) | How `@` skills load and run |
+| **CodeRabbit concepts** | [docs.coderabbit.ai/getting-started/yaml-configuration](https://docs.coderabbit.ai/getting-started/yaml-configuration) | chill profile, path instructions (reference only) |
+| **Gemini concepts** | [developers.google.com/gemini-code-assist/docs/code-review-style-guide](https://developers.google.com/gemini-code-assist/docs/code-review-style-guide) | Style-guide-as-rules (reference only) |
+| **Google eng practices** | [google.github.io/eng-practices/review](https://google.github.io/eng-practices/review/) | Human review quality bar |
+
+---
+
 ## In-repo docs
 
 | Doc | Purpose |
@@ -104,4 +119,4 @@ Moventiq uses **native UI** (Compose + SwiftUI) and shared logic in `:sharedLogi
 | [MVP.md](MVP.md) | Product scope |
 | [DESIGN.md](DESIGN.md) | Design tokens |
 | `.cursor/skills/moventiq-ui-architecture/` | UI SOLID, file splits, previews |
-| `.cursor/skills/moventiq-code-review/` | PR review profile (chill / CodeRabbit parity) |
+| `.cursor/skills/moventiq-code-review/` | Local PR/diff review (Cursor skill) |

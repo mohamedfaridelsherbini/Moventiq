@@ -45,6 +45,15 @@ final class OnboardingViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.state.currentPage, 2)
     }
 
+    func test_pageChanged_isNoOpWhenPageUnchanged() {
+        let viewModel = OnboardingViewModel(statusStore: FakeOnboardingStatusStore())
+
+        viewModel.handle(.pageChanged(1))
+        viewModel.handle(.pageChanged(1))
+
+        XCTAssertEqual(viewModel.state.currentPage, 1)
+    }
+
     func test_pageChanged_ignoresOutOfRangeIndex() {
         let viewModel = OnboardingViewModel(statusStore: FakeOnboardingStatusStore())
 

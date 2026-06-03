@@ -5,6 +5,8 @@ struct OnboardingContentView: View {
     let onEvent: (OnboardingEvent) -> Void
 
     @Environment(\.moventiqColors) private var colors
+    @Environment(\.moventiqTypography) private var typography
+    @Environment(\.moventiqSpacing) private var spacing
     @State private var selectedPage: Int
 
     init(state: OnboardingUiState, onEvent: @escaping (OnboardingEvent) -> Void) {
@@ -15,13 +17,13 @@ struct OnboardingContentView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            VStack(spacing: 36) {
+            VStack(spacing: spacing.xl + spacing.xs) {
                 HStack {
                     Spacer()
-                    Button("Skip") {
+                    Button(OnboardingStrings.skip) {
                         onEvent(.skip)
                     }
-                    .font(.subheadline.weight(.semibold))
+                    .font(typography.labelMedium)
                     .foregroundStyle(colors.textMuted)
                     .accessibilityIdentifier(OnboardingAccessibility.skip)
                 }
@@ -38,7 +40,7 @@ struct OnboardingContentView: View {
 
             Spacer(minLength: 0)
 
-            VStack(spacing: 24) {
+            VStack(spacing: spacing.lg) {
                 OnboardingProgressDots(
                     currentPage: state.currentPage,
                     pageCount: OnboardingPage.count,
@@ -50,9 +52,9 @@ struct OnboardingContentView: View {
                 )
             }
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 8)
-        .padding(.bottom, 28)
+        .padding(.horizontal, spacing.md + spacing.xs)
+        .padding(.top, spacing.sm)
+        .padding(.bottom, spacing.lg + spacing.xs)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(colors.surface.ignoresSafeArea())
         .accessibilityElement(children: .contain)
@@ -72,20 +74,22 @@ private struct OnboardingPageContent: View {
     let page: OnboardingPage
 
     @Environment(\.moventiqColors) private var colors
+    @Environment(\.moventiqTypography) private var typography
+    @Environment(\.moventiqSpacing) private var spacing
 
     var body: some View {
-        VStack(spacing: 36) {
+        VStack(spacing: spacing.xl + spacing.xs) {
             OnboardingIllustration(page: page)
 
-            VStack(spacing: 12) {
+            VStack(spacing: spacing.sm + spacing.xs) {
                 Text(page.headline)
-                    .font(.system(size: 27, weight: .bold))
+                    .font(typography.headlineSmall)
                     .multilineTextAlignment(.center)
                     .foregroundStyle(colors.textPrimary)
                     .tracking(-0.6)
 
                 Text(page.body)
-                    .font(.system(size: 15))
+                    .font(typography.bodyMedium)
                     .multilineTextAlignment(.center)
                     .foregroundStyle(colors.textSecondary)
                     .lineSpacing(4)

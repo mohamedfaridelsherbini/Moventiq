@@ -4,19 +4,22 @@ import Observation
 @MainActor
 @Observable
 final class OnboardingViewModel {
-    private(set) var state = OnboardingUiState()
+    private(set) var state: OnboardingUiState
 
     private let statusStore: OnboardingStatusStore
 
     init(statusStore: OnboardingStatusStore) {
         self.statusStore = statusStore
-        state.hasCompletedOnboarding = statusStore.hasCompletedOnboarding()
+        state = OnboardingUiState(
+            hasCompletedOnboarding: statusStore.hasCompletedOnboarding(),
+        )
     }
 
     func handle(_ event: OnboardingEvent) {
         switch event {
         case let .pageChanged(page):
             guard (0 ..< OnboardingPage.count).contains(page) else { return }
+            guard page != state.currentPage else { return }
             state.currentPage = page
         case .continue:
             if state.currentPage < OnboardingPage.count - 1 {

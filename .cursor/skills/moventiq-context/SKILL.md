@@ -23,7 +23,7 @@ Create Location → Create Task → Link to Location → Arrive → Task appears
 2. [ARCHITECTURE.md](../../../ARCHITECTURE.md) — **feature-first** modules, dependencies, geofencing, testing
 3. [AGENT.md](../../../AGENT.md) — conventions, build commands
 4. [DESIGN.md](../../../DESIGN.md) — color/typography/spacing tokens
-5. [RESOURCES.md](../../../RESOURCES.md) — Koin KMP ([setup guide](https://insert-koin.io/docs/reference/koin-core/kmp-setup/)) and other links
+5. [RESOURCES.md](../../../RESOURCES.md) — Koin KMP, platform docs, local code review skill
 
 Agent skills and rules: `.cursor/skills/`, `.cursor/rules/`.
 

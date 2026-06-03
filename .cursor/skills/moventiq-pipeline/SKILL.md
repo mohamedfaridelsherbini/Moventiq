@@ -38,6 +38,8 @@ Run in this exact order:
 | 3 | `moventiq-unit-tests` | Run unit tests for touched modules; add missing tests for new logic | **GATE** |
 | 4 | `moventiq-ui-tests` | Run UI tests if UI changed; add missing flow/content tests | **GATE** if UI changed |
 | 5 | `moventiq-code-review` | Chill self-review on diff (1–5 inline findings max) | **GATE** if critical |
+
+Invoke: `@moventiq-code-review review my diff` — local skill built on CodeRabbit + Gemini review concepts (see skill § Design philosophy).
 | 6 | `moventiq-ci` | Run CI-equivalent commands locally | **GATE** |
 
 Skip step 2 with ⏭️ when the diff has **no UI** (`androidApp/…/ui`, `iosApp/…/Features`, `Components`, `Theme`).

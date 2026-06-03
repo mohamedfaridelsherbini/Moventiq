@@ -25,6 +25,6 @@ enum class OnboardingPage(
     ;
 
     companion object {
-        const val COUNT: Int = 3
+        val COUNT: Int get() = entries.size
     }
 }

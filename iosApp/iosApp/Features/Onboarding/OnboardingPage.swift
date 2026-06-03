@@ -12,31 +12,31 @@ enum OnboardingPage: Int, CaseIterable, Identifiable {
     var headline: String {
         switch self {
         case .linkTasks:
-            "Create tasks linked to places"
+            OnboardingStrings.page1Headline
         case .detectArrival:
-            "Moventiq detects when you arrive"
+            OnboardingStrings.page2Headline
         case .autoSurface:
-            "The right tasks appear automatically"
+            OnboardingStrings.page3Headline
         }
     }
 
     var body: String {
         switch self {
         case .linkTasks:
-            "Add a to-do and pin it to a spot — home, work, the gym, anywhere it belongs."
+            OnboardingStrings.page1Body
         case .detectArrival:
-            "With lightweight geofencing, it quietly notices the moment you reach a saved place."
+            OnboardingStrings.page2Body
         case .autoSurface:
-            "No searching, no digging. Your place-based tasks surface exactly when they matter."
+            OnboardingStrings.page3Body
         }
     }
 
     var ctaTitle: String {
         switch self {
         case .linkTasks, .detectArrival:
-            "Continue"
+            OnboardingStrings.continue
         case .autoSurface:
-            "Get started"
+            OnboardingStrings.getStarted
         }
     }
 }

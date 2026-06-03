@@ -10,7 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.unit.dp
 import com.mohamedfaridelsherbini.moventiq.ui.theme.moventiqColors
 import com.mohamedfaridelsherbini.moventiq.ui.theme.moventiqSpacing
 
@@ -28,7 +27,7 @@ fun MoventiqPrimaryButton(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = 48.dp)
+            .heightIn(min = spacing.xxl)
             .then(if (testTag != null) Modifier.testTag(testTag) else Modifier),
         shape = RoundedCornerShape(spacing.md),
         colors = ButtonDefaults.buttonColors(

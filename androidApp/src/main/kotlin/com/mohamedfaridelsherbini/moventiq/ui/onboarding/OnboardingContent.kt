@@ -16,11 +16,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
+import kotlinx.coroutines.flow.distinctUntilChanged
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.mohamedfaridelsherbini.moventiq.R
 import com.mohamedfaridelsherbini.moventiq.ui.components.MoventiqPrimaryButton
 import com.mohamedfaridelsherbini.moventiq.ui.onboarding.components.OnboardingIllustration
@@ -48,11 +48,11 @@ fun OnboardingContent(
     }
 
     LaunchedEffect(pagerState) {
-        snapshotFlow { pagerState.currentPage }.collect { page ->
-            if (page != state.currentPage) {
+        snapshotFlow { pagerState.settledPage }
+            .distinctUntilChanged()
+            .collect { page ->
                 onEvent(OnboardingEvent.PageChanged(page))
             }
-        }
     }
 
     Scaffold(
@@ -66,10 +66,10 @@ fun OnboardingContent(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(
-                    start = spacing.md + 4.dp,
-                    end = spacing.md + 4.dp,
+                    start = spacing.md + spacing.xs,
+                    end = spacing.md + spacing.xs,
                     top = spacing.sm,
-                    bottom = spacing.lg + 4.dp,
+                    bottom = spacing.lg + spacing.xs,
                 ),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -77,7 +77,7 @@ fun OnboardingContent(
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(spacing.xl + 4.dp),
+                verticalArrangement = Arrangement.spacedBy(spacing.xl + spacing.xs),
             ) {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
@@ -134,13 +134,13 @@ private fun OnboardingPageContent(
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(spacing.xl + 4.dp),
+        verticalArrangement = Arrangement.spacedBy(spacing.xl + spacing.xs),
     ) {
         OnboardingIllustration(page = page)
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(spacing.sm + 4.dp),
+            verticalArrangement = Arrangement.spacedBy(spacing.sm + spacing.xs),
         ) {
             Text(
                 text = stringResource(page.headlineRes),

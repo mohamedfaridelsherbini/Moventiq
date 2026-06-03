@@ -52,6 +52,58 @@ extension Color {
     }
 }
 
+struct MoventiqTypography {
+    let headlineSmall: Font
+    let bodyMedium: Font
+    let labelMedium: Font
+
+    /// Values aligned with Android `MoventiqTypography` / DESIGN.md.
+    static let standard = MoventiqTypography(
+        headlineSmall: .system(size: 27, weight: .bold),
+        bodyMedium: .system(size: 15, weight: .regular),
+        labelMedium: .system(size: 15, weight: .semibold),
+    )
+}
+
+struct MoventiqSpacing {
+    let xs: CGFloat
+    let sm: CGFloat
+    let md: CGFloat
+    let lg: CGFloat
+    let xl: CGFloat
+    let xxl: CGFloat
+
+    /// Values aligned with Android `MoventiqSpacing` / DESIGN.md.
+    static let standard = MoventiqSpacing(
+        xs: 4,
+        sm: 8,
+        md: 16,
+        lg: 24,
+        xl: 32,
+        xxl: 48,
+    )
+}
+
+private struct MoventiqTypographyKey: EnvironmentKey {
+    static let defaultValue = MoventiqTypography.standard
+}
+
+private struct MoventiqSpacingKey: EnvironmentKey {
+    static let defaultValue = MoventiqSpacing.standard
+}
+
+extension EnvironmentValues {
+    var moventiqTypography: MoventiqTypography {
+        get { self[MoventiqTypographyKey.self] }
+        set { self[MoventiqTypographyKey.self] = newValue }
+    }
+
+    var moventiqSpacing: MoventiqSpacing {
+        get { self[MoventiqSpacingKey.self] }
+        set { self[MoventiqSpacingKey.self] = newValue }
+    }
+}
+
 struct MoventiqColors {
     let background: Color
     let foreground: Color
@@ -125,6 +177,8 @@ struct MoventiqTheme<Content: View>: View {
     var body: some View {
         content()
             .environment(\.moventiqColors, isDark ? .dark : .light)
+            .environment(\.moventiqTypography, .standard)
+            .environment(\.moventiqSpacing, .standard)
             .applyColorScheme(darkTheme)
     }
 }
