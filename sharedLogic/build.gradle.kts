@@ -15,23 +15,23 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     android {
-       namespace = "com.mohamedfaridelsherbini.moventiq.sharedLogic"
-       compileSdk = providers.gradleProperty("android.compileSdk").get().toInt()
-       minSdk = providers.gradleProperty("android.minSdk").get().toInt()
-    
-       compilerOptions {
-           jvmTarget = JvmTarget.JVM_11
-       }
-       androidResources {
-           enable = true
-       }
-       withHostTest {
-           isIncludeAndroidResources = true
-       }
+        namespace = "com.mohamedfaridelsherbini.moventiq.sharedLogic"
+        compileSdk = providers.gradleProperty("android.compileSdk").get().toInt()
+        minSdk = providers.gradleProperty("android.minSdk").get().toInt()
+
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_11
+        }
+        androidResources {
+            enable = true
+        }
+        withHostTest {
+            isIncludeAndroidResources = true
+        }
     }
-    
+
     sourceSets {
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)

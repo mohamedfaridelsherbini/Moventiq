@@ -72,16 +72,23 @@ Official Jetcaster sample uses `./gradlew jvmTest`. Moventiq has no root `jvmTes
 - Android APK: `androidApp/build/outputs/apk/debug/*.apk` → `android-apk`
 - iOS app: `build/Build/Products/Debug-iphonesimulator/` → `iphonesimulator-app`
 
-## Future: static analysis jobs
+## Static analysis (CI + local)
 
-Add when detekt/ktlint/SwiftLint are wired (see `kotlin-static-analysis` skill):
+| Tool | Scope | Command |
+|---|---|---|
+| detekt | `androidApp`, `sharedLogic` | `./gradlew detekt` |
+| ktlint | `androidApp`, `sharedLogic` | `./gradlew ktlintCheck` / `ktlintFormat` |
+| Android Lint | `androidApp` | `./gradlew :androidApp:lintDebug` |
+| SwiftLint | `iosApp/iosApp` | `swiftlint lint --strict --config iosApp/.swiftlint.yml iosApp/iosApp` |
+| **All Kotlin** | aggregate | `./gradlew staticAnalysis` |
 
-```bash
-./gradlew detekt ktlintCheck :androidApp:lintDebug
-swiftlint lint --strict iosApp/
-```
+CI job **`static-analysis`** runs `./gradlew staticAnalysis` on Ubuntu. **`build-ios`** runs SwiftLint on macOS. Both gate `build-android` and `build-ios`.
 
-Prefer a separate workflow or extra job — keep `build.yml` fast for PR gating.
+Config: `.editorconfig`, `config/detekt/detekt.yml`, `iosApp/.swiftlint.yml`. Deprecated `sharedUI` is excluded from detekt/ktlint.
+
+## Future: additional analysis
+
+Optional nightly: `xcodebuild analyze` (see `swift-static-analysis` skill).
 
 ## iOS build notes
 
@@ -98,10 +105,12 @@ Prefer a separate workflow or extra job — keep `build.yml` fast for PR gating.
 
 ## Local PR checklist
 
+- [ ] `./gradlew staticAnalysis`
 - [ ] `./gradlew :sharedLogic:testAndroidHostTest :sharedUI:testAndroidHostTest`
 - [ ] `./gradlew :androidApp:assembleDebug`
 - [ ] `./gradlew :androidApp:pixel6Api36DebugAndroidTest` (or CI `android-ui-test` job)
 - [ ] `xcodebuild test` on `iosApp` scheme (shared `xcshareddata`, not empty xcuserdata)
+- [ ] On Mac: `swiftlint lint --strict --config iosApp/.swiftlint.yml iosApp/iosApp`
 - [ ] On Mac: `./gradlew :sharedLogic:iosSimulatorArm64Test`
 
 ## Related skills

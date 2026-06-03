@@ -1,0 +1,62 @@
+# Moventiq detekt config (detekt 2.x) — extend defaults; tighten over time.
+# https://detekt.dev/docs/introduction/configurations/
+
+config:
+  validation: true
+
+comments:
+  active: true
+
+complexity:
+  active: true
+  LongMethod:
+    active: true
+    allowedLines: 80
+    ignoreAnnotated:
+      - Composable
+  LongParameterList:
+    active: true
+    allowedFunctionParameters: 8
+    allowedConstructorParameters: 9
+  TooManyFunctions:
+    active: true
+    allowedFunctionsPerFile: 20
+    allowedFunctionsPerClass: 15
+
+coroutines:
+  active: true
+
+empty-blocks:
+  active: true
+
+exceptions:
+  active: true
+
+naming:
+  active: true
+  FunctionNaming:
+    active: true
+    ignoreAnnotated:
+      - Composable
+      - Preview
+
+performance:
+  active: true
+
+potential-bugs:
+  active: true
+
+style:
+  active: true
+  MaxLineLength:
+    active: true
+    maxLineLength: 140
+    excludePackageStatements: true
+    excludeImportStatements: true
+  MagicNumber:
+    active: true
+    ignoreAnnotated:
+      - Preview
+      - Composable
+    ignorePropertyDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true

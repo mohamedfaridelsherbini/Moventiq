@@ -65,7 +65,11 @@ cd iosApp && xcodebuild test -project iosApp.xcodeproj -scheme iosApp \
   -Pandroid.testInstrumentationRunnerArguments.package=com.mohamedfaridelsherbini.moventiq.ui.splash
 
 # CI parity
+./gradlew staticAnalysis
 ./gradlew :sharedLogic:testAndroidHostTest :androidApp:assembleDebug
+
+# iOS lint (Mac only)
+swiftlint lint --strict --config iosApp/.swiftlint.yml iosApp/iosApp
 ```
 
 ---

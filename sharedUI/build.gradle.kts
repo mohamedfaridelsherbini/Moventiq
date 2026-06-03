@@ -8,23 +8,23 @@ plugins {
 }
 
 kotlin {
-    
+
     android {
-       namespace = "com.mohamedfaridelsherbini.moventiq.sharedUI"
-       compileSdk = providers.gradleProperty("android.compileSdk").get().toInt()
-       minSdk = providers.gradleProperty("android.minSdk").get().toInt()
-    
-       compilerOptions {
-           jvmTarget = JvmTarget.JVM_11
-       }
-       androidResources {
-           enable = true
-       }
-       withHostTest {
-           isIncludeAndroidResources = true
-       }
+        namespace = "com.mohamedfaridelsherbini.moventiq.sharedUI"
+        compileSdk = providers.gradleProperty("android.compileSdk").get().toInt()
+        minSdk = providers.gradleProperty("android.minSdk").get().toInt()
+
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_11
+        }
+        androidResources {
+            enable = true
+        }
+        withHostTest {
+            isIncludeAndroidResources = true
+        }
     }
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)

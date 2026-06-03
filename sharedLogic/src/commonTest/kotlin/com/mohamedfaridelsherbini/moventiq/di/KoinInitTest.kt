@@ -1,11 +1,11 @@
 package com.mohamedfaridelsherbini.moventiq.di
 
 import com.mohamedfaridelsherbini.moventiq.Greeting
+import org.koin.test.KoinTest
+import org.koin.test.inject
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
-import org.koin.test.KoinTest
-import org.koin.test.inject
 
 class KoinInitTest : KoinTest {
     private val greeting: Greeting by inject()

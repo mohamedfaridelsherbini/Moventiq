@@ -10,9 +10,10 @@ import org.koin.dsl.module
  *
  * @see <a href="https://insert-koin.io/docs/reference/koin-core/kmp-setup/">Koin KMP setup</a>
  */
-val sharedLogicModule = module {
-    single { Greeting() }
-}
+val sharedLogicModule =
+    module {
+        single { Greeting() }
+    }
 
 /** Platform-specific bindings (database driver, geofencing, etc.). */
 expect val platformModule: Module

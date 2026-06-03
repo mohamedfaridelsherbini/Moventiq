@@ -14,10 +14,11 @@ private var koinApplication: KoinApplication? = null
  */
 fun initKoin(config: KoinAppDeclaration? = null): KoinApplication {
     koinApplication?.let { return it }
-    val app = startKoin {
-        modules(sharedLogicModule, platformModule)
-        config?.invoke(this)
-    }
+    val app =
+        startKoin {
+            modules(sharedLogicModule, platformModule)
+            config?.invoke(this)
+        }
     koinApplication = app
     return app
 }

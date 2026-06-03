@@ -1,0 +1,26 @@
+# Moventiq SwiftLint — https://github.com/realm/SwiftLint
+
+line_length: 140
+
+disabled_rules:
+  - trailing_comma
+
+opt_in_rules:
+  - explicit_init
+
+identifier_name:
+  min_length:
+    warning: 2
+  excluded:
+    - id
+    - x
+    - y
+
+excluded:
+  - .build
+  - DerivedData
+  - iosApp.xcodeproj
+  - iosAppTests
+  - iosAppUITests
+
+reporter: "xcode"

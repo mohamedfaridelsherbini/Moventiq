@@ -76,6 +76,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    lint {
+        abortOnError = true
+        checkReleaseBuilds = false
+        warningsAsErrors = false
+    }
     testOptions {
         animationsDisabled = true
         // https://developer.android.com/studio/test/gradle-managed-devices

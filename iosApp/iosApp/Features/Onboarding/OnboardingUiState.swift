@@ -2,7 +2,7 @@ import Foundation
 
 struct OnboardingUiState: Equatable {
     var currentPage: Int = 0
-    var hasCompletedOnboarding: Bool? = nil
+    var hasCompletedOnboarding: Bool?
     var isFinished = false
 
     var shouldShowOnboarding: Bool {
