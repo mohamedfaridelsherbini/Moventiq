@@ -48,7 +48,7 @@ This skill is a **local Cursor agent review** that copies the *behavior* of stro
 
 ### Local call flow (when you `@` this skill)
 
-```
+```text
 You: @moventiq-code-review review my diff
         ↓
 Agent loads this SKILL.md + AGENT.md + MVP/ARCHITECTURE/DESIGN
@@ -222,7 +222,7 @@ Fail walkthrough row if:
 
 ## Architecture quick check
 
-```
+```text
 ✅ UI → ViewModel → UseCase → Repository → DAO → Room
 ❌ UI → DAO  ❌ ViewModel → RoomDatabase  ❌ Domain → android.* / platform.*
 ```

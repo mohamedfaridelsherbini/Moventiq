@@ -6,7 +6,7 @@ struct SplashView: View {
     var body: some View {
         SplashContentView(
             state: viewModel.state,
-            onEvent: viewModel.handle,
+            onEvent: viewModel.handle
         )
     }
 }

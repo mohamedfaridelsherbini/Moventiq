@@ -15,7 +15,7 @@ struct MoventiqApp: App {
             MoventiqTheme {
                 RootView(
                     splashViewModel: splashViewModel,
-                    onboardingViewModel: onboardingViewModel,
+                    onboardingViewModel: onboardingViewModel
                 )
             }
         }

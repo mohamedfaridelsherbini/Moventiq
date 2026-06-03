@@ -4,7 +4,7 @@ import SwiftUI
     MoventiqTheme(darkTheme: false) {
         OnboardingContentView(
             state: .preview(currentPage: 0),
-            onEvent: { _ in },
+            onEvent: { _ in }
         )
     }
 }
@@ -13,7 +13,7 @@ import SwiftUI
     MoventiqTheme(darkTheme: true) {
         OnboardingContentView(
             state: .preview(currentPage: 0),
-            onEvent: { _ in },
+            onEvent: { _ in }
         )
     }
 }
@@ -22,7 +22,7 @@ import SwiftUI
     MoventiqTheme(darkTheme: false) {
         OnboardingContentView(
             state: .preview(currentPage: 1),
-            onEvent: { _ in },
+            onEvent: { _ in }
         )
     }
 }
@@ -31,7 +31,7 @@ import SwiftUI
     MoventiqTheme(darkTheme: true) {
         OnboardingContentView(
             state: .preview(currentPage: 1),
-            onEvent: { _ in },
+            onEvent: { _ in }
         )
     }
 }
@@ -40,7 +40,7 @@ import SwiftUI
     MoventiqTheme(darkTheme: false) {
         OnboardingContentView(
             state: .preview(currentPage: 2),
-            onEvent: { _ in },
+            onEvent: { _ in }
         )
     }
 }
@@ -49,7 +49,7 @@ import SwiftUI
     MoventiqTheme(darkTheme: true) {
         OnboardingContentView(
             state: .preview(currentPage: 2),
-            onEvent: { _ in },
+            onEvent: { _ in }
         )
     }
 }
