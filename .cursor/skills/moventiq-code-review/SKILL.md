@@ -4,13 +4,14 @@ description: >-
   Reviews Moventiq PRs with CodeRabbit performance — diff-scoped, high-signal,
   chill profile (1–5 actionable comments), incremental on re-review. Uses
   .coderabbit.yaml rules. Use for PR feedback, triaging CodeRabbit, pre-merge audit.
+  External refs: RESOURCES.md (KMP/Android/iOS learning + Koin).
 ---
 
 # Moventiq code review
 
 **Source of truth:** [`.coderabbit.yaml`](../../../.coderabbit.yaml) — keep skill and YAML in sync.
 
-Cross-ref: `moventiq-ui-architecture`, `moventiq-context`, `moventiq-unit-tests`, `moventiq-ui-tests`, `AGENT.md`, `.cursor/rules/`.
+Cross-ref: `moventiq-ui-architecture`, `moventiq-context`, `moventiq-unit-tests`, `moventiq-ui-tests`, [RESOURCES.md](../../../RESOURCES.md), `AGENT.md`, `.cursor/rules/`.
 
 ## CodeRabbit performance model
 
@@ -92,6 +93,8 @@ Trigger manually: `@coderabbitai review` · Pre-merge: `@coderabbitai run pre-me
 ❌ UI → DAO  ❌ ViewModel → RoomDatabase  ❌ Domain → android.* / platform.*
 ```
 
+For platform conventions and official patterns, see [RESOURCES.md](../../../RESOURCES.md) — **Kotlin Multiplatform learning**, **Android official**, **iOS official**.
+
 ## Tests & previews (only for new/changed symbols)
 
 | File type | Required |
@@ -171,3 +174,4 @@ Omit empty sections. Do not duplicate pre-merge check failures as five separate 
 
 - UI: `moventiq-ui-architecture` · Tests: `moventiq-unit-tests`, `moventiq-ui-tests`
 - PR loop: `babysit` · CI: `moventiq-ci` · Static analysis: `kotlin-static-analysis`, `swift-static-analysis`
+- Learning & official docs: [RESOURCES.md](../../../RESOURCES.md) — [KMP learning index](https://kotlinlang.org/docs/multiplatform/kmp-learning-resources.html), Android, iOS

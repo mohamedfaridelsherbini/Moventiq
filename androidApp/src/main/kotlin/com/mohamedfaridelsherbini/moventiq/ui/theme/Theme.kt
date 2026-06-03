@@ -1,33 +1,39 @@
 package com.mohamedfaridelsherbini.moventiq.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 
 private val LightColorScheme = lightColorScheme(
     primary = MoventiqPrimary,
     background = MoventiqLight,
-    onBackground = MoventiqDark,
+    onBackground = MoventiqTextPrimary,
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = MoventiqPrimary,
+    primary = MoventiqPrimaryDark,
     background = MoventiqDark,
-    onBackground = MoventiqLight,
+    onBackground = MoventiqSurfaceLight,
 )
 
 @Composable
 fun MoventiqTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = androidx.compose.foundation.isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val moventiqColors = if (darkTheme) MoventiqDarkColors else MoventiqLightColors
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = MoventiqTypography,
-        content = content,
-    )
+    CompositionLocalProvider(
+        LocalMoventiqColors provides moventiqColors,
+        LocalMoventiqSpacing provides MoventiqSpacing(),
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = MoventiqTypography,
+            content = content,
+        )
+    }
 }

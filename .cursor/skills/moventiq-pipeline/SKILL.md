@@ -34,12 +34,15 @@ Run in this exact order:
 | # | Skill | Action | Gate |
 |---|---|---|---|
 | 1 | `moventiq-context` | Confirm scope, modules touched, definition of done | |
-| 2 | `moventiq-unit-tests` | Run unit tests for touched modules; add missing tests for new logic | **GATE** |
-| 3 | `moventiq-ui-tests` | Run UI tests if UI changed; add missing flow/content tests | **GATE** if UI changed |
-| 4 | `moventiq-code-review` | Chill self-review on diff (1–5 inline findings max) | **GATE** if critical |
-| 5 | `moventiq-ci` | Run CI-equivalent commands locally | **GATE** |
+| 2 | `moventiq-ui-architecture` | Audit UI diff against architecture checklist (file split, SOLID, previews, test tags) | **GATE** if UI changed |
+| 3 | `moventiq-unit-tests` | Run unit tests for touched modules; add missing tests for new logic | **GATE** |
+| 4 | `moventiq-ui-tests` | Run UI tests if UI changed; add missing flow/content tests | **GATE** if UI changed |
+| 5 | `moventiq-code-review` | Chill self-review on diff (1–5 inline findings max) | **GATE** if critical |
+| 6 | `moventiq-ci` | Run CI-equivalent commands locally | **GATE** |
 
-### verify — commands (after skills 2–3)
+Skip step 2 with ⏭️ when the diff has **no UI** (`androidApp/…/ui`, `iosApp/…/Features`, `Components`, `Theme`).
+
+### verify — commands (after skills 3–4)
 
 ```bash
 # Unit (adjust package filter to touched area)
@@ -84,7 +87,7 @@ Run in this exact order:
 
 Steps 5 and 6 are **parallel platforms** — run both only for KMP UI parity; otherwise run the one that applies.
 
-After step 11, run **verify** pipeline steps 2–5 if not already executed.
+After step 11, run **verify** pipeline steps 2–6 if not already executed.
 
 ---
 
@@ -130,7 +133,7 @@ Use **chill** mode unless the user asks for assertive/thorough.
 
 ## Rules
 
-- **Order matters** — do not run code-review before tests; do not implement UI before reading ui-architecture.
+- **Order matters** — audit ui-architecture before UI tests; do not run code-review before tests; do not implement UI before reading ui-architecture.
 - **One skill file per step** — path: `.cursor/skills/<name>/SKILL.md`
 - **Do not duplicate** skill content in chat — read, apply, report status.
 - **Platform deps:** iOS steps require Mac; skip with ⏭️ and note if unavailable.

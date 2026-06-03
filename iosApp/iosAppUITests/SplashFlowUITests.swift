@@ -7,7 +7,7 @@ final class SplashFlowUITests: XCTestCase {
 
     func test_app_navigatesToHome_afterSplashCompletes() {
         let app = XCUIApplication()
-        app.launchArguments.append("-UITestInstantSplash")
+        app.launchArguments.append(contentsOf: ["-UITestInstantSplash", "-UITestSkipOnboarding"])
         app.launch()
 
         let home = app.descendants(matching: .any)["home_screen"]
@@ -16,7 +16,7 @@ final class SplashFlowUITests: XCTestCase {
 
     func test_app_showsSplash_beforeNavigationCompletes() {
         let app = XCUIApplication()
-        app.launchArguments.append("-UITestLongSplash")
+        app.launchArguments.append(contentsOf: ["-UITestLongSplash", "-UITestSkipOnboarding"])
         app.launch()
 
         let splash = app.descendants(matching: .any)["splash_screen"]

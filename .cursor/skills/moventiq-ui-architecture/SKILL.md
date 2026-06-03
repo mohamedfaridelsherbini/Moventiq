@@ -102,6 +102,27 @@ final class HomeViewModel {
 
 Add stable `Modifier.testTag(...)` / accessibility identifiers on interactive nodes used in UI tests. Do not assert raw pixel colors.
 
+## Verify pipeline gate
+
+When `moventiq-pipeline` **verify** includes UI changes, audit the diff against this checklist **before** unit/UI tests. Fail the gate (❌) if any required item is missing; report ⏭️ skip when no UI files changed.
+
+### Per screen / feature (Android + iOS parity when both platforms ship)
+
+- [ ] `*Screen` / `*View` wires ViewModel; `*Content` / `*ContentView` is stateless `(state, onEvent)`
+- [ ] `*ViewModel`, `*UiState`, `*Event` (or Swift equivalents) present
+- [ ] ViewModel calls use cases or app-local stores — **never** DAOs/Room directly
+- [ ] Unidirectional flow: events in, state out (`StateFlow` / `@Observable`)
+- [ ] Light **and** dark previews for every `*Content` / component touched
+- [ ] `testTag` / `accessibilityIdentifier` on screen root and interactive controls used in tests
+- [ ] Theme tokens only — no hardcoded hex/dp/font sizes in UI code
+
+### Components
+
+- [ ] Stateless — props + callback only
+- [ ] Co-located previews (light + dark)
+
+See [reference.md](reference.md) for folder templates and testTag naming.
+
 ## Component checklist (new component)
 
 - [ ] Stateless — receives state + event callback
@@ -112,6 +133,7 @@ Add stable `Modifier.testTag(...)` / accessibility identifiers on interactive no
 
 ## Related skills
 
+- Orchestrator: `moventiq-pipeline` (verify step 2 · implement step 3)
 - Build Android UI: `moventiq-compose-ui`
 - Build iOS UI: `moventiq-swiftui-ui`
 - Review: `moventiq-code-review`

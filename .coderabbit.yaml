@@ -85,6 +85,7 @@ reviews:
         New use cases: commonTest happy path + edge case.
         Repositories: androidHostTest or iosTest with in-memory DB.
         Flag geofence side effects when locations change.
+        KMP docs: RESOURCES.md § Kotlin Multiplatform learning (Room KMP codelab, expect/actual).
 
     - path: "shared/**"
       instructions: |
@@ -96,11 +97,13 @@ reviews:
         Screen/Content/ViewModel/UiState/Event split. *Content stateless.
         @Preview light + dark with fake UiState. testTag matches iOS accessibility IDs.
         Branding/timing in *Branding objects.
+        Platform docs: RESOURCES.md § Android official (Compose, testing, architecture).
 
     - path: "iosApp/**"
       instructions: |
         View + ContentView + ViewModel + UiState. #Preview light + dark.
         @Observable @MainActor ViewModels; no inout struct mutation from async.
+        Platform docs: RESOURCES.md § iOS official (SwiftUI, HIG, XCTest).
 
     - path: "androidApp/src/test/**"
       instructions: |
