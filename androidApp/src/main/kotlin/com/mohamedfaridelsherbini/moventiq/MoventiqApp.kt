@@ -11,12 +11,16 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mohamedfaridelsherbini.moventiq.navigation.MoventiqNavHost
 import com.mohamedfaridelsherbini.moventiq.ui.onboarding.OnboardingScreen
 import com.mohamedfaridelsherbini.moventiq.ui.onboarding.OnboardingViewModel
+import com.mohamedfaridelsherbini.moventiq.ui.permissions.PermissionEvent
+import com.mohamedfaridelsherbini.moventiq.ui.permissions.PermissionFlowHost
+import com.mohamedfaridelsherbini.moventiq.ui.permissions.PermissionFlowViewModel
 import com.mohamedfaridelsherbini.moventiq.ui.splash.SplashBranding
 import com.mohamedfaridelsherbini.moventiq.ui.splash.SplashScreen
 import com.mohamedfaridelsherbini.moventiq.ui.splash.SplashViewModel
@@ -26,6 +30,7 @@ import org.koin.compose.viewmodel.koinViewModel
 private enum class AppPhase {
     Splash,
     Onboarding,
+    Permissions,
     Main,
 }
 
@@ -35,13 +40,22 @@ fun MoventiqApp(
     onSplashDrawn: () -> Unit,
     modifier: Modifier = Modifier,
     onboardingViewModel: OnboardingViewModel = koinViewModel(),
+    permissionViewModel: PermissionFlowViewModel = koinViewModel(),
 ) {
     val splashState by splashViewModel.state.collectAsStateWithLifecycle()
     val onboardingState by onboardingViewModel.state.collectAsStateWithLifecycle()
+    val permissionState by permissionViewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(onboardingState.shouldShowOnboarding, onboardingState.isFinished) {
+        if (!onboardingState.shouldShowOnboarding) {
+            permissionViewModel.onEvent(PermissionEvent.Refresh)
+        }
+    }
 
     val phase = when {
         !splashState.isComplete -> AppPhase.Splash
         onboardingState.shouldShowOnboarding -> AppPhase.Onboarding
+        !permissionState.isFlowComplete -> AppPhase.Permissions
         else -> AppPhase.Main
     }
 
@@ -99,6 +113,7 @@ fun MoventiqApp(
                     onContentDrawn = onSplashDrawn,
                 )
                 AppPhase.Onboarding -> OnboardingScreen(viewModel = onboardingViewModel)
+                AppPhase.Permissions -> PermissionFlowHost(viewModel = permissionViewModel)
                 AppPhase.Main -> MoventiqNavHost()
             }
         }

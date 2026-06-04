@@ -15,4 +15,28 @@
 
     <string name="onboarding_3_headline">The right tasks appear automatically</string>
     <string name="onboarding_3_body">No searching, no digging. Your place-based tasks surface exactly when they matter.</string>
+
+    <string name="permission_location_headline">Allow location access</string>
+    <string name="permission_location_body">Moventiq uses your location only to bring up the right tasks the moment you arrive at a place. That\u2019s it.</string>
+    <string name="permission_location_trust_1">Used only to surface your place-based tasks</string>
+    <string name="permission_location_trust_2">Works in the background when you arrive at a place</string>
+    <string name="permission_location_trust_3">Your location never leaves your device</string>
+    <string name="permission_location_allow">Allow location</string>
+    <string name="permission_location_later">Maybe later</string>
+
+    <string name="permission_notification_headline">Stay informed on arrival</string>
+    <string name="permission_notification_body">Moventiq needs to send you notifications so your tasks appear the moment you arrive at a saved location.</string>
+    <string name="permission_notification_bullet_1">Arrival reminders when you enter a place</string>
+    <string name="permission_notification_bullet_2">See pending tasks instantly</string>
+    <string name="permission_notification_bullet_3">Silent mode and quiet hours supported</string>
+    <string name="permission_notification_allow">Allow Notifications</string>
+    <string name="permission_notification_skip">Not now</string>
+
+    <string name="permission_denied_headline">Permission Required</string>
+    <string name="permission_denied_body">Moventiq needs location access to detect when you arrive at saved places. Please enable it in Settings.</string>
+    <string name="permission_denied_step_1">Open the Settings app</string>
+    <string name="permission_denied_step_2">Tap Privacy &amp; Location</string>
+    <string name="permission_denied_step_3">Set to Always Allow</string>
+    <string name="permission_denied_open_settings">Open Settings</string>
+    <string name="permission_denied_limited">Use limited features</string>
 </resources>

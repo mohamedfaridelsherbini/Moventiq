@@ -20,6 +20,8 @@ extension Color {
     static let moventiqBorderLight = Color(red: 0.886, green: 0.910, blue: 0.941)
     static let moventiqBorderDark = Color(red: 0.200, green: 0.255, blue: 0.333)
     static let moventiqProgressInactive = Color(red: 0.796, green: 0.835, blue: 0.882)
+    static let moventiqError = Color(red: 0.937, green: 0.267, blue: 0.267)
+    static let moventiqErrorContainer = Color(red: 0.996, green: 0.949, blue: 0.949)
 
     static func moventiqFadeBackground(
         darkTheme: Bool,
@@ -120,6 +122,8 @@ struct MoventiqColors {
     let progressInactive: Color
     let skeleton: Color
     let skeletonMuted: Color
+    let error: Color
+    let errorContainer: Color
 
     static let light = MoventiqColors(
         background: .moventiqBackgroundLight,
@@ -136,6 +140,8 @@ struct MoventiqColors {
         progressInactive: .moventiqProgressInactive,
         skeleton: .moventiqBorderLight,
         skeletonMuted: .moventiqPrimaryContainer,
+        error: .moventiqError,
+        errorContainer: .moventiqErrorContainer,
     )
 
     static let dark = MoventiqColors(
@@ -153,6 +159,8 @@ struct MoventiqColors {
         progressInactive: .moventiqProgressInactive,
         skeleton: .moventiqBorderDark,
         skeletonMuted: .moventiqPrimaryContainerDark,
+        error: .moventiqError,
+        errorContainer: .moventiqErrorContainer,
     )
 }
 

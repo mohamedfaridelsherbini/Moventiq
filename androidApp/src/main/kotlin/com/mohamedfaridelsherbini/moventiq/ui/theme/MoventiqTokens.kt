@@ -20,6 +20,8 @@ data class MoventiqColors(
     val progressInactive: Color,
     val skeleton: Color,
     val skeletonMuted: Color,
+    val error: Color,
+    val errorContainer: Color,
 )
 
 val MoventiqLightColors = MoventiqColors(
@@ -36,6 +38,8 @@ val MoventiqLightColors = MoventiqColors(
     progressInactive = MoventiqProgressInactive,
     skeleton = MoventiqBorderLight,
     skeletonMuted = MoventiqPrimaryContainer,
+    error = MoventiqError,
+    errorContainer = MoventiqErrorContainer,
 )
 
 val MoventiqDarkColors = MoventiqColors(
@@ -52,6 +56,8 @@ val MoventiqDarkColors = MoventiqColors(
     progressInactive = MoventiqProgressInactive,
     skeleton = MoventiqBorderDark,
     skeletonMuted = MoventiqPrimaryContainerDark,
+    error = MoventiqError,
+    errorContainer = MoventiqErrorContainer,
 )
 
 data class MoventiqSpacing(
