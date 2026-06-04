@@ -29,6 +29,8 @@ fun MoventiqTheme(
     CompositionLocalProvider(
         LocalMoventiqColors provides moventiqColors,
         LocalMoventiqSpacing provides MoventiqSpacing(),
+        LocalMoventiqRounded provides MoventiqRounded(),
+        LocalMoventiqStroke provides MoventiqStroke(),
     ) {
         MaterialTheme(
             colorScheme = colorScheme,

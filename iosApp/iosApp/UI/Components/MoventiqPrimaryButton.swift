@@ -18,7 +18,7 @@ struct MoventiqPrimaryButton: View {
                         .renderingMode(.template)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 18, height: 18)
+                        .frame(width: spacing.iconButton, height: spacing.iconButton)
                         .foregroundStyle(colors.textOnPrimary)
                 }
                 Text(title)

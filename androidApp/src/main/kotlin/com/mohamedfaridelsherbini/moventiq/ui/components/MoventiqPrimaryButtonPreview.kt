@@ -30,6 +30,22 @@ private fun MoventiqPrimaryButtonIconPreview() {
 }
 
 @Preview(
+    name = "MoventiqPrimaryButton — With icon (Dark)",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true,
+)
+@Composable
+private fun MoventiqPrimaryButtonIconDarkPreview() {
+    MoventiqTheme(darkTheme = true) {
+        MoventiqPrimaryButton(
+            text = "Open Settings",
+            onClick = {},
+            iconRes = R.drawable.ic_permission_external_link,
+        )
+    }
+}
+
+@Preview(
     name = "MoventiqPrimaryButton — Dark",
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     showBackground = true,

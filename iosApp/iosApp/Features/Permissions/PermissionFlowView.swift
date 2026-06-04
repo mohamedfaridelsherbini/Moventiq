@@ -178,7 +178,7 @@ private struct PermissionScreenLayout<Content: View>: View {
                     Text(secondaryTitle)
                         .font(typography.labelMedium)
                         .foregroundStyle(colors.textMuted)
-                        .frame(maxWidth: .infinity, minHeight: 44)
+                        .frame(maxWidth: .infinity, minHeight: spacing.iconHero)
                 }
                 .accessibilityIdentifier(secondaryAccessibilityId)
             }
@@ -209,7 +209,7 @@ private struct PermissionHeroIcon: View {
             OnboardingAssetIcon(
                 name: name,
                 tint: iconColor ?? colors.primary,
-                size: 44,
+                size: spacing.iconHero,
             )
         }
     }
@@ -229,12 +229,12 @@ private struct PermissionTextBlock: View {
                 .font(typography.headlineSmall)
                 .multilineTextAlignment(.center)
                 .foregroundStyle(colors.textPrimary)
-                .tracking(-0.6)
+                .tracking(typography.trackingTightHeadline)
             Text(bodyText)
                 .font(typography.bodyMedium)
                 .multilineTextAlignment(.center)
                 .foregroundStyle(colors.textSecondary)
-                .lineSpacing(4)
+                .lineSpacing(typography.lineSpacingBody)
         }
     }
 }
@@ -245,14 +245,15 @@ private struct PermissionTrustRow: View {
     @Environment(\.moventiqColors) private var colors
     @Environment(\.moventiqTypography) private var typography
     @Environment(\.moventiqSpacing) private var spacing
+    @Environment(\.moventiqRounded) private var rounded
 
     var body: some View {
         HStack(spacing: spacing.sm + spacing.xs) {
             ZStack {
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                RoundedRectangle(cornerRadius: rounded.sm, style: .continuous)
                     .fill(colors.primaryContainer)
-                    .frame(width: 34, height: 34)
-                OnboardingAssetIcon(name: "ic_onboarding_checkmark", tint: colors.primary, size: 16)
+                    .frame(width: spacing.iconContainerTrust, height: spacing.iconContainerTrust)
+                OnboardingAssetIcon(name: "ic_onboarding_checkmark", tint: colors.primary, size: spacing.iconInline)
             }
             Text(text)
                 .font(typography.bodyMedium)
@@ -268,14 +269,15 @@ private struct PermissionBulletRow: View {
     @Environment(\.moventiqColors) private var colors
     @Environment(\.moventiqTypography) private var typography
     @Environment(\.moventiqSpacing) private var spacing
+    @Environment(\.moventiqRounded) private var rounded
 
     var body: some View {
         HStack(spacing: spacing.sm + spacing.xs) {
             ZStack {
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                RoundedRectangle(cornerRadius: rounded.md, style: .continuous)
                     .fill(colors.primaryContainer)
-                    .frame(width: 32, height: 32)
-                OnboardingAssetIcon(name: "ic_onboarding_sparkles", tint: colors.primary, size: 16)
+                    .frame(width: spacing.xl, height: spacing.xl)
+                OnboardingAssetIcon(name: "ic_onboarding_sparkles", tint: colors.primary, size: spacing.iconInline)
             }
             Text(text)
                 .font(typography.bodyMedium)
@@ -298,9 +300,9 @@ private struct PermissionStepRow: View {
             ZStack {
                 Circle()
                     .fill(colors.primaryContainer)
-                    .frame(width: 28, height: 28)
+                    .frame(width: spacing.iconStepBadge, height: spacing.iconStepBadge)
                 Text("\(step)")
-                    .font(.system(size: 13, weight: .bold))
+                    .font(typography.labelSmall)
                     .foregroundStyle(colors.primary)
             }
             Text(text)
@@ -309,7 +311,7 @@ private struct PermissionStepRow: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.horizontal, spacing.md)
-        .padding(.vertical, spacing.sm + 6)
+        .padding(.vertical, spacing.smPlus)
     }
 }
 
@@ -319,6 +321,7 @@ private struct PermissionCard<Content: View>: View {
 
     @Environment(\.moventiqColors) private var colors
     @Environment(\.moventiqSpacing) private var spacing
+    @Environment(\.moventiqStroke) private var stroke
 
     var body: some View {
         let cornerRadius = largeCorners ? spacing.xl : spacing.lg
@@ -327,11 +330,11 @@ private struct PermissionCard<Content: View>: View {
             content()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(spacing.md + 2)
+        .padding(spacing.cardPaddingInset)
         .background(colors.surfaceElevated, in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .strokeBorder(colors.skeleton, lineWidth: 1),
+                .strokeBorder(colors.skeleton, lineWidth: stroke.hairline),
         )
     }
 }

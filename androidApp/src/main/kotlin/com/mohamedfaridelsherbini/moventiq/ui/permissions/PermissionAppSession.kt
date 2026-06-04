@@ -15,11 +15,12 @@ object PermissionAppSession {
     val returnedFromBackground: SharedFlow<Unit> = _returnedFromBackground.asSharedFlow()
 
     fun onActivityStarted() {
-        if (visibleActivityCount == 0 && wasInBackground) {
+        val previousCount = visibleActivityCount
+        visibleActivityCount++
+        if (previousCount == 0 && wasInBackground) {
             _returnedFromBackground.tryEmit(Unit)
             wasInBackground = false
         }
-        visibleActivityCount++
     }
 
     fun onActivityStopped() {

@@ -4,7 +4,7 @@ Canonical reference for Moventiq onboarding permission flow (Android + iOS). Des
 
 ## App flow
 
-```
+```text
 Splash → Onboarding? → Location Permission → (Permission Denied?) → Notification Permission? → Main
 ```
 

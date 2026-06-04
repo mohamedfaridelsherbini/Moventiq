@@ -17,10 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import com.mohamedfaridelsherbini.moventiq.R
 import com.mohamedfaridelsherbini.moventiq.ui.theme.moventiqColors
+import com.mohamedfaridelsherbini.moventiq.ui.theme.moventiqRounded
 import com.mohamedfaridelsherbini.moventiq.ui.theme.moventiqSpacing
+import com.mohamedfaridelsherbini.moventiq.ui.theme.moventiqStroke
 
 @Composable
 fun PermissionTrustRow(
@@ -29,6 +30,7 @@ fun PermissionTrustRow(
 ) {
     val colors = moventiqColors()
     val spacing = moventiqSpacing()
+    val rounded = moventiqRounded()
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -37,8 +39,8 @@ fun PermissionTrustRow(
     ) {
         Box(
             modifier = Modifier
-                .size(34.dp)
-                .clip(RoundedCornerShape(10.dp))
+                .size(spacing.iconContainerTrust)
+                .clip(RoundedCornerShape(rounded.sm))
                 .background(colors.primaryContainer),
             contentAlignment = Alignment.Center,
         ) {
@@ -46,7 +48,7 @@ fun PermissionTrustRow(
                 painter = painterResource(R.drawable.ic_onboarding_checkmark),
                 contentDescription = null,
                 tint = colors.primary,
-                modifier = Modifier.size(16.dp),
+                modifier = Modifier.size(spacing.iconInline),
             )
         }
         Text(
@@ -65,6 +67,7 @@ fun PermissionBulletRow(
 ) {
     val colors = moventiqColors()
     val spacing = moventiqSpacing()
+    val rounded = moventiqRounded()
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -73,8 +76,8 @@ fun PermissionBulletRow(
     ) {
         Box(
             modifier = Modifier
-                .size(32.dp)
-                .clip(RoundedCornerShape(16.dp))
+                .size(spacing.xl)
+                .clip(RoundedCornerShape(rounded.md))
                 .background(colors.primaryContainer),
             contentAlignment = Alignment.Center,
         ) {
@@ -82,7 +85,7 @@ fun PermissionBulletRow(
                 painter = painterResource(R.drawable.ic_onboarding_sparkles),
                 contentDescription = null,
                 tint = colors.primary,
-                modifier = Modifier.size(16.dp),
+                modifier = Modifier.size(spacing.iconInline),
             )
         }
         Text(
@@ -102,18 +105,19 @@ fun PermissionStepRow(
 ) {
     val colors = moventiqColors()
     val spacing = moventiqSpacing()
+    val rounded = moventiqRounded()
 
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = spacing.md, vertical = spacing.sm + 6.dp),
+            .padding(horizontal = spacing.md, vertical = spacing.smPlus),
         horizontalArrangement = Arrangement.spacedBy(spacing.sm + spacing.xs),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
             modifier = Modifier
-                .size(28.dp)
-                .clip(RoundedCornerShape(999.dp))
+                .size(spacing.iconStepBadge)
+                .clip(RoundedCornerShape(rounded.full))
                 .background(colors.primaryContainer),
             contentAlignment = Alignment.Center,
         ) {
@@ -140,15 +144,16 @@ fun PermissionCard(
 ) {
     val colors = moventiqColors()
     val spacing = moventiqSpacing()
+    val stroke = moventiqStroke()
     val cornerRadius = if (largeCorners) spacing.xl else spacing.lg
 
     Box(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(cornerRadius))
-            .border(1.dp, colors.border, RoundedCornerShape(cornerRadius))
+            .border(stroke.hairline, colors.border, RoundedCornerShape(cornerRadius))
             .background(colors.surfaceElevated)
-            .padding(spacing.md + 2.dp),
+            .padding(spacing.cardPaddingInset),
     ) {
         content()
     }

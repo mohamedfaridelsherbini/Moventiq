@@ -39,6 +39,7 @@ class AndroidPermissionStatusChecker(
             Manifest.permission.ACCESS_COARSE_LOCATION,
         ) == PackageManager.PERMISSION_GRANTED
 
+        // Partial grant: foreground OK, background missing on Android Q+.
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && (fineGranted || coarseGranted)
     }
 

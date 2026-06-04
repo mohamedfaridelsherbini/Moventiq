@@ -49,6 +49,7 @@ class OnboardingFlowTest {
             MoventiqApp(
                 splashViewModel = splashViewModel,
                 onboardingViewModel = onboardingViewModel,
+                permissionViewModel = completedPermissionViewModel(),
                 onSplashDrawn = {},
             )
         }
@@ -102,6 +103,7 @@ class OnboardingFlowTest {
             MoventiqApp(
                 splashViewModel = splashViewModel,
                 onboardingViewModel = onboardingViewModel,
+                permissionViewModel = completedPermissionViewModel(),
                 onSplashDrawn = {},
             )
         }
@@ -166,6 +168,7 @@ class OnboardingFlowTest {
             MoventiqApp(
                 splashViewModel = splashViewModel,
                 onboardingViewModel = onboardingViewModel,
+                permissionViewModel = completedPermissionViewModel(),
                 onSplashDrawn = {},
             )
         }

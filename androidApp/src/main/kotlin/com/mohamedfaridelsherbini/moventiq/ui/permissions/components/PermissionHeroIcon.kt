@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import com.mohamedfaridelsherbini.moventiq.ui.theme.moventiqColors
 import com.mohamedfaridelsherbini.moventiq.ui.theme.moventiqSpacing
 
@@ -37,7 +36,7 @@ fun PermissionHeroIcon(
             painter = painterResource(iconRes),
             contentDescription = null,
             tint = iconTint ?: colors.primary,
-            modifier = Modifier.size(44.dp),
+            modifier = Modifier.size(spacing.iconHero),
         )
     }
 }

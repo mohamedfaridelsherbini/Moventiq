@@ -33,17 +33,30 @@ final class PermissionFlowUITests: XCTestCase {
     }
 
     func test_showsNotification_afterLocationLater() {
-        app.descendants(matching: .any)[OnboardingAccessibilityId.skip].tap()
-        app.descendants(matching: .any)[PermissionAccessibilityId.locationLater].tap()
+        let skip = app.descendants(matching: .any)[OnboardingAccessibilityId.skip]
+        XCTAssertTrue(skip.waitForExistence(timeout: 5))
+        skip.tap()
+
+        let locationLater = app.descendants(matching: .any)[PermissionAccessibilityId.locationLater]
+        XCTAssertTrue(locationLater.waitForExistence(timeout: 5))
+        locationLater.tap()
 
         let notificationScreen = app.descendants(matching: .any)[PermissionAccessibilityId.notificationScreen]
         XCTAssertTrue(notificationScreen.waitForExistence(timeout: 5))
     }
 
     func test_reachesHome_afterPermissionSkips() {
-        app.descendants(matching: .any)[OnboardingAccessibilityId.skip].tap()
-        app.descendants(matching: .any)[PermissionAccessibilityId.locationLater].tap()
-        app.descendants(matching: .any)[PermissionAccessibilityId.notificationSkip].tap()
+        let skip = app.descendants(matching: .any)[OnboardingAccessibilityId.skip]
+        XCTAssertTrue(skip.waitForExistence(timeout: 5))
+        skip.tap()
+
+        let locationLater = app.descendants(matching: .any)[PermissionAccessibilityId.locationLater]
+        XCTAssertTrue(locationLater.waitForExistence(timeout: 5))
+        locationLater.tap()
+
+        let notificationSkip = app.descendants(matching: .any)[PermissionAccessibilityId.notificationSkip]
+        XCTAssertTrue(notificationSkip.waitForExistence(timeout: 5))
+        notificationSkip.tap()
 
         let home = app.descendants(matching: .any)["home_screen"]
         XCTAssertTrue(home.waitForExistence(timeout: 5))
