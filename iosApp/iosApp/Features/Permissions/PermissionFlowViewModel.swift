@@ -157,6 +157,14 @@ final class PermissionFlowViewModel {
     }
 }
 
+private final class UITestCompletedPermissionChecker: PermissionStatusChecker {
+    func hasAdequateLocationAccess() -> Bool { true }
+    func isLocationPermissionDenied() -> Bool { false }
+    func isNotificationPromptRequired() -> Bool { true }
+    func isNotificationGranted() -> Bool { true }
+    func refreshNotificationStatus() async {}
+}
+
 private final class UITestDeniedPermissionChecker: PermissionStatusChecker {
     func hasAdequateLocationAccess() -> Bool { false }
     func isLocationPermissionDenied() -> Bool { true }
@@ -170,7 +178,10 @@ enum PermissionFlowViewModelFactory {
     static func makePermissionFlowViewModel() -> PermissionFlowViewModel {
         let arguments = ProcessInfo.processInfo.arguments
         if arguments.contains("-UITestSkipPermissions") {
-            return PermissionFlowViewModel(statusStore: CompletedPermissionStatusStore())
+            return PermissionFlowViewModel(
+                statusStore: CompletedPermissionStatusStore(),
+                statusChecker: UITestCompletedPermissionChecker(),
+            )
         }
         if arguments.contains("-UITestPermissionDenied") {
             return PermissionFlowViewModel(
