@@ -11,6 +11,7 @@ final class PermissionFlowViewModel {
 
     private var locationSkippedThisSession = false
     private var notificationSkippedThisSession = false
+    private nonisolated(unsafe) var sessionTask: Task<Void, Never>?
 
     init(
         statusStore: PermissionStatusStore,
@@ -21,9 +22,17 @@ final class PermissionFlowViewModel {
         clearStalePersistedDefers()
         syncDeniedStateFromOs()
         state.step = computeStep()
-        PermissionAppSession.onReturnedFromBackground = { [weak self] in
-            self?.handle(.appReturnedFromBackground)
+        sessionTask = Task { @MainActor [weak self] in
+            for await _ in NotificationCenter.default.notifications(
+                named: .permissionAppReturnedFromBackground,
+            ) {
+                self?.handle(.appReturnedFromBackground)
+            }
         }
+    }
+
+    deinit {
+        sessionTask?.cancel()
     }
 
     fileprivate init(previewStep: PermissionFlowStep) {

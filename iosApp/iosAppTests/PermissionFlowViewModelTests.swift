@@ -19,6 +19,17 @@ final class PermissionFlowViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.state.step, .denied)
     }
 
+    func test_locationResults_whenInUseOnly_showsDeniedScreen() {
+        let viewModel = PermissionFlowViewModel(
+            statusStore: FreshPermissionStatusStore(),
+            statusChecker: FakePermissionStatusChecker(),
+        )
+
+        viewModel.handle(.locationResults(fineGranted: true, backgroundGranted: false))
+
+        XCTAssertEqual(viewModel.state.step, .denied)
+    }
+
     func test_locationResults_granted_thenRefresh_movesToNotification() {
         let checker = FakePermissionStatusChecker()
         let viewModel = PermissionFlowViewModel(

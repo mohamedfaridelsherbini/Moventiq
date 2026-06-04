@@ -1,10 +1,15 @@
 package com.mohamedfaridelsherbini.moventiq.ui.permissions
 
+import com.mohamedfaridelsherbini.moventiq.test.MainDispatcherRule
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class PermissionFlowViewModelTest {
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Before
     fun setUp() {

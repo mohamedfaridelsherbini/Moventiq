@@ -1,10 +1,12 @@
 package com.mohamedfaridelsherbini.moventiq.ui.permissions
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class PermissionFlowViewModel(
     private val statusStore: PermissionStatusStore,
@@ -17,19 +19,14 @@ class PermissionFlowViewModel(
     private var notificationSkippedThisSession = false
 
     init {
-        PermissionAppSession.onReturnedFromBackground = {
-            onEvent(PermissionEvent.AppReturnedFromBackground)
+        viewModelScope.launch {
+            PermissionAppSession.returnedFromBackground.collect {
+                onEvent(PermissionEvent.AppReturnedFromBackground)
+            }
         }
         clearStalePersistedDefers()
         syncDeniedStateFromOs()
         refreshFlow()
-    }
-
-    override fun onCleared() {
-        if (PermissionAppSession.onReturnedFromBackground != null) {
-            PermissionAppSession.onReturnedFromBackground = null
-        }
-        super.onCleared()
     }
 
     fun onPermissionFlowEntered() {

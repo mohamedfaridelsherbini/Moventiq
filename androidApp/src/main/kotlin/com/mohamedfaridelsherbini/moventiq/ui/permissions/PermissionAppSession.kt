@@ -1,5 +1,9 @@
 package com.mohamedfaridelsherbini.moventiq.ui.permissions
 
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+
 /**
  * Detects when the app returns from background so permission defers can reset per page.
  */
@@ -7,11 +11,12 @@ object PermissionAppSession {
     private var visibleActivityCount = 0
     private var wasInBackground = false
 
-    var onReturnedFromBackground: (() -> Unit)? = null
+    private val _returnedFromBackground = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val returnedFromBackground: SharedFlow<Unit> = _returnedFromBackground.asSharedFlow()
 
     fun onActivityStarted() {
         if (visibleActivityCount == 0 && wasInBackground) {
-            onReturnedFromBackground?.invoke()
+            _returnedFromBackground.tryEmit(Unit)
             wasInBackground = false
         }
         visibleActivityCount++
@@ -27,6 +32,5 @@ object PermissionAppSession {
     internal fun resetForTests() {
         visibleActivityCount = 0
         wasInBackground = false
-        onReturnedFromBackground = null
     }
 }
