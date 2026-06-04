@@ -1,15 +1,22 @@
 package com.mohamedfaridelsherbini.moventiq.ui.components
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import com.mohamedfaridelsherbini.moventiq.ui.theme.moventiqColors
 import com.mohamedfaridelsherbini.moventiq.ui.theme.moventiqSpacing
 
@@ -19,6 +26,7 @@ fun MoventiqPrimaryButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     testTag: String? = null,
+    @DrawableRes iconRes: Int? = null,
 ) {
     val colors = moventiqColors()
     val spacing = moventiqSpacing()
@@ -35,9 +43,22 @@ fun MoventiqPrimaryButton(
             contentColor = colors.textOnPrimary,
         ),
     ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelMedium,
-        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(spacing.sm),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            if (iconRes != null) {
+                Icon(
+                    painter = painterResource(iconRes),
+                    contentDescription = null,
+                    modifier = Modifier.size(spacing.iconButton),
+                    tint = colors.textOnPrimary,
+                )
+            }
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelMedium,
+            )
+        }
     }
 }

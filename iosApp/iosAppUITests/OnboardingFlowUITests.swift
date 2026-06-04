@@ -19,7 +19,7 @@ final class OnboardingFlowUITests: XCTestCase {
     }
 
     func test_app_navigatesToHome_whenOnboardingSkipped() {
-        let app = launchApp()
+        let app = launchApp(skipPermissions: true)
 
         let onboarding = app.descendants(matching: .any)[OnboardingAccessibilityId.screen]
         XCTAssertTrue(onboarding.waitForExistence(timeout: 5))
@@ -42,7 +42,7 @@ final class OnboardingFlowUITests: XCTestCase {
     }
 
     func test_app_navigatesToHome_afterOnboardingCompletes() {
-        let app = launchApp()
+        let app = launchApp(skipPermissions: true)
 
         let onboarding = app.descendants(matching: .any)[OnboardingAccessibilityId.screen]
         XCTAssertTrue(onboarding.waitForExistence(timeout: 5))
@@ -56,9 +56,12 @@ final class OnboardingFlowUITests: XCTestCase {
         XCTAssertTrue(home.waitForExistence(timeout: 5))
     }
 
-    private func launchApp() -> XCUIApplication {
+    private func launchApp(skipPermissions: Bool = false) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments.append(contentsOf: ["-UITestInstantSplash", "-UITestFreshOnboarding"])
+        if skipPermissions {
+            app.launchArguments.append("-UITestSkipPermissions")
+        }
         app.launch()
         return app
     }

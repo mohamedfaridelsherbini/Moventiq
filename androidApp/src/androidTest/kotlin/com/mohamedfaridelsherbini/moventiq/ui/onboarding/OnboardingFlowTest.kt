@@ -13,6 +13,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mohamedfaridelsherbini.moventiq.MoventiqApp
 import com.mohamedfaridelsherbini.moventiq.R
 import com.mohamedfaridelsherbini.moventiq.ui.home.HomeTestTags
+import com.mohamedfaridelsherbini.moventiq.ui.permissions.CompletedPermissionStatusStore
+import com.mohamedfaridelsherbini.moventiq.ui.permissions.FakePermissionStatusChecker
+import com.mohamedfaridelsherbini.moventiq.ui.permissions.PermissionFlowViewModel
 import com.mohamedfaridelsherbini.moventiq.ui.splash.SplashTestTags
 import com.mohamedfaridelsherbini.moventiq.ui.splash.SplashViewModel
 import org.junit.Rule
@@ -28,6 +31,15 @@ class OnboardingFlowTest {
     private val context: Context
         get() = ApplicationProvider.getApplicationContext()
 
+    private fun completedPermissionViewModel(): PermissionFlowViewModel =
+        PermissionFlowViewModel(
+            statusStore = CompletedPermissionStatusStore(),
+            statusChecker = FakePermissionStatusChecker(
+                adequateLocation = true,
+                notificationGranted = true,
+            ),
+        )
+
     @Test
     fun app_showsOnboarding_afterSplashCompletes() {
         val splashViewModel = SplashViewModel(enterWindowMs = 0L, exitDurationMs = 0L)
@@ -37,6 +49,7 @@ class OnboardingFlowTest {
             MoventiqApp(
                 splashViewModel = splashViewModel,
                 onboardingViewModel = onboardingViewModel,
+                permissionViewModel = completedPermissionViewModel(),
                 onSplashDrawn = {},
             )
         }
@@ -59,6 +72,7 @@ class OnboardingFlowTest {
             MoventiqApp(
                 splashViewModel = splashViewModel,
                 onboardingViewModel = onboardingViewModel,
+                permissionViewModel = completedPermissionViewModel(),
                 onSplashDrawn = {},
             )
         }
@@ -89,6 +103,7 @@ class OnboardingFlowTest {
             MoventiqApp(
                 splashViewModel = splashViewModel,
                 onboardingViewModel = onboardingViewModel,
+                permissionViewModel = completedPermissionViewModel(),
                 onSplashDrawn = {},
             )
         }
@@ -120,6 +135,7 @@ class OnboardingFlowTest {
             MoventiqApp(
                 splashViewModel = splashViewModel,
                 onboardingViewModel = onboardingViewModel,
+                permissionViewModel = completedPermissionViewModel(),
                 onSplashDrawn = {},
             )
         }
@@ -152,6 +168,7 @@ class OnboardingFlowTest {
             MoventiqApp(
                 splashViewModel = splashViewModel,
                 onboardingViewModel = onboardingViewModel,
+                permissionViewModel = completedPermissionViewModel(),
                 onSplashDrawn = {},
             )
         }

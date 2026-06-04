@@ -9,6 +9,9 @@ import com.mohamedfaridelsherbini.moventiq.MoventiqApp
 import com.mohamedfaridelsherbini.moventiq.ui.home.HomeTestTags
 import com.mohamedfaridelsherbini.moventiq.ui.onboarding.CompletedOnboardingStatusStore
 import com.mohamedfaridelsherbini.moventiq.ui.onboarding.OnboardingViewModel
+import com.mohamedfaridelsherbini.moventiq.ui.permissions.CompletedPermissionStatusStore
+import com.mohamedfaridelsherbini.moventiq.ui.permissions.FakePermissionStatusChecker
+import com.mohamedfaridelsherbini.moventiq.ui.permissions.PermissionFlowViewModel
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,6 +25,15 @@ class SplashFlowTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
+
+    private fun completedPermissionViewModel(): PermissionFlowViewModel =
+        PermissionFlowViewModel(
+            statusStore = CompletedPermissionStatusStore(),
+            statusChecker = FakePermissionStatusChecker(
+                adequateLocation = true,
+                notificationGranted = true,
+            ),
+        )
 
     @Test
     fun app_navigatesToHome_afterSplashCompletes() {
@@ -37,6 +49,7 @@ class SplashFlowTest {
             MoventiqApp(
                 splashViewModel = splashViewModel,
                 onboardingViewModel = onboardingViewModel,
+                permissionViewModel = completedPermissionViewModel(),
                 onSplashDrawn = {},
             )
         }
@@ -65,6 +78,7 @@ class SplashFlowTest {
             MoventiqApp(
                 splashViewModel = splashViewModel,
                 onboardingViewModel = onboardingViewModel,
+                permissionViewModel = completedPermissionViewModel(),
                 onSplashDrawn = {},
             )
         }

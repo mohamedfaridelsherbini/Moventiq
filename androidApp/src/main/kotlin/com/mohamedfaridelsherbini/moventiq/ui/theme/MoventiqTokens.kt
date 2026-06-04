@@ -20,6 +20,8 @@ data class MoventiqColors(
     val progressInactive: Color,
     val skeleton: Color,
     val skeletonMuted: Color,
+    val error: Color,
+    val errorContainer: Color,
 )
 
 val MoventiqLightColors = MoventiqColors(
@@ -36,6 +38,8 @@ val MoventiqLightColors = MoventiqColors(
     progressInactive = MoventiqProgressInactive,
     skeleton = MoventiqBorderLight,
     skeletonMuted = MoventiqPrimaryContainer,
+    error = MoventiqError,
+    errorContainer = MoventiqErrorContainer,
 )
 
 val MoventiqDarkColors = MoventiqColors(
@@ -52,6 +56,8 @@ val MoventiqDarkColors = MoventiqColors(
     progressInactive = MoventiqProgressInactive,
     skeleton = MoventiqBorderDark,
     skeletonMuted = MoventiqPrimaryContainerDark,
+    error = MoventiqError,
+    errorContainer = MoventiqErrorContainer,
 )
 
 data class MoventiqSpacing(
@@ -61,13 +67,50 @@ data class MoventiqSpacing(
     val lg: Dp = 24.dp,
     val xl: Dp = 32.dp,
     val xxl: Dp = 48.dp,
+) {
+    /** sm + 6 — button vertical padding per DESIGN.md */
+    val smPlus: Dp get() = sm + xs + 2.dp
+
+    val iconHero: Dp get() = xxl - xs
+
+    val iconInline: Dp get() = md
+
+    val iconButton: Dp get() = smPlus + xs
+
+    val iconContainerTrust: Dp get() = smPlus + md + xs
+
+    val iconStepBadge: Dp get() = lg + xs
+
+    val cardPaddingInset: Dp get() = smPlus + xs
+}
+
+data class MoventiqRounded(
+    val xs: Dp = 6.dp,
+    val sm: Dp = 10.dp,
+    val md: Dp = 16.dp,
+    val lg: Dp = 24.dp,
+    val xl: Dp = 32.dp,
+    val full: Dp = 999.dp,
+)
+
+/** Stroke widths — DESIGN.md card borders use 1px. */
+data class MoventiqStroke(
+    val hairline: Dp = 1.dp,
 )
 
 val LocalMoventiqColors = staticCompositionLocalOf { MoventiqLightColors }
 val LocalMoventiqSpacing = staticCompositionLocalOf { MoventiqSpacing() }
+val LocalMoventiqRounded = staticCompositionLocalOf { MoventiqRounded() }
+val LocalMoventiqStroke = staticCompositionLocalOf { MoventiqStroke() }
 
 @Composable
 fun moventiqColors(): MoventiqColors = LocalMoventiqColors.current
 
 @Composable
 fun moventiqSpacing(): MoventiqSpacing = LocalMoventiqSpacing.current
+
+@Composable
+fun moventiqRounded(): MoventiqRounded = LocalMoventiqRounded.current
+
+@Composable
+fun moventiqStroke(): MoventiqStroke = LocalMoventiqStroke.current

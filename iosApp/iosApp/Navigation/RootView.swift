@@ -3,12 +3,16 @@ import SwiftUI
 private enum AppPhase: Equatable {
     case splash
     case onboarding
+    case permissions
     case main
 }
 
 struct RootView: View {
     let splashViewModel: SplashViewModel
     let onboardingViewModel: OnboardingViewModel
+    let permissionViewModel: PermissionFlowViewModel
+
+    @Environment(\.scenePhase) private var scenePhase
 
     private var phase: AppPhase {
         if !splashViewModel.state.isComplete {
@@ -16,6 +20,9 @@ struct RootView: View {
         }
         if onboardingViewModel.state.shouldShowOnboarding {
             return .onboarding
+        }
+        if !permissionViewModel.state.isFlowComplete {
+            return .permissions
         }
         return .main
     }
@@ -29,12 +36,30 @@ struct RootView: View {
             case .onboarding:
                 OnboardingView(viewModel: onboardingViewModel)
                     .transition(.opacity.combined(with: .scale(scale: 0.98)))
+            case .permissions:
+                PermissionFlowView(viewModel: permissionViewModel)
+                    .transition(.opacity.combined(with: .scale(scale: 0.98)))
             case .main:
                 HomeContentView()
                     .transition(.opacity.combined(with: .scale(scale: 0.98)))
             }
         }
         .animation(.easeInOut(duration: SplashBranding.appCrossfadeDuration), value: phase)
+        .onChange(of: phase) { _, newPhase in
+            if newPhase == .permissions {
+                Task { await permissionViewModel.onPermissionFlowEntered() }
+            }
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            switch newPhase {
+            case .active:
+                PermissionAppSession.onDidBecomeActive()
+            case .background:
+                PermissionAppSession.onDidEnterBackground()
+            default:
+                break
+            }
+        }
     }
 }
 
@@ -57,6 +82,7 @@ enum SplashViewModelFactory {
     RootView(
         splashViewModel: SplashViewModel(enterWindow: 60, exitDuration: 60),
         onboardingViewModel: OnboardingViewModel(statusStore: OnboardingPreferences()),
+        permissionViewModel: PermissionFlowViewModel(statusStore: PermissionPreferences()),
     )
 }
 
@@ -64,6 +90,7 @@ enum SplashViewModelFactory {
     RootView(
         splashViewModel: SplashViewModel(enterWindow: 60, exitDuration: 60),
         onboardingViewModel: OnboardingViewModel(statusStore: OnboardingPreferences()),
+        permissionViewModel: PermissionFlowViewModel(statusStore: PermissionPreferences()),
     )
     .preferredColorScheme(.dark)
 }

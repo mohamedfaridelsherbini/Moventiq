@@ -5,6 +5,7 @@ import SwiftUI
 struct MoventiqApp: App {
     @State private var splashViewModel = SplashViewModelFactory.makeSplashViewModel()
     @State private var onboardingViewModel = OnboardingViewModelFactory.makeOnboardingViewModel()
+    @State private var permissionViewModel = PermissionFlowViewModelFactory.makePermissionFlowViewModel()
 
     init() {
         AppDependencies.bootstrap()
@@ -15,7 +16,8 @@ struct MoventiqApp: App {
             MoventiqTheme {
                 RootView(
                     splashViewModel: splashViewModel,
-                    onboardingViewModel: onboardingViewModel
+                    onboardingViewModel: onboardingViewModel,
+                    permissionViewModel: permissionViewModel,
                 )
             }
         }

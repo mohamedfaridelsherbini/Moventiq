@@ -20,6 +20,8 @@ extension Color {
     static let moventiqBorderLight = Color(red: 0.886, green: 0.910, blue: 0.941)
     static let moventiqBorderDark = Color(red: 0.200, green: 0.255, blue: 0.333)
     static let moventiqProgressInactive = Color(red: 0.796, green: 0.835, blue: 0.882)
+    static let moventiqError = Color(red: 0.937, green: 0.267, blue: 0.267)
+    static let moventiqErrorContainer = Color(red: 0.996, green: 0.949, blue: 0.949)
 
     static func moventiqFadeBackground(
         darkTheme: Bool,
@@ -57,12 +59,19 @@ struct MoventiqTypography {
     let headlineSmall: Font
     let bodyMedium: Font
     let labelMedium: Font
+    let labelSmall: Font
+
+    let trackingTightHeadline: CGFloat
+    let lineSpacingBody: CGFloat
 
     /// Values aligned with Android `MoventiqTypography` / DESIGN.md.
     static let standard = MoventiqTypography(
         headlineSmall: .system(size: 27, weight: .bold),
         bodyMedium: .system(size: 15, weight: .regular),
         labelMedium: .system(size: 15, weight: .semibold),
+        labelSmall: .system(size: 13, weight: .bold),
+        trackingTightHeadline: -0.6,
+        lineSpacingBody: 4,
     )
 }
 
@@ -73,6 +82,14 @@ struct MoventiqSpacing {
     let lg: CGFloat
     let xl: CGFloat
     let xxl: CGFloat
+
+    var smPlus: CGFloat { sm + xs + 2 }
+    var iconHero: CGFloat { xxl - xs }
+    var iconInline: CGFloat { md }
+    var iconButton: CGFloat { smPlus + xs }
+    var iconContainerTrust: CGFloat { smPlus + md + xs }
+    var iconStepBadge: CGFloat { lg + xs }
+    var cardPaddingInset: CGFloat { smPlus + xs }
 
     /// Values aligned with Android `MoventiqSpacing` / DESIGN.md.
     static let standard = MoventiqSpacing(
@@ -85,12 +102,45 @@ struct MoventiqSpacing {
     )
 }
 
+struct MoventiqRounded {
+    let xs: CGFloat
+    let sm: CGFloat
+    let md: CGFloat
+    let lg: CGFloat
+    let xl: CGFloat
+    let full: CGFloat
+
+    static let standard = MoventiqRounded(
+        xs: 6,
+        sm: 10,
+        md: 16,
+        lg: 24,
+        xl: 32,
+        full: 999,
+    )
+}
+
+/// Stroke widths — DESIGN.md card borders use 1px.
+struct MoventiqStroke {
+    let hairline: CGFloat
+
+    static let standard = MoventiqStroke(hairline: 1)
+}
+
 private struct MoventiqTypographyKey: EnvironmentKey {
     static let defaultValue = MoventiqTypography.standard
 }
 
 private struct MoventiqSpacingKey: EnvironmentKey {
     static let defaultValue = MoventiqSpacing.standard
+}
+
+private struct MoventiqRoundedKey: EnvironmentKey {
+    static let defaultValue = MoventiqRounded.standard
+}
+
+private struct MoventiqStrokeKey: EnvironmentKey {
+    static let defaultValue = MoventiqStroke.standard
 }
 
 extension EnvironmentValues {
@@ -102,6 +152,16 @@ extension EnvironmentValues {
     var moventiqSpacing: MoventiqSpacing {
         get { self[MoventiqSpacingKey.self] }
         set { self[MoventiqSpacingKey.self] = newValue }
+    }
+
+    var moventiqRounded: MoventiqRounded {
+        get { self[MoventiqRoundedKey.self] }
+        set { self[MoventiqRoundedKey.self] = newValue }
+    }
+
+    var moventiqStroke: MoventiqStroke {
+        get { self[MoventiqStrokeKey.self] }
+        set { self[MoventiqStrokeKey.self] = newValue }
     }
 }
 
@@ -120,6 +180,8 @@ struct MoventiqColors {
     let progressInactive: Color
     let skeleton: Color
     let skeletonMuted: Color
+    let error: Color
+    let errorContainer: Color
 
     static let light = MoventiqColors(
         background: .moventiqBackgroundLight,
@@ -136,6 +198,8 @@ struct MoventiqColors {
         progressInactive: .moventiqProgressInactive,
         skeleton: .moventiqBorderLight,
         skeletonMuted: .moventiqPrimaryContainer,
+        error: .moventiqError,
+        errorContainer: .moventiqErrorContainer,
     )
 
     static let dark = MoventiqColors(
@@ -153,6 +217,8 @@ struct MoventiqColors {
         progressInactive: .moventiqProgressInactive,
         skeleton: .moventiqBorderDark,
         skeletonMuted: .moventiqPrimaryContainerDark,
+        error: .moventiqError,
+        errorContainer: .moventiqErrorContainer,
     )
 }
 
@@ -180,6 +246,8 @@ struct MoventiqTheme<Content: View>: View {
             .environment(\.moventiqColors, isDark ? .dark : .light)
             .environment(\.moventiqTypography, .standard)
             .environment(\.moventiqSpacing, .standard)
+            .environment(\.moventiqRounded, .standard)
+            .environment(\.moventiqStroke, .standard)
             .applyColorScheme(darkTheme)
     }
 }
