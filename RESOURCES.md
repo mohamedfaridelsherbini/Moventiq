@@ -118,5 +118,7 @@ Built on **CodeRabbit + Gemini concepts**, implemented locally in one skill — 
 | [AGENT.md](AGENT.md) | Agent conventions, commands |
 | [MVP.md](MVP.md) | Product scope |
 | [DESIGN.md](DESIGN.md) | Design tokens |
-| `.cursor/skills/moventiq-ui-architecture/` | UI SOLID, file splits, previews |
-| `.cursor/skills/moventiq-code-review/` | Local PR/diff review (Cursor skill) |
+| `.cursor/skills/README.md` | Skill index and pipelines |
+| `.cursor/skills/moventiq-ui-architecture/` | UI SOLID, previews; [platforms.md](.cursor/skills/moventiq-ui-architecture/platforms.md) for Compose/SwiftUI |
+| `.cursor/skills/moventiq-feature-workflow/` | UML → tests → code |
+| `.cursor/skills/moventiq-code-review/` | Local PR/diff review |

@@ -113,5 +113,5 @@ Respect `SettingsEntity`: `arrivalAlerts`, `quietHoursEnabled`, `quietStartMinut
 ## Related skills
 
 - Data layer: `moventiq-room-kmp`
-- Arrival UI: `moventiq-compose-ui` / `moventiq-swiftui-ui`
+- Arrival UI: `moventiq-ui-architecture/platforms.md`
 - UI tests: `moventiq-ui-tests`

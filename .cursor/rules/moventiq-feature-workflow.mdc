@@ -1,0 +1,14 @@
+---
+description: Every new Moventiq feature follows UML → approved test plan → failing tests → implementation.
+alwaysApply: true
+---
+
+# Feature workflow — UML first, tests before code
+
+For **new features, screens, or behavior flows** (not typos / one-liners):
+
+1. **Phase A** — Create `docs/features/<slug>/uml.md` (Mermaid state/sequence + case table). **Stop for user approval.**
+2. **Phase B** — Finalize `test-plan.md`; add unit + UI tests that compile and fail for the right reasons. **No production code yet.**
+3. **Phase C** — Implement until tests pass; run `moventiq-pipeline` verify.
+
+Follow `.cursor/skills/moventiq-feature-workflow/SKILL.md`. Copy templates from `docs/features/_template/`.

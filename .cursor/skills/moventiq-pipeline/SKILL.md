@@ -78,23 +78,24 @@ swiftlint lint --strict --config iosApp/.swiftlint.yml iosApp/iosApp
 
 Run in this exact order:
 
-| # | Skill | When to skip |
-|---|---|---|
-| 1 | `moventiq-context` | Never |
-| 2 | `moventiq-pencil-design` | Skip if no UI / no `.pen` changes (see UI path globs above) |
-| 3 | `moventiq-ui-architecture` | Skip if no UI (see UI path globs above) |
-| 4 | `moventiq-room-kmp` | Skip if no data layer |
-| 5 | `moventiq-compose-ui` | Skip if not Android UI |
-| 6 | `moventiq-swiftui-ui` | Skip if not iOS UI |
-| 7 | `moventiq-geofencing` | Skip if no location/geofence/arrival |
-| 8 | `moventiq-unit-tests` | Never for new logic |
-| 9 | `moventiq-ui-tests` | Skip if no UI |
-| 10 | `moventiq-code-review` | Never — self-review before done |
-| 11 | `moventiq-ci` | Never — confirm CI green |
+| # | Skill | When to skip | Gate |
+|---|---|---|---|
+| 1 | `moventiq-context` | Never | |
+| 2 | `moventiq-feature-workflow` **Phase A** | Never for new features / flows | **GATE: user accepts UML** |
+| 3 | `moventiq-pencil-design` | Skip if no UI / no `.pen` changes (see UI path globs above) | |
+| 4 | `moventiq-feature-workflow` **Phase B** | Never for new logic / flows | **GATE: red tests compile** |
+| 5 | `moventiq-ui-architecture` | Skip if no UI | Read [platforms.md](../moventiq-ui-architecture/platforms.md) when coding |
+| 6 | `moventiq-room-kmp` | Skip if no data layer | |
+| 7 | `moventiq-geofencing` | Skip if no location/geofence/arrival | |
+| 8 | `moventiq-feature-workflow` **Phase C** | Never — production code to green tests | |
+| 9 | `moventiq-unit-tests` | Never — confirm green | **GATE** |
+| 10 | `moventiq-ui-tests` | Skip if no UI | **GATE** if UI |
+| 11 | `moventiq-code-review` | Never — self-review before done | |
+| 12 | `moventiq-ci` | Never — confirm CI green | **GATE** |
 
-Steps 5 and 6 are **parallel platforms** — run both only for KMP UI parity; otherwise run the one that applies.
+**Phase A → B → C** details: `moventiq-feature-workflow`. Do not write production code before Phase B.
 
-After step 11, run **verify** pipeline steps 2–6 if not already executed.
+After step 12, run **verify** pipeline steps 2–6 if not already executed.
 
 ---
 

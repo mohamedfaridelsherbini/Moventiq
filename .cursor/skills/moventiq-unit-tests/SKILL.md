@@ -10,6 +10,8 @@ description: >-
 
 Strategy table: [ARCHITECTURE.md](../../../ARCHITECTURE.md) §13.
 
+**Feature workflow:** For new features, write tests in **Phase B** (before production code). See `moventiq-feature-workflow`.
+
 **Not in scope:** Compose UI tests, XCUITest — see `moventiq-ui-tests`.
 
 ## Test naming

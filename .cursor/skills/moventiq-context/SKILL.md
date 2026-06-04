@@ -82,17 +82,26 @@ Agent skills and rules: `.cursor/skills/`, `.cursor/rules/`.
 - Accessibility: labels + ≥44dp touch targets
 - New use cases / platform ViewModels have unit tests
 
+## Feature development order
+
+For **new features or behavior flows** (not one-line fixes):
+
+1. **UML + cases** — `docs/features/<slug>/uml.md` (Mermaid); user accepts design
+2. **Test plan + red tests** — `docs/features/<slug>/test-plan.md`; unit + UI tests before production code
+3. **Implement** — code until tests green; then `moventiq-pipeline` verify
+
+Skill: `moventiq-feature-workflow`. Template: `docs/features/_template/`.
+
 ## Related skills
 
 | Task | Skill |
 |---|---|
 | **Run all skills in order** | `moventiq-pipeline` |
+| **New feature order (UML → tests → code)** | `moventiq-feature-workflow` |
 | Design file | `moventiq-pencil-design` |
 | Room / data | `moventiq-room-kmp` |
-| Android UI | `moventiq-compose-ui` |
-| iOS UI | `moventiq-swiftui-ui` |
+| UI structure + platform impl | `moventiq-ui-architecture` (+ [platforms.md](../moventiq-ui-architecture/platforms.md)) |
 | Geofencing | `moventiq-geofencing` |
-| UI structure / previews | `moventiq-ui-architecture` |
 | Code review | `moventiq-code-review` |
 | Unit tests | `moventiq-unit-tests` |
 | UI tests | `moventiq-ui-tests` |

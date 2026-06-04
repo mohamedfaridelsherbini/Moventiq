@@ -133,8 +133,8 @@ See [reference.md](reference.md) for folder templates and testTag naming.
 
 ## Related skills
 
-- Orchestrator: `moventiq-pipeline` (verify step 2 · implement step 3)
-- Build Android UI: `moventiq-compose-ui`
-- Build iOS UI: `moventiq-swiftui-ui`
-- Review: `moventiq-code-review`
+- Orchestrator: `moventiq-pipeline`
+- Platform UI (Compose / SwiftUI): [platforms.md](platforms.md)
+- Design file: `moventiq-pencil-design`
 - Tests: `moventiq-unit-tests`, `moventiq-ui-tests`
+- Review: `moventiq-code-review`

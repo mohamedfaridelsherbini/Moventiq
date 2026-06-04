@@ -4,6 +4,8 @@ Guidance for AI agents and developers. Read with [MVP.md](MVP.md), [ARCHITECTURE
 
 **Skills & rules:** `.cursor/skills/`, `.cursor/rules/`. Run **`moventiq-pipeline`** (verify · implement · review · data) before merge.
 
+**New features:** UML → accepted test plan → failing tests → code (`moventiq-feature-workflow`).
+
 ---
 
 ## 1. What this is

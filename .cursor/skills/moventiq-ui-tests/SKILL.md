@@ -7,233 +7,106 @@ description: >-
 
 # Moventiq UI tests
 
-Follow [Automate UI tests](https://developer.android.com/training/testing/ui-tests) and [Compose testing setup](https://developer.android.com/develop/ui/compose/testing).
+**Feature workflow:** Write UI tests in **Phase B** before production code (`moventiq-feature-workflow`).
 
-UI architecture (testTag, content split): `moventiq-ui-architecture`.
+**Previews ≠ UI tests.** testTag / accessibility IDs: `../moventiq-ui-architecture/reference.md`.
 
-**Previews ≠ UI tests:** Previews validate design in Android Studio/Xcode. UI tests validate behavior in CI on device/simulator.
+## Naming
 
-## Test naming
+snake_case `{feature}_{visibleBehavior}_{condition}`
 
-Use **snake_case** with **2–3 segments**:
+Examples: `app_showsNotification_afterLocationLater`, `permissionDenied_limitedFeatures_emitsEvent`.
 
-```text
-{feature}_{visibleBehavior}_{condition}
-```
-
-| Segment | Content | Example |
-|---|---|---|
-| feature | screen or flow scope | `splash`, `app`, `home`, `tasks` |
-| visibleBehavior | what the user sees (not implementation) | `shows_wordmark`, `navigates_to_home` |
-| condition | context | `in_dark_theme`, `after_enter_animation`, `when_exiting`, `before_navigation_completes` |
-
-Examples: `splash_shows_screen_root`, `splash_shows_brand_text_in_dark_theme`, `app_navigates_to_home_after_splash_completes`.
-
-**How to rename**
-
-1. **Refactor → Rename** (⇧F6) on the `@Test` method — same as unit tests.
-2. Run one instrumented test (see **Commands** — `--tests` does **not** work on `connectedDebugAndroidTest`).
-3. Prefer **behavior** verbs (`shows`, `navigates`, `displays`) over implementation (`renders`, `emits`, `callsViewModel`).
-4. Match `testTag` nouns where helpful: `splash_shows_wordmark_*` ↔ `SplashTestTags.WORDMARK`.
-
-Cross-ref: unit test naming in `moventiq-unit-tests`.
+Use behavior verbs: `shows`, `navigates`, `reaches` — not `renders`, `emits`.
 
 ## Scope
 
 | Type | Tool | When |
 |---|---|---|
-| Behavior UI test | Compose `ui-test-junit4` + semantics | Navigation, visibility, text, state |
-| Component semantics | Compose test + fake `*UiState` | Screen content without navigation |
-| Screenshot regression | Roborazzi / Paparazzi | Optional visual CI |
-| iOS flows | XCUITest | Critical paths on simulator |
+| Content smoke | `createComposeRule` + fake state | Headlines, testTags |
+| Flow | `MoventiqApp` + fake ViewModels | Onboarding → permission → home |
+| iOS | XCUITest + `launchArguments` | Same critical paths |
 
-Behavior tests analyze the UI hierarchy and assert on element properties — not pixels. See [Behavior UI tests](https://developer.android.com/training/testing/ui-tests/behavior).
+Do not assert pixel colors.
 
-## Prerequisites
+## Android patterns
 
-- `*Content(state, onEvent)` split — test content with fake state OR full flow via `setContent`
-- Stable selectors: `Modifier.testTag("task_row_buy_milk")` or semantics text
-- Replace dependencies with test doubles (in-memory repos, fake ViewModels) via DI — see [UI test architecture](https://developer.android.com/training/testing/ui-tests#architecture-and-test-setup)
-- Do not assert pixel colors — assert visibility, text, state
-
-See `moventiq-ui-architecture/reference.md` for testTag conventions.
-
-## Android setup (`:androidApp`)
-
-Instrumented tests live in `src/androidTest/kotlin`. Gradle builds a test APK and runs it on a device/emulator with `AndroidJUnitRunner`.
-
-Version catalog keys already in `gradle/libs.versions.toml`:
-
-- `[versions]` → `androidx-compose = "1.11.1"`
-- `[libraries]` → `androidx-compose-ui-test-junit4`, `androidx-compose-ui-test-manifest` (both use `version.ref = "androidx-compose"`)
-
-Do not duplicate keys under a different version alias in docs — copy from the repo file when bumping versions.
-
-`androidApp/build.gradle.kts`:
+**Content test** — no ViewModel:
 
 ```kotlin
-defaultConfig {
-    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+composeTestRule.setContent {
+    MoventiqTheme { LocationPermissionContent(onEvent = {}) }
 }
-testOptions {
-    animationsDisabled = true
-}
-
-// Compose testing — https://developer.android.com/develop/ui/compose/testing
-debugImplementation(libs.androidx.compose.ui.test.manifest)
-androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-androidTestImplementation(libs.androidx.testExt.junit)
-androidTestImplementation(libs.androidx.test.runner)
-androidTestImplementation(libs.androidx.test.rules)
-androidTestImplementation(libs.androidx.espresso.core) // 3.7+ required for API 36 emulators
+composeTestRule.onNodeWithTag(PermissionTestTags.LOCATION_SCREEN).assertIsDisplayed()
 ```
 
-`ui-test-manifest` registers `ComponentActivity` for `createComposeRule()` — do not hand-roll a debug manifest.
-
-### Content test (fake state, no navigation)
+**Flow test** — hoist ViewModel **before** `setContent`:
 
 ```kotlin
-@RunWith(AndroidJUnit4::class)
-class HomeContentTest {
-    @get:Rule
-    val composeTestRule = createComposeRule()
-
-    @Composable
-    private fun TestHost(state: HomeUiState) {
-        MoventiqTheme { HomeContent(state = state, onEvent = {}) }
-    }
-
-    @Test
-    fun home_shows_empty_state_when_no_tasks() {
-        composeTestRule.setContent { TestHost(HomeUiState.previewEmpty()) }
-        composeTestRule.onNodeWithTag("home_empty_state").assertIsDisplayed()
-    }
+val splashViewModel = SplashViewModel(enterWindowMs = 0L, exitDurationMs = 0L)
+val permissionViewModel = PermissionFlowViewModel(
+    statusStore = FreshPermissionStatusStore(),
+    statusChecker = FakePermissionStatusChecker(),
+)
+composeTestRule.setContent {
+    MoventiqApp(
+        splashViewModel = splashViewModel,
+        permissionViewModel = permissionViewModel,
+        onSplashDrawn = {},
+    )
 }
 ```
 
-### Flow test (test-double ViewModel)
+Use `createComposeRule()` (v2). `createAndroidComposeRule` only when activity/Koin required.
 
-Create the ViewModel **before** `setContent { }` — never construct it inside a `@Composable` (lint: `ViewModelConstructorInComposable`).
+After pager clicks, `waitUntil` next screen tag before assert.
 
-Inject deterministic timing or fakes instead of real network/DB:
+## iOS patterns
 
-```kotlin
-@RunWith(AndroidJUnit4::class)
-class SplashFlowTest {
-    @get:Rule
-    val composeTestRule = createComposeRule()
+Launch args for timing: `-UITestInstantSplash`, `-UITestFreshOnboarding`, `-UITestPermissionDenied`.
 
-    @Test
-    fun app_navigates_to_home_after_splash_completes() {
-        val splashViewModel = SplashViewModel(
-            enterWindowMs = 0L,
-            exitDurationMs = 0L,
-        )
-
-        composeTestRule.setContent {
-            MoventiqApp(
-                splashViewModel = splashViewModel,
-                onSplashDrawn = {},
-            )
-        }
-
-        composeTestRule.waitUntil(timeoutMillis = 5_000) {
-            composeTestRule
-                .onAllNodesWithTag(HomeTestTags.SCREEN)
-                .fetchSemanticsNodes()
-                .isNotEmpty()
-        }
-        composeTestRule.onNodeWithTag(HomeTestTags.SCREEN).assertIsDisplayed()
-    }
-}
+```swift
+let screen = app.descendants(matching: .any)["permission_location_screen"]
+XCTAssertTrue(screen.waitForExistence(timeout: 5))
 ```
 
-Use `createAndroidComposeRule<MainActivity>()` only when the test needs a real activity (system permissions, Koin graph, etc.). Prefer `createComposeRule()` from `androidx.compose.ui.test.junit4.v2`.
+Root views: `.accessibilityElement(children: .contain)`.
 
-## Priority MVP flows
+## MVP priority flows
 
-| # | Flow |
-|---|---|
-| 1 | Onboarding → permission → main |
-| 2 | Create location → appears in Places list |
-| 3 | Create task → linked to location → visible in Tasks |
-| 4 | Tab navigation (Home, Tasks, Places, Settings) |
-| 5 | Settings → appearance theme toggle |
-| 6 | Mock geofence ENTER → Arrival screen visible |
+1. Onboarding → permissions → main
+2. Create location → Places list
+3. Create task → Tasks list
+4. Tab navigation
+5. Mock geofence → Arrival (M3)
 
 ## Commands
 
-Gradle `--tests` filters **JVM unit tests only** (`testDebugUnitTest`). Instrumented UI tests use `android.testInstrumentationRunnerArguments` instead.
+Gradle `--tests` works for **unit tests only**, not instrumented.
 
 ```bash
-# Android unit tests (JVM — supports --tests)
-./gradlew :androidApp:testDebugUnitTest \
-  --tests "com.mohamedfaridelsherbini.moventiq.ui.splash.*"
+# Android UI — managed emulator (CI parity)
+./gradlew :androidApp:pixel6Api36DebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.package=com.mohamedfaridelsherbini.moventiq.ui.permissions
 
-# Android UI tests — all instrumented tests (requires emulator or device)
-./gradlew :androidApp:connectedDebugAndroidTest
+# Android UI — filter by class
+./gradlew :androidApp:pixel6Api36DebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.class=com.mohamedfaridelsherbini.moventiq.ui.permissions.PermissionFlowTest
 
-# Android UI tests — filter by package
-./gradlew :androidApp:connectedDebugAndroidTest \
-  -Pandroid.testInstrumentationRunnerArguments.package=com.mohamedfaridelsherbini.moventiq.ui.splash
-
-# Android UI tests — filter by class (comma-separated for multiple)
-./gradlew :androidApp:connectedDebugAndroidTest \
-  -Pandroid.testInstrumentationRunnerArguments.class=com.mohamedfaridelsherbini.moventiq.ui.splash.SplashContentTest,com.mohamedfaridelsherbini.moventiq.ui.splash.SplashFlowTest
-
-# Android UI tests — single method (Class#methodName)
-./gradlew :androidApp:connectedDebugAndroidTest \
-  -Pandroid.testInstrumentationRunnerArguments.class=com.mohamedfaridelsherbini.moventiq.ui.splash.SplashContentTest#splash_shows_wordmark_when_exiting
+# iOS
+cd iosApp && xcodebuild test -project iosApp.xcodeproj -scheme iosApp \
+  -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' CODE_SIGNING_ALLOWED=NO
 ```
 
-# iOS — use shared scheme + test plan (iosApp/iosApp.xctestplan)
-cd iosApp
-xcodebuild test \
-  -project iosApp.xcodeproj \
-  -scheme iosApp \
-  -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest'
-
-# iOS unit tests only
-xcodebuild test -project iosApp.xcodeproj -scheme iosApp \
-  -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' \
-  -only-testing:iosAppTests
-```
-
-Use a simulator name from `xcrun simctl list devices available`. Prefer the shared scheme in `iosApp.xcodeproj/xcshareddata/xcschemes/` — a private scheme in `xcuserdata/` overrides it and can break `xcodebuild test`.
-
-## iOS (XCUITest)
-
-Targets: `iosAppUITests/` (flows), `iosAppTests/` (ViewModels). Match Android `testTag` names via `accessibilityIdentifier` on SwiftUI views.
-
-Use launch arguments for deterministic splash timing (see `SplashViewModelFactory.makeSplashViewModel()`):
-
-- `-UITestInstantSplash` — zero delay, navigates to home immediately
-- `-UITestLongSplash` — keeps splash visible for UI assertions
-
-```swift
-func test_app_navigates_to_home_after_splash_completes() {
-    let app = XCUIApplication()
-    app.launchArguments.append("-UITestInstantSplash")
-    app.launch()
-
-    let home = app.descendants(matching: .any)["home_screen"]
-    XCTAssertTrue(home.waitForExistence(timeout: 5))
-}
-```
-
-Container views need `.accessibilityElement(children: .contain)` so XCUITest can query the identifier on the root.
+More CI detail: `moventiq-ci`.
 
 ## Definition of done
 
-- [ ] Each MVP milestone screen has at least one flow or content test before milestone closes
-- [ ] Interactive nodes in tested flows have `testTag` or stable accessibility ID
-- [ ] Light/dark covered by previews; UI tests focus on behavior
-- [ ] `./gradlew :androidApp:connectedDebugAndroidTest` green on CI emulator
-- [ ] `xcodebuild test -project iosApp.xcodeproj -scheme iosApp` green on Mac CI simulator
+- [ ] Critical flow has content or flow test
+- [ ] `testTag` / accessibility ID on tested controls
+- [ ] `./gradlew :androidApp:pixel6Api36DebugAndroidTest` green
+- [ ] `xcodebuild test` green (Mac)
 
-## Related skills
+## Related
 
-- Previews / structure: `moventiq-ui-architecture`
-- Unit tests: `moventiq-unit-tests`
-- Review: `moventiq-code-review`
-- CI: `moventiq-ci`
+`moventiq-unit-tests` · `moventiq-ui-architecture` · `moventiq-code-review` · `moventiq-ci`
