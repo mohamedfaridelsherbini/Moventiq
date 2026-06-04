@@ -2,6 +2,7 @@ package com.mohamedfaridelsherbini.moventiq.ui.permissions
 
 sealed interface PermissionEvent {
     data object Refresh : PermissionEvent
+    data object AppReturnedFromBackground : PermissionEvent
     data object LocationAllow : PermissionEvent
     data object LocationLater : PermissionEvent
     data class LocationResults(

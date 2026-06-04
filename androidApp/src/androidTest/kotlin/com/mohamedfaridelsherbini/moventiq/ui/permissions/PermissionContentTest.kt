@@ -5,10 +5,12 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mohamedfaridelsherbini.moventiq.R
 import com.mohamedfaridelsherbini.moventiq.ui.theme.MoventiqTheme
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -62,5 +64,21 @@ class PermissionContentTest {
             .onNodeWithText(context.getString(R.string.permission_denied_headline))
             .assertIsDisplayed()
         composeTestRule.onNodeWithTag(PermissionTestTags.DENIED_SCREEN).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(PermissionTestTags.DENIED_OPEN_SETTINGS).assertIsDisplayed()
+    }
+
+    @Test
+    fun permissionDenied_limitedFeatures_emitsEvent() {
+        var received: PermissionEvent? = null
+
+        composeTestRule.setContent {
+            MoventiqTheme {
+                PermissionDeniedContent(onEvent = { received = it })
+            }
+        }
+
+        composeTestRule.onNodeWithTag(PermissionTestTags.DENIED_LIMITED).performClick()
+
+        assertEquals(PermissionEvent.DeniedLimitedFeatures, received)
     }
 }

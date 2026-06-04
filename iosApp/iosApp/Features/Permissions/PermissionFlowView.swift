@@ -17,9 +17,6 @@ struct PermissionFlowView: View {
                 EmptyView()
             }
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-            viewModel.handle(.refresh)
-        }
     }
 }
 
@@ -45,20 +42,21 @@ private struct LocationPermissionView: View {
             secondaryTitle: PermissionStrings.locationLater,
             secondaryAction: { onEvent(.locationLater) },
             secondaryAccessibilityId: PermissionAccessibility.locationLater,
-        ) {
-            PermissionHeroIcon(name: "ic_onboarding_map_pin")
-            PermissionTextBlock(
-                headline: PermissionStrings.locationHeadline,
-                bodyText: PermissionStrings.locationBody,
-            )
-            PermissionCard {
-                VStack(alignment: .leading, spacing: spacing.md) {
-                    PermissionTrustRow(text: PermissionStrings.locationTrust1)
-                    PermissionTrustRow(text: PermissionStrings.locationTrust2)
-                    PermissionTrustRow(text: PermissionStrings.locationTrust3)
+            content: {
+                PermissionHeroIcon(name: "ic_onboarding_map_pin")
+                PermissionTextBlock(
+                    headline: PermissionStrings.locationHeadline,
+                    bodyText: PermissionStrings.locationBody,
+                )
+                PermissionCard {
+                    VStack(alignment: .leading, spacing: spacing.md) {
+                        PermissionTrustRow(text: PermissionStrings.locationTrust1)
+                        PermissionTrustRow(text: PermissionStrings.locationTrust2)
+                        PermissionTrustRow(text: PermissionStrings.locationTrust3)
+                    }
                 }
             }
-        }
+        )
     }
 }
 
@@ -83,18 +81,19 @@ private struct NotificationPermissionView: View {
             secondaryTitle: PermissionStrings.notificationSkip,
             secondaryAction: { onEvent(.notificationSkip) },
             secondaryAccessibilityId: PermissionAccessibility.notificationSkip,
-        ) {
-            PermissionHeroIcon(name: "ic_permission_bell")
-            PermissionTextBlock(
-                headline: PermissionStrings.notificationHeadline,
-                bodyText: PermissionStrings.notificationBody,
-            )
-            VStack(alignment: .leading, spacing: spacing.sm + spacing.xs) {
-                PermissionBulletRow(text: PermissionStrings.notificationBullet1)
-                PermissionBulletRow(text: PermissionStrings.notificationBullet2)
-                PermissionBulletRow(text: PermissionStrings.notificationBullet3)
+            content: {
+                PermissionHeroIcon(name: "ic_permission_bell")
+                PermissionTextBlock(
+                    headline: PermissionStrings.notificationHeadline,
+                    bodyText: PermissionStrings.notificationBody,
+                )
+                VStack(alignment: .leading, spacing: spacing.sm + spacing.xs) {
+                    PermissionBulletRow(text: PermissionStrings.notificationBullet1)
+                    PermissionBulletRow(text: PermissionStrings.notificationBullet2)
+                    PermissionBulletRow(text: PermissionStrings.notificationBullet3)
+                }
             }
-        }
+        )
     }
 }
 
@@ -109,6 +108,7 @@ private struct PermissionDeniedView: View {
             screenId: PermissionAccessibility.deniedScreen,
             centered: true,
             primaryTitle: PermissionStrings.deniedOpenSettings,
+            primaryIconName: "ic_permission_external_link",
             primaryAction: {
                 onEvent(.deniedOpenSettings)
                 if let url = URL(string: UIApplication.openSettingsURLString) {
@@ -119,24 +119,25 @@ private struct PermissionDeniedView: View {
             secondaryTitle: PermissionStrings.deniedLimited,
             secondaryAction: { onEvent(.deniedLimitedFeatures) },
             secondaryAccessibilityId: PermissionAccessibility.deniedLimited,
-        ) {
-            PermissionHeroIcon(
-                name: "ic_permission_shield_off",
-                iconColor: colors.error,
-                containerColor: colors.errorContainer,
-            )
-            PermissionTextBlock(
-                headline: PermissionStrings.deniedHeadline,
-                bodyText: PermissionStrings.deniedBody,
-            )
-            PermissionCard {
-                VStack(spacing: 0) {
-                    PermissionStepRow(step: 1, text: PermissionStrings.deniedStep1)
-                    PermissionStepRow(step: 2, text: PermissionStrings.deniedStep2)
-                    PermissionStepRow(step: 3, text: PermissionStrings.deniedStep3)
+            content: {
+                PermissionHeroIcon(
+                    name: "ic_permission_shield_off",
+                    iconColor: colors.error,
+                    containerColor: colors.errorContainer,
+                )
+                PermissionTextBlock(
+                    headline: PermissionStrings.deniedHeadline,
+                    bodyText: PermissionStrings.deniedBody,
+                )
+                PermissionCard(largeCorners: true) {
+                    VStack(spacing: 0) {
+                        PermissionStepRow(step: 1, text: PermissionStrings.deniedStep1)
+                        PermissionStepRow(step: 2, text: PermissionStrings.deniedStep2)
+                        PermissionStepRow(step: 3, text: PermissionStrings.deniedStep3)
+                    }
                 }
             }
-        }
+        )
     }
 }
 
@@ -144,6 +145,7 @@ private struct PermissionScreenLayout<Content: View>: View {
     let screenId: String
     var centered = false
     let primaryTitle: String
+    var primaryIconName: String?
     let primaryAction: () -> Void
     let primaryAccessibilityId: String
     let secondaryTitle: String
@@ -170,6 +172,7 @@ private struct PermissionScreenLayout<Content: View>: View {
                     title: primaryTitle,
                     action: primaryAction,
                     accessibilityIdentifier: primaryAccessibilityId,
+                    iconName: primaryIconName,
                 )
                 Button(action: secondaryAction) {
                     Text(secondaryTitle)
@@ -311,20 +314,23 @@ private struct PermissionStepRow: View {
 }
 
 private struct PermissionCard<Content: View>: View {
+    var largeCorners = false
     @ViewBuilder let content: () -> Content
 
     @Environment(\.moventiqColors) private var colors
     @Environment(\.moventiqSpacing) private var spacing
 
     var body: some View {
+        let cornerRadius = largeCorners ? spacing.xl : spacing.lg
+
         VStack(alignment: .leading) {
             content()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(spacing.md + 2)
-        .background(colors.surfaceElevated, in: RoundedRectangle(cornerRadius: spacing.lg, style: .continuous))
+        .background(colors.surfaceElevated, in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: spacing.lg, style: .continuous)
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                 .strokeBorder(colors.skeleton, lineWidth: 1),
         )
     }

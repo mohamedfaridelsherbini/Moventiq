@@ -135,19 +135,29 @@ fun PermissionStepRow(
 @Composable
 fun PermissionCard(
     modifier: Modifier = Modifier,
+    largeCorners: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     val colors = moventiqColors()
     val spacing = moventiqSpacing()
+    val cornerRadius = if (largeCorners) spacing.xl else spacing.lg
 
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(spacing.lg))
-            .border(1.dp, colors.border, RoundedCornerShape(spacing.lg))
+            .clip(RoundedCornerShape(cornerRadius))
+            .border(1.dp, colors.border, RoundedCornerShape(cornerRadius))
             .background(colors.surfaceElevated)
             .padding(spacing.md + 2.dp),
     ) {
         content()
     }
+}
+
+@Composable
+fun PermissionDeniedStepsCard(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    PermissionCard(modifier = modifier, largeCorners = true, content = content)
 }

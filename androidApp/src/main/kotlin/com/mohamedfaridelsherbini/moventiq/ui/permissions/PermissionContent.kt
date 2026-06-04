@@ -1,28 +1,19 @@
 package com.mohamedfaridelsherbini.moventiq.ui.permissions
 
 import android.Manifest
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
-import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -32,7 +23,6 @@ import com.mohamedfaridelsherbini.moventiq.ui.components.MoventiqPrimaryButton
 import com.mohamedfaridelsherbini.moventiq.ui.permissions.components.PermissionBulletRow
 import com.mohamedfaridelsherbini.moventiq.ui.permissions.components.PermissionCard
 import com.mohamedfaridelsherbini.moventiq.ui.permissions.components.PermissionHeroIcon
-import com.mohamedfaridelsherbini.moventiq.ui.permissions.components.PermissionStepRow
 import com.mohamedfaridelsherbini.moventiq.ui.permissions.components.PermissionTrustRow
 import com.mohamedfaridelsherbini.moventiq.ui.theme.moventiqColors
 import com.mohamedfaridelsherbini.moventiq.ui.theme.moventiqSpacing
@@ -229,127 +219,6 @@ fun NotificationPermissionContent(
             PermissionBulletRow(stringResource(R.string.permission_notification_bullet_1))
             PermissionBulletRow(stringResource(R.string.permission_notification_bullet_2))
             PermissionBulletRow(stringResource(R.string.permission_notification_bullet_3))
-        }
-    }
-}
-
-@Composable
-fun PermissionDeniedContent(
-    onEvent: (PermissionEvent) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val colors = moventiqColors()
-    val spacing = moventiqSpacing()
-    val context = LocalContext.current
-
-    PermissionScaffold(
-        screenTag = PermissionTestTags.DENIED_SCREEN,
-        modifier = modifier,
-        centered = true,
-        bottomContent = {
-            MoventiqPrimaryButton(
-                text = stringResource(R.string.permission_denied_open_settings),
-                onClick = {
-                    onEvent(PermissionEvent.DeniedOpenSettings)
-                    context.startActivity(
-                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                            data = Uri.fromParts("package", context.packageName, null)
-                        },
-                    )
-                },
-                testTag = PermissionTestTags.DENIED_OPEN_SETTINGS,
-            )
-            TextButton(
-                onClick = { onEvent(PermissionEvent.DeniedLimitedFeatures) },
-                modifier = Modifier.testTag(PermissionTestTags.DENIED_LIMITED),
-            ) {
-                Text(
-                    text = stringResource(R.string.permission_denied_limited),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = colors.textMuted,
-                )
-            }
-        },
-    ) {
-        PermissionHeroIcon(
-            iconRes = R.drawable.ic_permission_shield_off,
-            iconTint = colors.error,
-            containerColor = colors.errorContainer,
-        )
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(spacing.sm + spacing.xs),
-        ) {
-            Text(
-                text = stringResource(R.string.permission_denied_headline),
-                style = MaterialTheme.typography.headlineSmall,
-                color = colors.textPrimary,
-                textAlign = TextAlign.Center,
-            )
-            Text(
-                text = stringResource(R.string.permission_denied_body),
-                style = MaterialTheme.typography.bodyMedium,
-                color = colors.textSecondary,
-                textAlign = TextAlign.Center,
-            )
-        }
-        PermissionCard {
-            Column {
-                PermissionStepRow(1, stringResource(R.string.permission_denied_step_1))
-                PermissionStepRow(2, stringResource(R.string.permission_denied_step_2))
-                PermissionStepRow(3, stringResource(R.string.permission_denied_step_3))
-            }
-        }
-    }
-}
-
-@Composable
-private fun PermissionScaffold(
-    screenTag: String,
-    modifier: Modifier = Modifier,
-    centered: Boolean = false,
-    bottomContent: @Composable () -> Unit,
-    content: @Composable () -> Unit,
-) {
-    val colors = moventiqColors()
-    val spacing = moventiqSpacing()
-
-    Scaffold(
-        modifier = modifier
-            .fillMaxSize()
-            .testTag(screenTag),
-        containerColor = colors.surface,
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(
-                    start = spacing.lg,
-                    end = spacing.lg,
-                    top = spacing.lg,
-                    bottom = spacing.lg + spacing.xs,
-                ),
-            verticalArrangement = if (centered) Arrangement.Center else Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f, fill = !centered)
-                    .verticalScroll(rememberScrollState())
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(spacing.lg),
-            ) {
-                content()
-            }
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(spacing.sm + spacing.xs),
-            ) {
-                bottomContent()
-            }
         }
     }
 }

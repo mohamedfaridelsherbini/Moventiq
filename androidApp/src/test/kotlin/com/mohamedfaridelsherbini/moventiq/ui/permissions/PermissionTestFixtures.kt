@@ -3,6 +3,9 @@ package com.mohamedfaridelsherbini.moventiq.ui.permissions
 class CompletedPermissionStatusStore : PermissionStatusStore {
     override fun isLocationPromptCompleted(): Boolean = true
     override fun setLocationPromptCompleted() = Unit
+    override fun clearLegacyDeferFlags() = Unit
+    override fun wasLocationAllowAttempted(): Boolean = false
+    override fun setLocationAllowAttempted() = Unit
     override fun isNotificationPromptCompleted(): Boolean = true
     override fun setNotificationPromptCompleted() = Unit
     override fun isLimitedFeaturesAcknowledged(): Boolean = false
@@ -21,6 +24,17 @@ class FreshPermissionStatusStore : PermissionStatusStore {
     override fun setLocationPromptCompleted() {
         locationCompleted = true
     }
+    override fun clearLegacyDeferFlags() {
+        locationCompleted = false
+        notificationCompleted = false
+    }
+    override fun wasLocationAllowAttempted(): Boolean = allowAttempted
+    override fun setLocationAllowAttempted() {
+        allowAttempted = true
+    }
+
+    private var allowAttempted = false
+
     override fun isNotificationPromptCompleted(): Boolean = notificationCompleted
     override fun setNotificationPromptCompleted() {
         notificationCompleted = true
@@ -36,11 +50,13 @@ class FreshPermissionStatusStore : PermissionStatusStore {
 }
 
 class FakePermissionStatusChecker(
-    private val adequateLocation: Boolean = false,
-    private val notificationGranted: Boolean = false,
-    private val notificationRequired: Boolean = true,
+    var adequateLocation: Boolean = false,
+    var locationPermissionDenied: Boolean = false,
+    var notificationGranted: Boolean = false,
+    var notificationRequired: Boolean = true,
 ) : PermissionStatusChecker {
     override fun hasAdequateLocationAccess(): Boolean = adequateLocation
+    override fun isLocationPermissionDenied(): Boolean = locationPermissionDenied
     override fun isNotificationPromptRequired(): Boolean = notificationRequired
     override fun isNotificationGranted(): Boolean = notificationGranted
 }

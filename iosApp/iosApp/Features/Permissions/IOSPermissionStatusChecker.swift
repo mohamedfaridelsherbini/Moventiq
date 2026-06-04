@@ -8,6 +8,18 @@ final class IOSPermissionStatusChecker: PermissionStatusChecker {
         CLLocationManager().authorizationStatus == .authorizedAlways
     }
 
+    func isLocationPermissionDenied() -> Bool {
+        if hasAdequateLocationAccess() {
+            return false
+        }
+        switch CLLocationManager().authorizationStatus {
+        case .denied, .restricted:
+            return true
+        default:
+            return false
+        }
+    }
+
     func isNotificationPromptRequired() -> Bool {
         true
     }

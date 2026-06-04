@@ -27,6 +27,21 @@ class AndroidPermissionStatusChecker(
         return fineGranted && backgroundGranted
     }
 
+    override fun isLocationPermissionDenied(): Boolean {
+        if (hasAdequateLocationAccess()) return false
+
+        val fineGranted = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+        ) == PackageManager.PERMISSION_GRANTED
+        val coarseGranted = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+        ) == PackageManager.PERMISSION_GRANTED
+
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && (fineGranted || coarseGranted)
+    }
+
     override fun isNotificationPromptRequired(): Boolean =
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
 

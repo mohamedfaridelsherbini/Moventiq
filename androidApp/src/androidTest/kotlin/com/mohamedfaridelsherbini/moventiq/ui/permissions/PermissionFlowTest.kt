@@ -67,6 +67,97 @@ class PermissionFlowTest {
     }
 
     @Test
+    fun app_showsNotification_afterLocationLater() {
+        val splashViewModel = SplashViewModel(enterWindowMs = 0L, exitDurationMs = 0L)
+        val onboardingViewModel = OnboardingViewModel(FreshOnboardingStatusStore())
+        val permissionViewModel = PermissionFlowViewModel(
+            statusStore = FreshPermissionStatusStore(),
+            statusChecker = FakePermissionStatusChecker(),
+        )
+
+        composeTestRule.setContent {
+            MoventiqApp(
+                splashViewModel = splashViewModel,
+                onboardingViewModel = onboardingViewModel,
+                permissionViewModel = permissionViewModel,
+                onSplashDrawn = {},
+            )
+        }
+
+        composeTestRule.waitUntil(timeoutMillis = 5_000) {
+            composeTestRule
+                .onAllNodesWithTag(OnboardingTestTags.SCREEN)
+                .fetchSemanticsNodes()
+                .isNotEmpty()
+        }
+        composeTestRule.onNodeWithTag(OnboardingTestTags.SKIP).performClick()
+
+        composeTestRule.waitUntil(timeoutMillis = 5_000) {
+            composeTestRule
+                .onAllNodesWithTag(PermissionTestTags.LOCATION_SCREEN)
+                .fetchSemanticsNodes()
+                .isNotEmpty()
+        }
+        composeTestRule.onNodeWithTag(PermissionTestTags.LOCATION_LATER).performClick()
+
+        composeTestRule.waitUntil(timeoutMillis = 5_000) {
+            composeTestRule
+                .onAllNodesWithTag(PermissionTestTags.NOTIFICATION_SCREEN)
+                .fetchSemanticsNodes()
+                .isNotEmpty()
+        }
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.permission_notification_headline))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun app_reachesHome_afterDeniedLimitedFeatures() {
+        val splashViewModel = SplashViewModel(enterWindowMs = 0L, exitDurationMs = 0L)
+        val onboardingViewModel = OnboardingViewModel(FreshOnboardingStatusStore())
+        val permissionViewModel = PermissionFlowViewModel(
+            statusStore = FreshPermissionStatusStore(),
+            statusChecker = FakePermissionStatusChecker(locationPermissionDenied = true),
+        )
+
+        composeTestRule.setContent {
+            MoventiqApp(
+                splashViewModel = splashViewModel,
+                onboardingViewModel = onboardingViewModel,
+                permissionViewModel = permissionViewModel,
+                onSplashDrawn = {},
+            )
+        }
+
+        composeTestRule.waitUntil(timeoutMillis = 5_000) {
+            composeTestRule
+                .onAllNodesWithTag(OnboardingTestTags.SCREEN)
+                .fetchSemanticsNodes()
+                .isNotEmpty()
+        }
+        composeTestRule.onNodeWithTag(OnboardingTestTags.SKIP).performClick()
+
+        composeTestRule.waitUntil(timeoutMillis = 5_000) {
+            composeTestRule
+                .onAllNodesWithTag(PermissionTestTags.DENIED_SCREEN)
+                .fetchSemanticsNodes()
+                .isNotEmpty()
+        }
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.permission_denied_headline))
+            .assertIsDisplayed()
+        composeTestRule.onNodeWithTag(PermissionTestTags.DENIED_LIMITED).performClick()
+
+        composeTestRule.waitUntil(timeoutMillis = 5_000) {
+            composeTestRule
+                .onAllNodesWithTag(HomeTestTags.SCREEN)
+                .fetchSemanticsNodes()
+                .isNotEmpty()
+        }
+        composeTestRule.onNodeWithTag(HomeTestTags.SCREEN).assertIsDisplayed()
+    }
+
+    @Test
     fun app_reachesHome_afterPermissionSkips() {
         val splashViewModel = SplashViewModel(enterWindowMs = 0L, exitDurationMs = 0L)
         val onboardingViewModel = OnboardingViewModel(FreshOnboardingStatusStore())
@@ -106,6 +197,7 @@ class PermissionFlowTest {
                 .fetchSemanticsNodes()
                 .isNotEmpty()
         }
+        composeTestRule.onNodeWithTag(PermissionTestTags.NOTIFICATION_SCREEN).assertIsDisplayed()
         composeTestRule.onNodeWithTag(PermissionTestTags.NOTIFICATION_SKIP).performClick()
 
         composeTestRule.waitUntil(timeoutMillis = 5_000) {

@@ -12,6 +12,8 @@ struct RootView: View {
     let onboardingViewModel: OnboardingViewModel
     let permissionViewModel: PermissionFlowViewModel
 
+    @Environment(\.scenePhase) private var scenePhase
+
     private var phase: AppPhase {
         if !splashViewModel.state.isComplete {
             return .splash
@@ -43,9 +45,19 @@ struct RootView: View {
             }
         }
         .animation(.easeInOut(duration: SplashBranding.appCrossfadeDuration), value: phase)
-        .onChange(of: onboardingViewModel.state.isFinished) { _, finished in
-            if finished {
-                permissionViewModel.handle(.refresh)
+        .onChange(of: phase) { _, newPhase in
+            if newPhase == .permissions {
+                Task { await permissionViewModel.onPermissionFlowEntered() }
+            }
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            switch newPhase {
+            case .active:
+                PermissionAppSession.onDidBecomeActive()
+            case .background:
+                PermissionAppSession.onDidEnterBackground()
+            default:
+                break
             }
         }
     }

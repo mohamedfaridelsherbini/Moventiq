@@ -15,6 +15,7 @@ struct PermissionFlowUiState: Equatable {
 
 enum PermissionEvent: Equatable {
     case refresh
+    case appReturnedFromBackground
     case locationAllow
     case locationLater
     case locationResults(fineGranted: Bool, backgroundGranted: Bool)
@@ -28,6 +29,9 @@ enum PermissionEvent: Equatable {
 protocol PermissionStatusStore: AnyObject {
     func isLocationPromptCompleted() -> Bool
     func setLocationPromptCompleted()
+    func clearLegacyDeferFlags()
+    func wasLocationAllowAttempted() -> Bool
+    func setLocationAllowAttempted()
     func isNotificationPromptCompleted() -> Bool
     func setNotificationPromptCompleted()
     func isLimitedFeaturesAcknowledged() -> Bool
@@ -38,6 +42,8 @@ protocol PermissionStatusStore: AnyObject {
 
 protocol PermissionStatusChecker {
     func hasAdequateLocationAccess() -> Bool
+    func isLocationPermissionDenied() -> Bool
     func isNotificationPromptRequired() -> Bool
     func isNotificationGranted() -> Bool
+    func refreshNotificationStatus() async
 }

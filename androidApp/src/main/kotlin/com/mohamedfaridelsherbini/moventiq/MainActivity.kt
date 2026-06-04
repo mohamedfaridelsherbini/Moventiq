@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.mohamedfaridelsherbini.moventiq.ui.permissions.PermissionAppSession
 import com.mohamedfaridelsherbini.moventiq.ui.splash.SplashBranding
 import com.mohamedfaridelsherbini.moventiq.ui.splash.SplashPhase
 import com.mohamedfaridelsherbini.moventiq.ui.splash.SplashUiState
@@ -48,6 +49,16 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
             )
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        PermissionAppSession.onActivityStarted()
+    }
+
+    override fun onStop() {
+        PermissionAppSession.onActivityStopped()
+        super.onStop()
     }
 }
 

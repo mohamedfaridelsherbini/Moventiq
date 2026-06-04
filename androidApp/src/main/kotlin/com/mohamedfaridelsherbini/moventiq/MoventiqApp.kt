@@ -18,7 +18,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mohamedfaridelsherbini.moventiq.navigation.MoventiqNavHost
 import com.mohamedfaridelsherbini.moventiq.ui.onboarding.OnboardingScreen
 import com.mohamedfaridelsherbini.moventiq.ui.onboarding.OnboardingViewModel
-import com.mohamedfaridelsherbini.moventiq.ui.permissions.PermissionEvent
 import com.mohamedfaridelsherbini.moventiq.ui.permissions.PermissionFlowHost
 import com.mohamedfaridelsherbini.moventiq.ui.permissions.PermissionFlowViewModel
 import com.mohamedfaridelsherbini.moventiq.ui.splash.SplashBranding
@@ -46,17 +45,17 @@ fun MoventiqApp(
     val onboardingState by onboardingViewModel.state.collectAsStateWithLifecycle()
     val permissionState by permissionViewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(onboardingState.shouldShowOnboarding, onboardingState.isFinished) {
-        if (!onboardingState.shouldShowOnboarding) {
-            permissionViewModel.onEvent(PermissionEvent.Refresh)
-        }
-    }
-
     val phase = when {
         !splashState.isComplete -> AppPhase.Splash
         onboardingState.shouldShowOnboarding -> AppPhase.Onboarding
         !permissionState.isFlowComplete -> AppPhase.Permissions
         else -> AppPhase.Main
+    }
+
+    LaunchedEffect(phase) {
+        if (phase == AppPhase.Permissions) {
+            permissionViewModel.onPermissionFlowEntered()
+        }
     }
 
     MoventiqTheme {

@@ -13,34 +13,64 @@ class PermissionFlowViewModel(
     private val _state = MutableStateFlow(PermissionFlowUiState())
     val state: StateFlow<PermissionFlowUiState> = _state.asStateFlow()
 
+    private var locationSkippedThisSession = false
+    private var notificationSkippedThisSession = false
+
     init {
+        PermissionAppSession.onReturnedFromBackground = {
+            onEvent(PermissionEvent.AppReturnedFromBackground)
+        }
+        clearStalePersistedDefers()
+        syncDeniedStateFromOs()
+        refreshFlow()
+    }
+
+    override fun onCleared() {
+        if (PermissionAppSession.onReturnedFromBackground != null) {
+            PermissionAppSession.onReturnedFromBackground = null
+        }
+        super.onCleared()
+    }
+
+    fun onPermissionFlowEntered() {
         refreshFlow()
     }
 
     fun onEvent(event: PermissionEvent) {
         when (event) {
             PermissionEvent.Refresh -> refreshFlow()
-            PermissionEvent.LocationAllow -> Unit
+            PermissionEvent.AppReturnedFromBackground -> {
+                locationSkippedThisSession = false
+                notificationSkippedThisSession = false
+                clearStalePersistedDefers()
+                refreshFlow()
+            }
+            PermissionEvent.LocationAllow -> {
+                statusStore.setLocationAllowAttempted()
+            }
             PermissionEvent.LocationLater -> {
-                statusStore.setLocationPromptCompleted()
+                locationSkippedThisSession = true
                 statusStore.setShowLocationDeniedScreen(false)
                 refreshFlow()
             }
             is PermissionEvent.LocationResults -> handleLocationResults(event)
             PermissionEvent.NotificationAllow -> Unit
             PermissionEvent.NotificationSkip -> {
-                statusStore.setNotificationPromptCompleted()
+                notificationSkippedThisSession = true
                 refreshFlow()
             }
             is PermissionEvent.NotificationResult -> {
-                statusStore.setNotificationPromptCompleted()
+                if (event.granted) {
+                    notificationSkippedThisSession = false
+                }
                 refreshFlow()
             }
             PermissionEvent.DeniedOpenSettings -> Unit
             PermissionEvent.DeniedLimitedFeatures -> {
                 statusStore.setLimitedFeaturesAcknowledged()
-                statusStore.setLocationPromptCompleted()
                 statusStore.setShowLocationDeniedScreen(false)
+                locationSkippedThisSession = false
+                notificationSkippedThisSession = false
                 refreshFlow()
             }
         }
@@ -51,7 +81,7 @@ class PermissionFlowViewModel(
             (event.fineGranted && !requiresBackgroundPermission())
 
         if (adequate) {
-            statusStore.setLocationPromptCompleted()
+            locationSkippedThisSession = false
             statusStore.setShowLocationDeniedScreen(false)
         } else {
             statusStore.setShowLocationDeniedScreen(true)
@@ -63,39 +93,48 @@ class PermissionFlowViewModel(
         _state.update { it.copy(step = computeStep()) }
     }
 
-    private fun computeStep(): PermissionFlowStep = when {
-        statusStore.isLimitedFeaturesAcknowledged() -> PermissionFlowStep.None
-        statusChecker.hasAdequateLocationAccess() -> stepAfterAdequateLocation()
-        statusStore.shouldShowLocationDeniedScreen() -> PermissionFlowStep.Denied
-        !statusStore.isLocationPromptCompleted() -> PermissionFlowStep.Location
-        else -> computeNotificationStep()
+    private fun clearStalePersistedDefers() {
+        if (statusStore.isLimitedFeaturesAcknowledged()) return
+        statusStore.clearLegacyDeferFlags()
     }
 
-    private fun stepAfterAdequateLocation(): PermissionFlowStep {
-        if (!statusStore.isLocationPromptCompleted()) {
-            statusStore.setLocationPromptCompleted()
+    private fun syncDeniedStateFromOs() {
+        if (statusStore.isLimitedFeaturesAcknowledged()) return
+        if (statusChecker.hasAdequateLocationAccess()) {
+            statusStore.setShowLocationDeniedScreen(false)
+            return
         }
-        statusStore.setShowLocationDeniedScreen(false)
-        return computeNotificationStep()
+        if (
+            statusStore.shouldShowLocationDeniedScreen() ||
+            statusChecker.isLocationPermissionDenied() ||
+            statusStore.wasLocationAllowAttempted()
+        ) {
+            statusStore.setShowLocationDeniedScreen(true)
+        }
     }
 
-    private fun computeNotificationStep(): PermissionFlowStep = when {
-        !statusChecker.isNotificationPromptRequired() -> {
-            if (!statusStore.isNotificationPromptCompleted()) {
-                statusStore.setNotificationPromptCompleted()
-            }
-            PermissionFlowStep.None
-        }
-        statusChecker.isNotificationGranted() -> {
-            if (!statusStore.isNotificationPromptCompleted()) {
-                statusStore.setNotificationPromptCompleted()
-            }
-            PermissionFlowStep.None
-        }
-        !statusStore.isNotificationPromptCompleted() -> PermissionFlowStep.Notification
-        else -> PermissionFlowStep.None
-    }
+    private fun computeStep(): PermissionFlowStep =
+        PermissionFlowStepResolver.resolve(
+            PermissionFlowInput(
+                limitedFeaturesAcknowledged = statusStore.isLimitedFeaturesAcknowledged(),
+                hasAdequateLocationAccess = statusChecker.hasAdequateLocationAccess(),
+                showLocationDeniedRecovery = shouldShowLocationDeniedRecovery(),
+                locationSkippedThisSession = locationSkippedThisSession,
+                notificationSkippedThisSession = notificationSkippedThisSession,
+                notificationPromptRequired = statusChecker.isNotificationPromptRequired(),
+                notificationGranted = statusChecker.isNotificationGranted(),
+            ),
+        )
+
+    private fun shouldShowLocationDeniedRecovery(): Boolean =
+        statusStore.shouldShowLocationDeniedScreen() || statusChecker.isLocationPermissionDenied()
 
     private fun requiresBackgroundPermission(): Boolean =
         android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
+
+    companion object {
+        internal fun resetSessionForTests() {
+            PermissionAppSession.resetForTests()
+        }
+    }
 }

@@ -3,6 +3,7 @@ package com.mohamedfaridelsherbini.moventiq.ui.components
 import android.content.res.Configuration
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.mohamedfaridelsherbini.moventiq.R
 import com.mohamedfaridelsherbini.moventiq.ui.theme.MoventiqTheme
 
 @Preview(name = "MoventiqPrimaryButton — Light", showBackground = true)
@@ -12,6 +13,18 @@ private fun MoventiqPrimaryButtonLightPreview() {
         MoventiqPrimaryButton(
             text = "Continue",
             onClick = {},
+        )
+    }
+}
+
+@Preview(name = "MoventiqPrimaryButton — With icon", showBackground = true)
+@Composable
+private fun MoventiqPrimaryButtonIconPreview() {
+    MoventiqTheme(darkTheme = false) {
+        MoventiqPrimaryButton(
+            text = "Open Settings",
+            onClick = {},
+            iconRes = R.drawable.ic_permission_external_link,
         )
     }
 }

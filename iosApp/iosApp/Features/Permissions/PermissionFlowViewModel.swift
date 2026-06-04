@@ -7,39 +7,77 @@ final class PermissionFlowViewModel {
     private(set) var state = PermissionFlowUiState()
 
     private let statusStore: PermissionStatusStore
-    private let statusChecker: IOSPermissionStatusChecker
+    private let statusChecker: any PermissionStatusChecker
+
+    private var locationSkippedThisSession = false
+    private var notificationSkippedThisSession = false
 
     init(
         statusStore: PermissionStatusStore,
-        statusChecker: IOSPermissionStatusChecker = IOSPermissionStatusChecker(),
+        statusChecker: (any PermissionStatusChecker)? = nil,
     ) {
         self.statusStore = statusStore
-        self.statusChecker = statusChecker
-        Task { await refreshFlow() }
+        self.statusChecker = statusChecker ?? IOSPermissionStatusChecker()
+        clearStalePersistedDefers()
+        syncDeniedStateFromOs()
+        state.step = computeStep()
+        PermissionAppSession.onReturnedFromBackground = { [weak self] in
+            self?.handle(.appReturnedFromBackground)
+        }
+    }
+
+    fileprivate init(previewStep: PermissionFlowStep) {
+        self.statusStore = CompletedPermissionStatusStore()
+        self.statusChecker = IOSPermissionStatusChecker()
+        self.state = PermissionFlowUiState(step: previewStep)
+    }
+
+    static func preview(step: PermissionFlowStep) -> PermissionFlowViewModel {
+        PermissionFlowViewModel(previewStep: step)
+    }
+
+    func onPermissionFlowEntered() async {
+        await refreshFlow()
     }
 
     func handle(_ event: PermissionEvent) {
         switch event {
         case .refresh:
+            state.step = computeStep()
             Task { await refreshFlow() }
-        case .locationAllow, .notificationAllow, .deniedOpenSettings:
+        case .appReturnedFromBackground:
+            locationSkippedThisSession = false
+            notificationSkippedThisSession = false
+            clearStalePersistedDefers()
+            state.step = computeStep()
+            Task { await refreshFlow() }
+        case .locationAllow:
+            statusStore.setLocationAllowAttempted()
+        case .notificationAllow, .deniedOpenSettings:
             break
         case .locationLater:
-            statusStore.setLocationPromptCompleted()
+            locationSkippedThisSession = true
             statusStore.setShowLocationDeniedScreen(false)
+            state.step = computeStep()
             Task { await refreshFlow() }
         case let .locationResults(fineGranted, backgroundGranted):
             handleLocationResults(fineGranted: fineGranted, backgroundGranted: backgroundGranted)
         case .notificationSkip:
-            statusStore.setNotificationPromptCompleted()
+            notificationSkippedThisSession = true
+            state.step = computeStep()
             Task { await refreshFlow() }
-        case .notificationResult:
-            statusStore.setNotificationPromptCompleted()
+        case .notificationResult(let granted):
+            if granted {
+                notificationSkippedThisSession = false
+            }
+            state.step = computeStep()
             Task { await refreshFlow() }
         case .deniedLimitedFeatures:
             statusStore.setLimitedFeaturesAcknowledged()
-            statusStore.setLocationPromptCompleted()
             statusStore.setShowLocationDeniedScreen(false)
+            locationSkippedThisSession = false
+            notificationSkippedThisSession = false
+            state.step = computeStep()
             Task { await refreshFlow() }
         }
     }
@@ -49,59 +87,73 @@ final class PermissionFlowViewModel {
         state.step = computeStep()
     }
 
+    private func clearStalePersistedDefers() {
+        if statusStore.isLimitedFeaturesAcknowledged() {
+            return
+        }
+        statusStore.clearLegacyDeferFlags()
+    }
+
+    private func syncDeniedStateFromOs() {
+        if statusStore.isLimitedFeaturesAcknowledged() {
+            return
+        }
+        if statusChecker.hasAdequateLocationAccess() {
+            statusStore.setShowLocationDeniedScreen(false)
+            return
+        }
+        if statusStore.shouldShowLocationDeniedScreen()
+            || statusChecker.isLocationPermissionDenied()
+            || statusStore.wasLocationAllowAttempted() {
+            statusStore.setShowLocationDeniedScreen(true)
+        }
+    }
+
     private func handleLocationResults(fineGranted: Bool, backgroundGranted: Bool) {
         let adequate = backgroundGranted || (fineGranted && !requiresBackgroundPermission())
         if adequate {
-            statusStore.setLocationPromptCompleted()
+            locationSkippedThisSession = false
             statusStore.setShowLocationDeniedScreen(false)
         } else {
             statusStore.setShowLocationDeniedScreen(true)
         }
+        state.step = computeStep()
         Task { await refreshFlow() }
     }
 
     private func computeStep() -> PermissionFlowStep {
-        if statusStore.isLimitedFeaturesAcknowledged() {
-            return .none
-        }
-
-        if statusChecker.hasAdequateLocationAccess() {
-            if !statusStore.isLocationPromptCompleted() {
-                statusStore.setLocationPromptCompleted()
-            }
-            statusStore.setShowLocationDeniedScreen(false)
-            return computeNotificationStep()
-        }
-
-        if statusStore.shouldShowLocationDeniedScreen() {
-            return .denied
-        }
-
-        if !statusStore.isLocationPromptCompleted() {
-            return .location
-        }
-
-        return computeNotificationStep()
+        PermissionFlowStepResolver.resolve(
+            PermissionFlowInput(
+                limitedFeaturesAcknowledged: statusStore.isLimitedFeaturesAcknowledged(),
+                hasAdequateLocationAccess: statusChecker.hasAdequateLocationAccess(),
+                showLocationDeniedRecovery: shouldShowLocationDeniedRecovery(),
+                locationSkippedThisSession: locationSkippedThisSession,
+                notificationSkippedThisSession: notificationSkippedThisSession,
+                notificationPromptRequired: statusChecker.isNotificationPromptRequired(),
+                notificationGranted: statusChecker.isNotificationGranted(),
+            ),
+        )
     }
 
-    private func computeNotificationStep() -> PermissionFlowStep {
-        if statusChecker.isNotificationGranted() {
-            if !statusStore.isNotificationPromptCompleted() {
-                statusStore.setNotificationPromptCompleted()
-            }
-            return .none
-        }
-
-        if !statusStore.isNotificationPromptCompleted() {
-            return .notification
-        }
-
-        return .none
+    private func shouldShowLocationDeniedRecovery() -> Bool {
+        statusStore.shouldShowLocationDeniedScreen() || statusChecker.isLocationPermissionDenied()
     }
 
     private func requiresBackgroundPermission() -> Bool {
         true
     }
+
+    static func resetSessionForTests() {
+        PermissionAppSession.resetForTests()
+    }
+}
+
+private final class UITestDeniedPermissionChecker: PermissionStatusChecker {
+    func hasAdequateLocationAccess() -> Bool { false }
+    func isLocationPermissionDenied() -> Bool { true }
+    func isNotificationPromptRequired() -> Bool { true }
+    func isNotificationGranted() -> Bool { false }
+    func refreshNotificationStatus() async {}
 }
 
 enum PermissionFlowViewModelFactory {
@@ -111,6 +163,12 @@ enum PermissionFlowViewModelFactory {
         if arguments.contains("-UITestSkipPermissions") {
             return PermissionFlowViewModel(statusStore: CompletedPermissionStatusStore())
         }
+        if arguments.contains("-UITestPermissionDenied") {
+            return PermissionFlowViewModel(
+                statusStore: FreshPermissionStatusStore(),
+                statusChecker: UITestDeniedPermissionChecker(),
+            )
+        }
         return PermissionFlowViewModel(statusStore: PermissionPreferences())
     }
 }
@@ -118,6 +176,9 @@ enum PermissionFlowViewModelFactory {
 final class CompletedPermissionStatusStore: PermissionStatusStore {
     func isLocationPromptCompleted() -> Bool { true }
     func setLocationPromptCompleted() {}
+    func clearLegacyDeferFlags() {}
+    func wasLocationAllowAttempted() -> Bool { false }
+    func setLocationAllowAttempted() {}
     func isNotificationPromptCompleted() -> Bool { true }
     func setNotificationPromptCompleted() {}
     func isLimitedFeaturesAcknowledged() -> Bool { false }
@@ -131,9 +192,16 @@ final class FreshPermissionStatusStore: PermissionStatusStore {
     private var notificationCompleted = false
     private var limitedFeatures = false
     private var showDenied = false
+    private var allowAttempted = false
 
     func isLocationPromptCompleted() -> Bool { locationCompleted }
     func setLocationPromptCompleted() { locationCompleted = true }
+    func clearLegacyDeferFlags() {
+        locationCompleted = false
+        notificationCompleted = false
+    }
+    func wasLocationAllowAttempted() -> Bool { allowAttempted }
+    func setLocationAllowAttempted() { allowAttempted = true }
     func isNotificationPromptCompleted() -> Bool { notificationCompleted }
     func setNotificationPromptCompleted() { notificationCompleted = true }
     func isLimitedFeaturesAcknowledged() -> Bool { limitedFeatures }

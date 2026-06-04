@@ -3,7 +3,10 @@ import XCTest
 private enum PermissionAccessibilityId {
     static let locationScreen = "permission_location_screen"
     static let locationLater = "permission_location_later"
+    static let notificationScreen = "permission_notification_screen"
     static let notificationSkip = "permission_notification_skip"
+    static let deniedScreen = "permission_denied_screen"
+    static let deniedLimited = "permission_denied_limited"
 }
 
 private enum OnboardingAccessibilityId {
@@ -29,10 +32,33 @@ final class PermissionFlowUITests: XCTestCase {
         XCTAssertTrue(locationScreen.waitForExistence(timeout: 5))
     }
 
+    func test_showsNotification_afterLocationLater() {
+        app.descendants(matching: .any)[OnboardingAccessibilityId.skip].tap()
+        app.descendants(matching: .any)[PermissionAccessibilityId.locationLater].tap()
+
+        let notificationScreen = app.descendants(matching: .any)[PermissionAccessibilityId.notificationScreen]
+        XCTAssertTrue(notificationScreen.waitForExistence(timeout: 5))
+    }
+
     func test_reachesHome_afterPermissionSkips() {
         app.descendants(matching: .any)[OnboardingAccessibilityId.skip].tap()
         app.descendants(matching: .any)[PermissionAccessibilityId.locationLater].tap()
         app.descendants(matching: .any)[PermissionAccessibilityId.notificationSkip].tap()
+
+        let home = app.descendants(matching: .any)["home_screen"]
+        XCTAssertTrue(home.waitForExistence(timeout: 5))
+    }
+
+    func test_reachesHome_afterDeniedLimitedFeatures() {
+        app.terminate()
+        app.launchArguments += ["-UITestPermissionDenied"]
+        app.launch()
+
+        app.descendants(matching: .any)[OnboardingAccessibilityId.skip].tap()
+
+        let deniedScreen = app.descendants(matching: .any)[PermissionAccessibilityId.deniedScreen]
+        XCTAssertTrue(deniedScreen.waitForExistence(timeout: 5))
+        app.descendants(matching: .any)[PermissionAccessibilityId.deniedLimited].tap()
 
         let home = app.descendants(matching: .any)["home_screen"]
         XCTAssertTrue(home.waitForExistence(timeout: 5))
