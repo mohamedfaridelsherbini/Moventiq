@@ -76,7 +76,7 @@ private struct AutoSurfaceIllustration: View {
                     .fill(colors.primary)
                     .frame(width: 48, height: 48)
                     .overlay(Circle().strokeBorder(colors.textOnPrimary, lineWidth: 3))
-                SparkleIcon(tint: colors.textOnPrimary)
+                OnboardingAssetIcon(name: "ic_onboarding_sparkles", tint: colors.textOnPrimary, size: 24)
             }
             .shadow(color: colors.primary.opacity(0.3), radius: 8, y: 6)
             .offset(x: 91, y: -78)
@@ -96,7 +96,7 @@ private struct TaskCardSkeleton: View {
                 .frame(width: 24, height: 24)
                 .overlay {
                     if checked {
-                        CheckMark(size: 15, tint: colors.textOnPrimary)
+                        OnboardingAssetIcon(name: "ic_onboarding_checkmark", tint: colors.textOnPrimary, size: 15)
                     }
                 }
 
@@ -137,7 +137,7 @@ private struct TaskRowSkeleton: View {
                 .frame(width: 22, height: 22)
                 .overlay {
                     if checked {
-                        CheckMark(size: 13, tint: colors.textOnPrimary)
+                        OnboardingAssetIcon(name: "ic_onboarding_checkmark", tint: colors.textOnPrimary, size: 13)
                     }
                 }
             SkeletonLine(width: lineWidth, color: checked ? colors.skeleton : colors.skeletonMuted)
@@ -180,7 +180,7 @@ private struct LocationPin: View {
             .fill(colors.primary)
             .frame(width: size, height: size)
             .overlay {
-                MapPinIcon(tint: colors.textOnPrimary, size: size * 0.46)
+                OnboardingAssetIcon(name: "ic_onboarding_map_pin", tint: colors.textOnPrimary, size: size * 0.46)
             }
     }
 }
@@ -198,83 +198,17 @@ private struct GeofenceRing: View {
     }
 }
 
-private struct CheckMark: View {
-    let size: CGFloat
-    let tint: Color
-
-    var body: some View {
-        Canvas { context, canvasSize in
-            var path = Path()
-            path.move(to: CGPoint(x: canvasSize.width * 0.18, y: canvasSize.height * 0.52))
-            path.addLine(to: CGPoint(x: canvasSize.width * 0.42, y: canvasSize.height * 0.76))
-            path.addLine(to: CGPoint(x: canvasSize.width * 0.82, y: canvasSize.height * 0.28))
-            context.stroke(path, with: .color(tint), lineWidth: size * 0.12)
-        }
-        .frame(width: size, height: size)
-    }
-}
-
-private struct MapPinIcon: View {
+private struct OnboardingAssetIcon: View {
+    let name: String
     let tint: Color
     let size: CGFloat
 
     var body: some View {
-        Canvas { context, canvasSize in
-            let width = canvasSize.width
-            let height = canvasSize.height
-            var path = Path()
-            path.move(to: CGPoint(x: width / 2, y: height * 0.92))
-            path.addCurve(
-                to: CGPoint(x: width / 2, y: height * 0.18),
-                control1: CGPoint(x: width * 0.12, y: height * 0.58),
-                control2: CGPoint(x: width * 0.12, y: height * 0.28),
-            )
-            path.addCurve(
-                to: CGPoint(x: width / 2, y: height * 0.92),
-                control1: CGPoint(x: width * 0.88, y: height * 0.28),
-                control2: CGPoint(x: width * 0.88, y: height * 0.58),
-            )
-            context.fill(path, with: .color(tint))
-            let center = CGPoint(x: width / 2, y: height * 0.38)
-            context.fill(
-                Path(ellipseIn: CGRect(
-                    x: center.x - width * 0.14,
-                    y: center.y - width * 0.14,
-                    width: width * 0.28,
-                    height: width * 0.28,
-                )),
-                with: .color(tint),
-            )
-        }
-        .frame(width: size, height: size)
-    }
-}
-
-private struct SparkleIcon: View {
-    let tint: Color
-
-    var body: some View {
-        Canvas { context, canvasSize in
-            let center = CGPoint(x: canvasSize.width / 2, y: canvasSize.height / 2)
-            let arm = min(canvasSize.width, canvasSize.height) * 0.34
-            var horizontal = Path()
-            horizontal.move(to: CGPoint(x: center.x - arm, y: center.y))
-            horizontal.addLine(to: CGPoint(x: center.x + arm, y: center.y))
-            var vertical = Path()
-            vertical.move(to: CGPoint(x: center.x, y: center.y - arm))
-            vertical.addLine(to: CGPoint(x: center.x, y: center.y + arm))
-            var diagonalOne = Path()
-            diagonalOne.move(to: CGPoint(x: center.x - arm * 0.7, y: center.y - arm * 0.7))
-            diagonalOne.addLine(to: CGPoint(x: center.x + arm * 0.7, y: center.y + arm * 0.7))
-            var diagonalTwo = Path()
-            diagonalTwo.move(to: CGPoint(x: center.x - arm * 0.7, y: center.y + arm * 0.7))
-            diagonalTwo.addLine(to: CGPoint(x: center.x + arm * 0.7, y: center.y - arm * 0.7))
-            let stroke = StrokeStyle(lineWidth: 2.5, lineCap: .round)
-            context.stroke(horizontal, with: .color(tint), style: stroke)
-            context.stroke(vertical, with: .color(tint), style: stroke)
-            context.stroke(diagonalOne, with: .color(tint), style: stroke)
-            context.stroke(diagonalTwo, with: .color(tint), style: stroke)
-        }
-        .frame(width: 24, height: 24)
+        Image(name)
+            .renderingMode(.template)
+            .resizable()
+            .scaledToFit()
+            .frame(width: size, height: size)
+            .foregroundStyle(tint)
     }
 }

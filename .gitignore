@@ -20,6 +20,9 @@ captures
 # Brand assets (local design export — launcher icons live in androidApp/iosApp)
 brand-assets/
 
+# Design sources (SVG exports; app assets live in androidApp/iosApp)
+design/
+
 # Node
 node_modules/
 package-lock.json
