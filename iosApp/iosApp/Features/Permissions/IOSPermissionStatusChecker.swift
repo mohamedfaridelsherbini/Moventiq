@@ -2,17 +2,20 @@ import CoreLocation
 import UserNotifications
 
 final class IOSPermissionStatusChecker: PermissionStatusChecker {
+    // Retain a single manager: Apple discourages allocating CLLocationManager just to
+    // read authorization status, and computeStep() queries it several times per pass.
+    private let locationManager = CLLocationManager()
     private(set) var cachedNotificationGranted = false
 
     func hasAdequateLocationAccess() -> Bool {
-        CLLocationManager().authorizationStatus == .authorizedAlways
+        locationManager.authorizationStatus == .authorizedAlways
     }
 
     func isLocationPermissionDenied() -> Bool {
         if hasAdequateLocationAccess() {
             return false
         }
-        switch CLLocationManager().authorizationStatus {
+        switch locationManager.authorizationStatus {
         case .denied, .restricted:
             return true
         default:

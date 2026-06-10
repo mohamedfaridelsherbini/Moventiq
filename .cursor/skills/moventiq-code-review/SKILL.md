@@ -1,9 +1,9 @@
 ---
 name: moventiq-code-review
 description: >-
-  Local Moventiq PR/diff review — diff-scoped, chill profile (1–5 inline),
-  walkthrough, path rules, pre-merge gates. Invoke via @moventiq-code-review
-  or moventiq-pipeline review.
+  Local Moventiq PR/diff review — diff-scoped, correctness pass + Android/iOS
+  parity, assertive profile (3–8 inline), walkthrough, path rules, pre-merge
+  gates. Invoke via @moventiq-code-review or moventiq-pipeline review.
 ---
 
 # Moventiq code review
@@ -12,27 +12,50 @@ description: >-
 
 **Run:** `@moventiq-code-review review my diff` · `moventiq-pipeline review`
 
-**Default:** chill — 1–5 inline comments; minor/nit in walkthrough only. Diff + direct call sites only. Prefer PRs ≤400 lines.
+**Default:** assertive — 3–8 inline comments; minor/nit in walkthrough only. Diff + direct call sites only. Prefer PRs ≤400 lines.
+
+**Relation to built-in `/code-review`:** the built-in skill is the generic bug/cleanup finder (ad-hoc, deeper for one-offs). This skill is the *Moventiq-aware* gate run by `moventiq-pipeline` before merge — it adds project rules, MVP scope, parity, and the pre-merge checklist. CI (`.github/workflows/build.yml`) enforces detekt/ktlint/SwiftLint/Lint + tests; **do not** re-flag linter-enforced style here.
 
 ## Modes
 
 | Mode | Inline budget |
 |---|---|
-| **chill** (default) | 1–5 |
-| **assertive** | 3–8 |
+| **chill** | 1–5 |
+| **assertive** (default) | 3–8 |
 | **incremental** | New issues only |
+
+Correctness findings (§ CORRECTNESS) are **exempt from the budget** — always report every confirmed logic bug, in any mode.
 
 ## Workflow
 
 1. `git diff develop...HEAD` (or PR files)
 2. Skip § Skip paths
-3. Match paths → § Path instructions
-4. Apply § Global rules; stay within comment budget
+3. **Correctness pass** — read each touched hunk *and* its enclosing function; apply § CORRECTNESS. For any logic shared Android↔iOS (resolvers, status checkers, ViewModels), diff the two implementations against each other (§ Parity).
+4. Match paths → § Path instructions; apply § Global rules; stay within comment budget
 5. Output § Walkthrough template + verdict
 
 ## Skip paths
 
 `**/build/**`, `**/.gradle/**`, `**/DerivedData/**`, `**/*.pen`, `**/reports/tests/**`, generated assets
+
+## Global rules — CORRECTNESS (block merge, budget-exempt)
+
+Logic bugs, not conventions. Each finding must name a concrete trigger → wrong result.
+
+- **Stale/cached state drives UI** — a `computeStep`/state read in `init` or a synchronous path that consumes an async-refreshed cache (e.g. iOS `cachedNotificationGranted` default-false before `refreshNotificationStatus`), causing a wrong screen to flash on launch. Seed sync, or gate the phase until first refresh.
+- **Permission-result mislabel** — reporting a result field that doesn't match the OS check that gates the flow (e.g. coarse/Approximate grant emitted as `fineGranted = true` while the checker requires FINE), so the resolver and the live checker disagree and bounce the user.
+- **Inverted / off-by-one condition; wrong-variable copy-paste; swallowed error in `catch`.**
+- **Missing `await` / race** — UI reads VM state before an `async` init/refresh has run.
+- **Persisted flag never cleared** when its lifecycle says it should reset (verify against the `clear*`/reset path).
+- **Dead control** — an action button whose handler is a no-op on the second invocation (e.g. iOS notif re-`requestAuthorization` after `.denied` never re-prompts) with no alternate escape.
+
+### Parity (Android ↔ iOS)
+
+For any feature with mirrored logic on both platforms:
+
+- Shared resolver **inputs and branch order** must match (`PermissionFlowStepResolver`, etc.).
+- Status-checker **semantics** must match the platform OS contract *and* each other's intent (e.g. "adequate location" = background-capable on both).
+- A behavior fixed on one platform but not the other is a finding. Name the diverging file:line on both sides.
 
 ## Global rules — CRITICAL (block merge)
 
@@ -84,32 +107,40 @@ snake_case `{subject}_{outcome}_{condition}`. Hoist ViewModel before `setContent
 | VM initial state | Store fields in `StateFlow` constructor, not `init { update }` |
 | Enum page count | `entries.size` / `allCases.count` |
 | iOS dark text | Use dark `textPrimary` token, not light repurposed |
+| iOS cached perm status flashes wrong screen | Seed cache sync or gate phase until first `refresh*` |
+| Coarse grant treated as fine | `fineGranted` from FINE result only, not coarse |
+| New `CLLocationManager()` per status read | Retain one instance; reading status is cheap, alloc isn't |
 
 ## Inline format
 
+Rank findings most-severe first (correctness → critical → major). Use clickable `file:line` links.
+
 ```markdown
-**major** `path/File.kt:42` — issue.
-Fix: …
+**correctness** [PermissionContent.kt:88](androidApp/.../PermissionContent.kt:88) — coarse grant emitted as `fineGranted=true`; checker requires FINE → user bounced to Denied.
+Trigger: Android 12+ "Approximate" + background granted.
+Fix: derive `fineGranted` from `ACCESS_FINE_LOCATION` only.
 ```
 
 ## Walkthrough template
 
 ```markdown
 ## Walkthrough
-**Mode:** chill · **Scope:** N files · intent
+**Mode:** assertive · **Scope:** N files · intent
 
 ## Summary
 - …
 
 ## Pre-merge checks
 | Check | Status |
+| Correctness (no logic bugs) | ✅/❌ |
+| Android↔iOS parity | ✅/❌ |
 | Architecture | ✅/❌ |
 | MVP scope | ✅/❌ |
 | Previews light+dark | ✅/❌ |
 | Unit tests for new logic | ✅/❌ |
 
-## Inline findings
-(critical/major with Fix)
+## Findings
+(correctness first, then critical/major — each with Trigger + Fix)
 
 ## Verdict
 ✅ Approve / 🔄 Request changes

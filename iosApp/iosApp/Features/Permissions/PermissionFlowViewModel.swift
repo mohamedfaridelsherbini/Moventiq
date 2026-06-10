@@ -22,6 +22,11 @@ final class PermissionFlowViewModel {
         clearStalePersistedDefers()
         syncDeniedStateFromOs()
         state.step = computeStep()
+        // Notification status loads asynchronously; prime it now so a returning user
+        // who already granted does not see the notification screen flash on launch.
+        Task { @MainActor [weak self] in
+            await self?.refreshFlow()
+        }
         sessionTask = Task { @MainActor [weak self] in
             for await _ in NotificationCenter.default.notifications(
                 named: .permissionAppReturnedFromBackground,

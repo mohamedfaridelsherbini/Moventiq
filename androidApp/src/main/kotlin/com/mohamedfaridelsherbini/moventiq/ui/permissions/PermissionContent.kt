@@ -6,7 +6,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -85,8 +84,9 @@ fun LocationPermissionContent(
     val fineLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions(),
     ) { results ->
-        val fineGranted = results[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
-            results[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+        // Geofencing needs precise location; an Approximate-only (coarse) grant is
+        // not adequate, so require FINE here to stay consistent with the status checker.
+        val fineGranted = results[Manifest.permission.ACCESS_FINE_LOCATION] == true
         if (!fineGranted) {
             onEvent(PermissionEvent.LocationResults(fineGranted = false, backgroundGranted = false))
             return@rememberLauncherForActivityResult

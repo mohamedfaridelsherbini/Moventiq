@@ -71,9 +71,23 @@ private struct NotificationPermissionView: View {
             primaryTitle: PermissionStrings.notificationAllow,
             primaryAction: {
                 onEvent(.notificationAllow)
-                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
+                let center = UNUserNotificationCenter.current()
+                center.getNotificationSettings { settings in
                     Task { @MainActor in
-                        onEvent(.notificationResult(granted: granted))
+                        switch settings.authorizationStatus {
+                        case .notDetermined:
+                            // First prompt: ask the OS.
+                            center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
+                                Task { @MainActor in onEvent(.notificationResult(granted: granted)) }
+                            }
+                        case .denied:
+                            // iOS won't re-present once denied; send the user to Settings instead.
+                            if let url = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(url)
+                            }
+                        default:
+                            onEvent(.notificationResult(granted: true))
+                        }
                     }
                 }
             },
