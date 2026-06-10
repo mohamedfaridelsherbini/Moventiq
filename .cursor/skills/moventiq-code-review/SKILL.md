@@ -113,12 +113,12 @@ snake_case `{subject}_{outcome}_{condition}`. Hoist ViewModel before `setContent
 
 ## Inline format
 
-Rank findings most-severe first (correctness → critical → major). Use clickable `file:line` links.
+Rank findings most-severe first (correctness → critical → major). Link the location as a clickable markdown link whose href is the repo-relative path plus `:line` — pattern `[File.kt:NN](relative/path/File.kt:NN)`.
 
-```markdown
-**correctness** [PermissionContent.kt:88](androidApp/.../PermissionContent.kt:88) — coarse grant emitted as `fineGranted=true`; checker requires FINE → user bounced to Denied.
-Trigger: Android 12+ "Approximate" + background granted.
-Fix: derive `fineGranted` from `ACCESS_FINE_LOCATION` only.
+```text
+**correctness** `File.kt:NN` — one-line issue; concrete trigger → wrong result.
+Trigger: inputs/state that fire it.
+Fix: the change.
 ```
 
 ## Walkthrough template
