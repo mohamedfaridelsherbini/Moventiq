@@ -89,11 +89,7 @@ final class PermissionFlowViewModel {
             state.step = computeStep()
             Task { await refreshFlow() }
         case .notificationResult(let granted):
-            if granted {
-                notificationSkippedThisSession = false
-            }
-            state.step = computeStep()
-            Task { await refreshFlow() }
+            handleNotificationResult(granted: granted)
         case .deniedLimitedFeatures:
             statusStore.setLimitedFeaturesAcknowledged()
             statusStore.setShowLocationDeniedScreen(false)
@@ -102,6 +98,14 @@ final class PermissionFlowViewModel {
             state.step = computeStep()
             Task { await refreshFlow() }
         }
+    }
+
+    private func handleNotificationResult(granted: Bool) {
+        if granted {
+            notificationSkippedThisSession = false
+        }
+        state.step = computeStep()
+        Task { await refreshFlow() }
     }
 
     func refreshFlow() async {
