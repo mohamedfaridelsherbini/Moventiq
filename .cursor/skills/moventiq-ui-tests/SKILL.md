@@ -95,7 +95,7 @@ Gradle `--tests` works for **unit tests only**, not instrumented.
 
 # iOS
 cd iosApp && xcodebuild test -project iosApp.xcodeproj -scheme iosApp \
-  -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' CODE_SIGNING_ALLOWED=NO
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' CODE_SIGNING_ALLOWED=NO
 ```
 
 More CI detail: `moventiq-ci`.

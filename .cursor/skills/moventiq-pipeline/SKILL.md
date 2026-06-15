@@ -52,17 +52,19 @@ Skip step 2 with ⏭️ when the diff has **no UI** — none of these path globs
 ./gradlew :androidApp:testDebugUnitTest --tests "com.mohamedfaridelsherbini.moventiq.<feature>.*"
 ./gradlew :sharedLogic:testAndroidHostTest
 
-# Android UI (instrumented — no --tests flag)
+# Android UI (instrumented — no --tests flag). Prefer the managed emulator below
+# (CI parity, no device needed); use connectedDebugAndroidTest only when you have a
+# physical device or your own running emulator attached.
 ./gradlew :androidApp:connectedDebugAndroidTest \
   -Pandroid.testInstrumentationRunnerArguments.package=com.mohamedfaridelsherbini.moventiq.<feature>
+
+# Android UI (managed emulator — default; no physical device required, matches CI)
+./gradlew :androidApp:pixel6Api36DebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.package=com.mohamedfaridelsherbini.moventiq.ui.splash
 
 # iOS (Mac only) — shared scheme in xcshareddata; delete xcuserdata/iosApp.xcscheme overrides
 cd iosApp && xcodebuild test -project iosApp.xcodeproj -scheme iosApp \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' CODE_SIGNING_ALLOWED=NO
-
-# Android UI (managed emulator — no physical device required)
-./gradlew :androidApp:pixel6Api36DebugAndroidTest \
-  -Pandroid.testInstrumentationRunnerArguments.package=com.mohamedfaridelsherbini.moventiq.ui.splash
 
 # CI parity
 ./gradlew staticAnalysis

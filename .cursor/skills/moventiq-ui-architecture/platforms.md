@@ -100,7 +100,7 @@ Mirror Android token names: `Color.moventiqPrimary`, `.moventiqTheme(colorScheme
 ### Build
 
 ```bash
-cd iosApp && xcodebuild -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' build
+cd iosApp && xcodebuild -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' build
 ```
 
 ---

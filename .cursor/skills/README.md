@@ -4,7 +4,7 @@ Orchestrator: **`moventiq-pipeline`** — always start here for implement / veri
 
 Feature order: **`moventiq-feature-workflow`** — UML → approved tests → code.
 
-## Active skills (12)
+## Active skills (11)
 
 | Skill | Use when |
 |---|---|

@@ -120,7 +120,7 @@ fun onCompleteTask_marksTaskCompleted() = runTest {
     val vm = HomeViewModel(fakeObserveTasks, fakeCompleteTask, /* … */)
     vm.onEvent(HomeEvent.CompleteTask("task-1"))
 
-    assertFalse(vm.state.value.tasks.first { it.id == "task-1" }.isCompleted.not())
+    assertTrue(vm.state.value.tasks.first { it.id == "task-1" }.isCompleted)
     // or assert fake was called
 }
 ```

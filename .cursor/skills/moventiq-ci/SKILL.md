@@ -11,7 +11,7 @@ Follows the [Kotlin KMP GitHub Actions guide](https://kotlinlang.org/docs/multip
 
 Adapted for Moventiq module names (`:androidApp`, `:sharedLogic`, `iosApp/`).
 
-Sibling skills: `kotlin-static-analysis`, `swift-static-analysis`, `kmp-ci-code-analysis`.
+Sibling skills (global/optional — not under `.cursor/skills/`): `kotlin-static-analysis`, `swift-static-analysis`, `kmp-ci-code-analysis`.
 
 ## Repo layout
 
@@ -45,9 +45,10 @@ Matches Kotlin docs: no daemon in CI, parallel + build cache enabled.
 
 | Job | Runner | Needs | Command |
 |---|---|---|---|
-| `test` | `ubuntu-latest` | — | `:sharedLogic:testAndroidHostTest` `:sharedUI:testAndroidHostTest` |
-| `build-android` | `ubuntu-latest` | `test` | `:androidApp:assembleDebug` |
-| `build-ios` | `macos-latest` | `test` | `:sharedLogic:iosSimulatorArm64Test`, `xcodebuild test` |
+| `static-analysis` | `ubuntu-latest` | — | `./gradlew staticAnalysis` (gates `build-android` + `build-ios`; see § Static analysis) |
+| `test` | `ubuntu-latest` | — | `:sharedLogic:testAndroidHostTest` `:sharedUI:testAndroidHostTest` (interim; drop `:sharedUI` when the module is deleted) |
+| `build-android` | `ubuntu-latest` | `test`, `static-analysis` | `:androidApp:assembleDebug` |
+| `build-ios` | `macos-latest` | `test`, `static-analysis` | `:sharedLogic:iosSimulatorArm64Test`, SwiftLint, `xcodebuild test` |
 | `android-ui-test` | `ubuntu-latest` | `build-android` | `:androidApp:pixel6Api36DebugAndroidTest` |
 
 ### Why not `jvmTest` / `allTests` on Ubuntu?
@@ -106,7 +107,7 @@ Optional nightly: `xcodebuild analyze` (see `swift-static-analysis` skill).
 ## Local PR checklist
 
 - [ ] `./gradlew staticAnalysis`
-- [ ] `./gradlew :sharedLogic:testAndroidHostTest :sharedUI:testAndroidHostTest`
+- [ ] `./gradlew :sharedLogic:testAndroidHostTest :sharedUI:testAndroidHostTest` (`:sharedUI` interim — drop when the module is deleted)
 - [ ] `./gradlew :androidApp:assembleDebug`
 - [ ] `./gradlew :androidApp:pixel6Api36DebugAndroidTest` (or CI `android-ui-test` job)
 - [ ] `xcodebuild test` on `iosApp` scheme (shared `xcshareddata`, not empty xcuserdata)
