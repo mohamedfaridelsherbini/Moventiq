@@ -90,6 +90,9 @@ android {
                     device = "Pixel 6"
                     apiLevel = 36
                     systemImageSource = "google"
+                    // Pin the ABI to the CI runner's architecture; avoids NDK
+                    // translation when that becomes the default in AGP 10.
+                    testedAbi = "x86_64"
                 }
             }
         }
