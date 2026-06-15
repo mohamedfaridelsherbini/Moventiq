@@ -18,11 +18,11 @@ description: >-
 
 ## Modes
 
-| Mode | Inline budget |
-|---|---|
-| **chill** | 1–5 |
-| **assertive** (default) | 3–8 |
-| **incremental** | New issues only |
+| Mode                    | Inline budget   |
+|-------------------------|-----------------|
+| **chill**               | 1–5             |
+| **assertive** (default) | 3–8             |
+| **incremental**         | New issues only |
 
 Correctness findings (§ CORRECTNESS) are **exempt from the budget** — always report every confirmed logic bug, in any mode.
 
@@ -101,19 +101,19 @@ snake_case `{subject}_{outcome}_{condition}`. Hoist ViewModel before `setContent
 
 ## Moventiq references
 
-| Topic | Fix |
-|---|---|
-| Stale pager `LaunchedEffect` | Dedupe in VM; use `settledPage` |
-| VM initial state | Store fields in `StateFlow` constructor, not `init { update }` |
-| Enum page count | `entries.size` / `allCases.count` |
-| iOS dark text | Use dark `textPrimary` token, not light repurposed |
-| iOS cached perm status flashes wrong screen | Seed cache sync or gate phase until first `refresh*` |
-| Coarse grant treated as fine | `fineGranted` from FINE result only, not coarse |
-| New `CLLocationManager()` per status read | Retain one instance; reading status is cheap, alloc isn't |
+| Topic                                       | Fix                                                            |
+|---------------------------------------------|----------------------------------------------------------------|
+| Stale pager `LaunchedEffect`                | Dedupe in VM; use `settledPage`                                |
+| VM initial state                            | Store fields in `StateFlow` constructor, not `init { update }` |
+| Enum page count                             | `entries.size` / `allCases.count`                              |
+| iOS dark text                               | Use dark `textPrimary` token, not light repurposed             |
+| iOS cached perm status flashes wrong screen | Seed cache sync or gate phase until first `refresh*`           |
+| Coarse grant treated as fine                | `fineGranted` from FINE result only, not coarse                |
+| New `CLLocationManager()` per status read   | Retain one instance; reading status is cheap, alloc isn't      |
 
 ## Inline format
 
-Rank findings most-severe first (correctness → critical → major). Link the location as a clickable markdown link whose href is the repo-relative path plus `:line` — pattern `[File.kt:NN](relative/path/File.kt:NN)`.
+Rank findings most-severe first (correctness → critical → major). Link the location as a clickable Markdown link whose href is the repo-relative path plus `:line` — pattern `[File.kt:NN](relative/path/File.kt:NN)`.
 
 ```text
 **correctness** `File.kt:NN` — one-line issue; concrete trigger → wrong result.
