@@ -1,7 +1,6 @@
-package com.mohamedfaridelsherbini.moventiq.ui.permissions
+package com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,12 +10,26 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class PermissionFlowViewModel(
+/**
+ * Shared state machine for the permission flow. Platform ViewModels become thin
+ * adapters that forward events and expose [state] / [effects] to the UI:
+ *
+ *  - Android: collect [state] as `StateFlow`, collect [effects] in a `LaunchedEffect`.
+ *  - iOS: bridge [state] into an `@Observable` mirror, consume [effects] in `.task`.
+ *
+ * The platform owns lifecycle observation (app foreground) and the system calls
+ * (permission requests, opening Settings); this store owns the *decisions*.
+ *
+ * @param scope a long-lived scope (the platform ViewModel's `viewModelScope` /
+ *   a `Task`-backed scope on iOS) used for effect emission and async refresh.
+ */
+class PermissionFlowStore(
     private val statusStore: PermissionStatusStore,
-    private val statusChecker: PermissionStatusChecker,
-) : ViewModel() {
-    private val _state = MutableStateFlow(PermissionFlowUiState())
-    val state: StateFlow<PermissionFlowUiState> = _state.asStateFlow()
+    private val statusReader: PermissionStatusReader,
+    private val scope: CoroutineScope
+) {
+    private val _state = MutableStateFlow(PermissionFlowState())
+    val state: StateFlow<PermissionFlowState> = _state.asStateFlow()
 
     private val _effects = Channel<PermissionEffect>(Channel.BUFFERED)
     val effects: Flow<PermissionEffect> = _effects.receiveAsFlow()
@@ -25,76 +38,81 @@ class PermissionFlowViewModel(
     private var notificationSkippedThisSession = false
 
     init {
-        viewModelScope.launch {
-            PermissionAppSession.returnedFromBackground.collect {
-                onEvent(PermissionEvent.AppReturnedFromBackground)
-            }
-        }
         clearStalePersistedDefers()
         syncDeniedStateFromOs()
-        refreshFlow()
+        recompute()
+        // Notification status may load asynchronously; prime it so a returning user
+        // who already granted does not see the notification screen flash on launch.
+        scope.launch { refresh() }
     }
 
-    fun onPermissionFlowEntered() {
-        refreshFlow()
+    /** Re-run the resolver after the flow becomes visible (no state mutation). */
+    fun onFlowEntered() {
+        scope.launch { refresh() }
     }
 
     fun onEvent(event: PermissionEvent) {
         when (event) {
-            PermissionEvent.Refresh -> refreshFlow()
+            PermissionEvent.Refresh -> scope.launch { refresh() }
             PermissionEvent.AppReturnedFromBackground -> {
                 locationSkippedThisSession = false
                 notificationSkippedThisSession = false
                 clearStalePersistedDefers()
-                refreshFlow()
+                recomputeThenRefresh()
             }
-            PermissionEvent.LocationAllow -> {
-                statusStore.setLocationAllowAttempted()
-            }
+            PermissionEvent.LocationAllow -> statusStore.setLocationAllowAttempted()
             PermissionEvent.LocationLater -> {
                 locationSkippedThisSession = true
                 statusStore.setShowLocationDeniedScreen(false)
-                refreshFlow()
+                recomputeThenRefresh()
             }
             is PermissionEvent.LocationResults -> handleLocationResults(event)
             PermissionEvent.NotificationAllow -> Unit
             PermissionEvent.NotificationSkip -> {
                 notificationSkippedThisSession = true
-                refreshFlow()
+                recomputeThenRefresh()
             }
             is PermissionEvent.NotificationResult -> {
-                if (event.granted) {
-                    notificationSkippedThisSession = false
-                }
-                refreshFlow()
+                if (event.granted) notificationSkippedThisSession = false
+                recomputeThenRefresh()
             }
             PermissionEvent.DeniedOpenSettings ->
-                viewModelScope.launch { _effects.send(PermissionEffect.OpenAppSettings) }
+                scope.launch { _effects.send(PermissionEffect.OpenAppSettings) }
             PermissionEvent.DeniedLimitedFeatures -> {
                 statusStore.setLimitedFeaturesAcknowledged()
                 statusStore.setShowLocationDeniedScreen(false)
                 locationSkippedThisSession = false
                 notificationSkippedThisSession = false
-                refreshFlow()
+                recomputeThenRefresh()
             }
         }
     }
 
-    private fun handleLocationResults(event: PermissionEvent.LocationResults) {
-        val adequate = event.backgroundGranted ||
-            (event.fineGranted && !requiresBackgroundPermission())
+    suspend fun refresh() {
+        statusReader.refreshNotificationStatus()
+        recompute()
+    }
 
+    private fun recomputeThenRefresh() {
+        recompute()
+        scope.launch { refresh() }
+    }
+
+    private fun recompute() {
+        _state.update { it.copy(step = computeStep()) }
+    }
+
+    private fun handleLocationResults(event: PermissionEvent.LocationResults) {
+        val adequate =
+            event.backgroundGranted ||
+                (event.fineGranted && !statusReader.requiresBackgroundLocation)
         if (adequate) {
             locationSkippedThisSession = false
             statusStore.setShowLocationDeniedScreen(false)
         } else {
             statusStore.setShowLocationDeniedScreen(true)
         }
-        refreshFlow()
-    }
-
-    fun refreshFlow() {
-        _state.update { it.copy(step = computeStep()) }
+        recomputeThenRefresh()
     }
 
     private fun clearStalePersistedDefers() {
@@ -104,13 +122,13 @@ class PermissionFlowViewModel(
 
     private fun syncDeniedStateFromOs() {
         if (statusStore.isLimitedFeaturesAcknowledged()) return
-        if (statusChecker.hasAdequateLocationAccess()) {
+        if (statusReader.hasAdequateLocationAccess()) {
             statusStore.setShowLocationDeniedScreen(false)
             return
         }
         if (
             statusStore.shouldShowLocationDeniedScreen() ||
-            statusChecker.isLocationPermissionDenied() ||
+            statusReader.isLocationPermissionDenied() ||
             statusStore.wasLocationAllowAttempted()
         ) {
             statusStore.setShowLocationDeniedScreen(true)
@@ -121,24 +139,15 @@ class PermissionFlowViewModel(
         PermissionFlowStepResolver.resolve(
             PermissionFlowInput(
                 limitedFeaturesAcknowledged = statusStore.isLimitedFeaturesAcknowledged(),
-                hasAdequateLocationAccess = statusChecker.hasAdequateLocationAccess(),
+                hasAdequateLocationAccess = statusReader.hasAdequateLocationAccess(),
                 showLocationDeniedRecovery = shouldShowLocationDeniedRecovery(),
                 locationSkippedThisSession = locationSkippedThisSession,
                 notificationSkippedThisSession = notificationSkippedThisSession,
-                notificationPromptRequired = statusChecker.isNotificationPromptRequired(),
-                notificationGranted = statusChecker.isNotificationGranted(),
-            ),
+                notificationPromptRequired = statusReader.isNotificationPromptRequired(),
+                notificationGranted = statusReader.isNotificationGranted()
+            )
         )
 
     private fun shouldShowLocationDeniedRecovery(): Boolean =
-        statusStore.shouldShowLocationDeniedScreen() || statusChecker.isLocationPermissionDenied()
-
-    private fun requiresBackgroundPermission(): Boolean =
-        android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
-
-    companion object {
-        internal fun resetSessionForTests() {
-            PermissionAppSession.resetForTests()
-        }
-    }
+        statusStore.shouldShowLocationDeniedScreen() || statusReader.isLocationPermissionDenied()
 }

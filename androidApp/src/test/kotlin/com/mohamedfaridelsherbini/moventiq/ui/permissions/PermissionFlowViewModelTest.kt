@@ -1,6 +1,8 @@
 package com.mohamedfaridelsherbini.moventiq.ui.permissions
 
+import app.cash.turbine.test
 import com.mohamedfaridelsherbini.moventiq.test.MainDispatcherRule
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -187,6 +189,20 @@ class PermissionFlowViewModelTest {
         viewModel.onEvent(PermissionEvent.Refresh)
 
         assertEquals(PermissionFlowStep.Notification, viewModel.state.value.step)
+    }
+
+    @Test
+    fun deniedOpenSettings_emitsOpenAppSettingsEffect() = runTest {
+        val viewModel = PermissionFlowViewModel(
+            statusStore = FreshPermissionStatusStore(),
+            statusChecker = FakePermissionStatusChecker(),
+        )
+
+        viewModel.effects.test {
+            viewModel.onEvent(PermissionEvent.DeniedOpenSettings)
+            assertEquals(PermissionEffect.OpenAppSettings, awaitItem())
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test

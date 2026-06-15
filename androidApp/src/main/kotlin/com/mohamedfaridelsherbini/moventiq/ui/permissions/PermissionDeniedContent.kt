@@ -1,8 +1,5 @@
 package com.mohamedfaridelsherbini.moventiq.ui.permissions
 
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
@@ -11,7 +8,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -30,7 +26,6 @@ fun PermissionDeniedContent(
 ) {
     val colors = moventiqColors()
     val spacing = moventiqSpacing()
-    val context = LocalContext.current
 
     PermissionScaffold(
         screenTag = PermissionTestTags.DENIED_SCREEN,
@@ -39,14 +34,7 @@ fun PermissionDeniedContent(
         bottomContent = {
             MoventiqPrimaryButton(
                 text = stringResource(R.string.permission_denied_open_settings),
-                onClick = {
-                    onEvent(PermissionEvent.DeniedOpenSettings)
-                    context.startActivity(
-                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                            data = Uri.fromParts("package", context.packageName, null)
-                        },
-                    )
-                },
+                onClick = { onEvent(PermissionEvent.DeniedOpenSettings) },
                 testTag = PermissionTestTags.DENIED_OPEN_SETTINGS,
                 iconRes = R.drawable.ic_permission_external_link,
             )

@@ -6,6 +6,9 @@ import Observation
 final class PermissionFlowViewModel {
     private(set) var state = PermissionFlowUiState()
 
+    let effects: AsyncStream<PermissionEffect>
+    private let effectsContinuation: AsyncStream<PermissionEffect>.Continuation
+
     private let statusStore: PermissionStatusStore
     private let statusChecker: any PermissionStatusChecker
 
@@ -17,6 +20,7 @@ final class PermissionFlowViewModel {
         statusStore: PermissionStatusStore,
         statusChecker: (any PermissionStatusChecker)? = nil,
     ) {
+        (effects, effectsContinuation) = AsyncStream<PermissionEffect>.makeStream()
         self.statusStore = statusStore
         self.statusChecker = statusChecker ?? IOSPermissionStatusChecker()
         clearStalePersistedDefers()
@@ -38,9 +42,11 @@ final class PermissionFlowViewModel {
 
     deinit {
         sessionTask?.cancel()
+        effectsContinuation.finish()
     }
 
     fileprivate init(previewStep: PermissionFlowStep) {
+        (effects, effectsContinuation) = AsyncStream<PermissionEffect>.makeStream()
         self.statusStore = CompletedPermissionStatusStore()
         self.statusChecker = IOSPermissionStatusChecker()
         self.state = PermissionFlowUiState(step: previewStep)
@@ -67,8 +73,10 @@ final class PermissionFlowViewModel {
             Task { await refreshFlow() }
         case .locationAllow:
             statusStore.setLocationAllowAttempted()
-        case .notificationAllow, .deniedOpenSettings:
+        case .notificationAllow:
             break
+        case .deniedOpenSettings:
+            effectsContinuation.yield(.openAppSettings)
         case .locationLater:
             locationSkippedThisSession = true
             statusStore.setShowLocationDeniedScreen(false)

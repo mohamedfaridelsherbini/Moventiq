@@ -26,6 +26,13 @@ enum PermissionEvent: Equatable {
     case deniedLimitedFeatures
 }
 
+/// One-shot effects emitted by `PermissionFlowViewModel` for the view to perform once
+/// (launching system screens). Unlike `PermissionFlowUiState` these must not be
+/// re-applied on re-render, so they travel over an `AsyncStream`, not observable state.
+enum PermissionEffect: Equatable {
+    case openAppSettings
+}
+
 protocol PermissionStatusStore: AnyObject {
     func isLocationPromptCompleted() -> Bool
     func setLocationPromptCompleted()

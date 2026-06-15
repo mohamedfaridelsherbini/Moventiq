@@ -17,6 +17,16 @@ struct PermissionFlowView: View {
                 EmptyView()
             }
         }
+        .task {
+            for await effect in viewModel.effects {
+                switch effect {
+                case .openAppSettings:
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        await UIApplication.shared.open(url)
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -123,12 +133,7 @@ private struct PermissionDeniedView: View {
             centered: true,
             primaryTitle: PermissionStrings.deniedOpenSettings,
             primaryIconName: "ic_permission_external_link",
-            primaryAction: {
-                onEvent(.deniedOpenSettings)
-                if let url = URL(string: UIApplication.openSettingsURLString) {
-                    UIApplication.shared.open(url)
-                }
-            },
+            primaryAction: { onEvent(.deniedOpenSettings) },
             primaryAccessibilityId: PermissionAccessibility.deniedOpenSettings,
             secondaryTitle: PermissionStrings.deniedLimited,
             secondaryAction: { onEvent(.deniedLimitedFeatures) },

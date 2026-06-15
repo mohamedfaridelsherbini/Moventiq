@@ -174,6 +174,19 @@ final class PermissionFlowViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.state.step, .notification)
     }
 
+    func test_deniedOpenSettings_emitsOpenAppSettingsEffect() async {
+        let viewModel = PermissionFlowViewModel(
+            statusStore: FreshPermissionStatusStore(),
+            statusChecker: FakePermissionStatusChecker(),
+        )
+
+        viewModel.handle(.deniedOpenSettings)
+
+        var iterator = viewModel.effects.makeAsyncIterator()
+        let effect = await iterator.next()
+        XCTAssertEqual(effect, .openAppSettings)
+    }
+
     func test_coldStart_osDenied_showsDeniedScreen() {
         let checker = FakePermissionStatusChecker()
         checker.locationPermissionDenied = true
