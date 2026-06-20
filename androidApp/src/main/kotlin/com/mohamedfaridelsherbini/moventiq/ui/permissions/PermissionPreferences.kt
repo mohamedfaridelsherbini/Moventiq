@@ -15,13 +15,8 @@ class PermissionPreferences(
 ) : PermissionStatusStore {
     private val prefs = context.applicationContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    override fun isLocationPromptCompleted(): Boolean =
-        prefs.getBoolean(KEY_LOCATION_PROMPT_COMPLETED, false)
-
-    override fun setLocationPromptCompleted() {
-        prefs.edit(commit = true) { putBoolean(KEY_LOCATION_PROMPT_COMPLETED, true) }
-    }
-
+    // Clears prompt-completion flags persisted by older app versions; the keys are
+    // no longer read, only wiped on launch so stale values cannot linger.
     override fun clearLegacyDeferFlags() {
         prefs.edit(commit = true) {
             putBoolean(KEY_LOCATION_PROMPT_COMPLETED, false)
@@ -34,13 +29,6 @@ class PermissionPreferences(
 
     override fun setLocationAllowAttempted() {
         prefs.edit(commit = true) { putBoolean(KEY_LOCATION_ALLOW_ATTEMPTED, true) }
-    }
-
-    override fun isNotificationPromptCompleted(): Boolean =
-        prefs.getBoolean(KEY_NOTIFICATION_PROMPT_COMPLETED, false)
-
-    override fun setNotificationPromptCompleted() {
-        prefs.edit(commit = true) { putBoolean(KEY_NOTIFICATION_PROMPT_COMPLETED, true) }
     }
 
     override fun isLimitedFeaturesAcknowledged(): Boolean =

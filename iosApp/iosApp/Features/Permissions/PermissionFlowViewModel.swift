@@ -211,13 +211,9 @@ enum PermissionFlowViewModelFactory {
 }
 
 final class CompletedPermissionStatusStore: PermissionStatusStore {
-    func isLocationPromptCompleted() -> Bool { true }
-    func setLocationPromptCompleted() {}
     func clearLegacyDeferFlags() {}
     func wasLocationAllowAttempted() -> Bool { false }
     func setLocationAllowAttempted() {}
-    func isNotificationPromptCompleted() -> Bool { true }
-    func setNotificationPromptCompleted() {}
     func isLimitedFeaturesAcknowledged() -> Bool { false }
     func setLimitedFeaturesAcknowledged() {}
     func shouldShowLocationDeniedScreen() -> Bool { false }
@@ -225,22 +221,13 @@ final class CompletedPermissionStatusStore: PermissionStatusStore {
 }
 
 final class FreshPermissionStatusStore: PermissionStatusStore {
-    private var locationCompleted = false
-    private var notificationCompleted = false
     private var limitedFeatures = false
     private var showDenied = false
     private var allowAttempted = false
 
-    func isLocationPromptCompleted() -> Bool { locationCompleted }
-    func setLocationPromptCompleted() { locationCompleted = true }
-    func clearLegacyDeferFlags() {
-        locationCompleted = false
-        notificationCompleted = false
-    }
+    func clearLegacyDeferFlags() {}
     func wasLocationAllowAttempted() -> Bool { allowAttempted }
     func setLocationAllowAttempted() { allowAttempted = true }
-    func isNotificationPromptCompleted() -> Bool { notificationCompleted }
-    func setNotificationPromptCompleted() { notificationCompleted = true }
     func isLimitedFeaturesAcknowledged() -> Bool { limitedFeatures }
     func setLimitedFeaturesAcknowledged() { limitedFeatures = true }
     func shouldShowLocationDeniedScreen() -> Bool { showDenied }

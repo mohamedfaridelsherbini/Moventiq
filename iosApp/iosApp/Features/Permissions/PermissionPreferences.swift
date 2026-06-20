@@ -12,14 +12,8 @@ final class PermissionPreferences: PermissionStatusStore {
         self.defaults = defaults
     }
 
-    func isLocationPromptCompleted() -> Bool {
-        defaults.bool(forKey: locationPromptKey)
-    }
-
-    func setLocationPromptCompleted() {
-        defaults.set(true, forKey: locationPromptKey)
-    }
-
+    // Clears prompt-completion flags persisted by older app versions; the keys are
+    // no longer read, only wiped on launch so stale values cannot linger.
     func clearLegacyDeferFlags() {
         defaults.set(false, forKey: locationPromptKey)
         defaults.set(false, forKey: notificationPromptKey)
@@ -31,14 +25,6 @@ final class PermissionPreferences: PermissionStatusStore {
 
     func setLocationAllowAttempted() {
         defaults.set(true, forKey: locationAllowAttemptedKey)
-    }
-
-    func isNotificationPromptCompleted() -> Bool {
-        defaults.bool(forKey: notificationPromptKey)
-    }
-
-    func setNotificationPromptCompleted() {
-        defaults.set(true, forKey: notificationPromptKey)
     }
 
     func isLimitedFeaturesAcknowledged() -> Bool {

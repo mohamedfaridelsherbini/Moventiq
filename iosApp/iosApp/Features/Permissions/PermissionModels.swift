@@ -34,13 +34,9 @@ enum PermissionEffect: Equatable {
 }
 
 protocol PermissionStatusStore: AnyObject {
-    func isLocationPromptCompleted() -> Bool
-    func setLocationPromptCompleted()
     func clearLegacyDeferFlags()
     func wasLocationAllowAttempted() -> Bool
     func setLocationAllowAttempted()
-    func isNotificationPromptCompleted() -> Bool
-    func setNotificationPromptCompleted()
     func isLimitedFeaturesAcknowledged() -> Bool
     func setLimitedFeaturesAcknowledged()
     func shouldShowLocationDeniedScreen() -> Bool
