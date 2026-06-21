@@ -1,4 +1,10 @@
-# Shared KMP store — prototype (permission flow)
+# Shared KMP store — permission flow
+
+> **Status: shipped** on branch `feat/permission-shared-store`. The permission flow now runs on the shared `PermissionFlowStore` (`commonMain`) on both platforms. The store is a synchronous, scope-free reducer; Android wraps it in a thin `ViewModel`, iOS wraps `PermissionFlowStoreHolder` (iosMain) which bridges `state`/`effects` Flows to Swift closures (a hand-rolled bridge — **swap to SKIE** for `AsyncSequence`/Swift-enum ergonomics once SKIE supports Kotlin 2.3.21; it currently caps at 2.3.10). The async iOS notification query lives Swift-side (`NotificationStatusLoader`) so the Kotlin reader stays fully synchronous and Swift never has to implement a Kotlin `suspend` protocol method.
+
+---
+
+## Original design notes
 
 > Reference for enhancement (b): move the state-reduction logic into a single `commonMain` store so the Android and iOS ViewModels stop re-implementing the same reducer. The permission flow is the pilot because its reducer is currently written **twice** (Kotlin `PermissionFlowViewModel` + Swift `PermissionFlowViewModel`), which is exactly the parity surface `moventiq-code-review` polices.
 

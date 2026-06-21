@@ -35,7 +35,7 @@ class PermissionFlowTest {
         val onboardingViewModel = OnboardingViewModel(FreshOnboardingStatusStore())
         val permissionViewModel = PermissionFlowViewModel(
             statusStore = FreshPermissionStatusStore(),
-            statusChecker = FakePermissionStatusChecker(),
+            statusReader = FakePermissionStatusChecker(),
         )
 
         composeTestRule.setContent {
@@ -72,7 +72,7 @@ class PermissionFlowTest {
         val onboardingViewModel = OnboardingViewModel(FreshOnboardingStatusStore())
         val permissionViewModel = PermissionFlowViewModel(
             statusStore = FreshPermissionStatusStore(),
-            statusChecker = FakePermissionStatusChecker(),
+            statusReader = FakePermissionStatusChecker(),
         )
 
         composeTestRule.setContent {
@@ -117,7 +117,7 @@ class PermissionFlowTest {
         val onboardingViewModel = OnboardingViewModel(FreshOnboardingStatusStore())
         val permissionViewModel = PermissionFlowViewModel(
             statusStore = FreshPermissionStatusStore(),
-            statusChecker = FakePermissionStatusChecker(locationPermissionDenied = true),
+            statusReader = FakePermissionStatusChecker(locationPermissionDenied = true),
         )
 
         composeTestRule.setContent {
@@ -163,7 +163,7 @@ class PermissionFlowTest {
         val onboardingViewModel = OnboardingViewModel(FreshOnboardingStatusStore())
         val permissionViewModel = PermissionFlowViewModel(
             statusStore = FreshPermissionStatusStore(),
-            statusChecker = FakePermissionStatusChecker(),
+            statusReader = FakePermissionStatusChecker(),
         )
 
         composeTestRule.setContent {

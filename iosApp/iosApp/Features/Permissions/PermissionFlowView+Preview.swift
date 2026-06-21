@@ -1,3 +1,4 @@
+import SharedLogic
 import SwiftUI
 
 #Preview("Location Permission — Light") {

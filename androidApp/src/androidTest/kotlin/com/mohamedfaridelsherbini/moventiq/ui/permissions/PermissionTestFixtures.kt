@@ -1,5 +1,8 @@
 package com.mohamedfaridelsherbini.moventiq.ui.permissions
 
+import com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation.PermissionStatusReader
+import com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation.PermissionStatusStore
+
 class CompletedPermissionStatusStore : PermissionStatusStore {
     override fun clearLegacyDeferFlags() = Unit
     override fun wasLocationAllowAttempted(): Boolean = false
@@ -35,7 +38,8 @@ class FakePermissionStatusChecker(
     var locationPermissionDenied: Boolean = false,
     var notificationGranted: Boolean = false,
     var notificationRequired: Boolean = true,
-) : PermissionStatusChecker {
+    override val requiresBackgroundLocation: Boolean = true,
+) : PermissionStatusReader {
     override fun hasAdequateLocationAccess(): Boolean = adequateLocation
     override fun isLocationPermissionDenied(): Boolean = locationPermissionDenied
     override fun isNotificationPromptRequired(): Boolean = notificationRequired

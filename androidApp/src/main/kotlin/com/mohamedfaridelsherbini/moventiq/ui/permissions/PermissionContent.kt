@@ -23,6 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mohamedfaridelsherbini.moventiq.R
+import com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation.PermissionEffect
+import com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation.PermissionEvent
+import com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation.PermissionFlowStep
 import com.mohamedfaridelsherbini.moventiq.ui.components.MoventiqPrimaryButton
 import com.mohamedfaridelsherbini.moventiq.ui.permissions.components.PermissionBulletRow
 import com.mohamedfaridelsherbini.moventiq.ui.permissions.components.PermissionCard

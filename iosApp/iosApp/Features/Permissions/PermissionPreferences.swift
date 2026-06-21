@@ -1,4 +1,5 @@
 import Foundation
+import SharedLogic
 
 final class PermissionPreferences: PermissionStatusStore {
     private let defaults: UserDefaults
@@ -39,7 +40,7 @@ final class PermissionPreferences: PermissionStatusStore {
         defaults.bool(forKey: showDeniedKey)
     }
 
-    func setShowLocationDeniedScreen(_ show: Bool) {
+    func setShowLocationDeniedScreen(show: Bool) {
         defaults.set(show, forKey: showDeniedKey)
     }
 }

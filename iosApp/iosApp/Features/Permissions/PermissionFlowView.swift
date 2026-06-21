@@ -1,3 +1,4 @@
+import SharedLogic
 import SwiftUI
 import UserNotifications
 
@@ -6,24 +7,21 @@ struct PermissionFlowView: View {
 
     var body: some View {
         Group {
-            switch viewModel.state.step {
-            case .location:
+            // PermissionFlowStep is a Kotlin enum (not a Swift enum), so compare with ==.
+            if viewModel.state.step == PermissionFlowStep.location {
                 LocationPermissionView(onEvent: viewModel.handle)
-            case .notification:
+            } else if viewModel.state.step == PermissionFlowStep.notification {
                 NotificationPermissionView(onEvent: viewModel.handle)
-            case .denied:
+            } else if viewModel.state.step == PermissionFlowStep.denied {
                 PermissionDeniedView(onEvent: viewModel.handle)
-            case .none:
+            } else {
                 EmptyView()
             }
         }
         .task {
-            for await effect in viewModel.effects {
-                switch effect {
-                case .openAppSettings:
-                    if let url = URL(string: UIApplication.openSettingsURLString) {
-                        await UIApplication.shared.open(url)
-                    }
+            for await effect in viewModel.effects where effect is PermissionEffectOpenAppSettings {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    await UIApplication.shared.open(url)
                 }
             }
         }
@@ -43,14 +41,14 @@ private struct LocationPermissionView: View {
             screenId: PermissionAccessibility.locationScreen,
             primaryTitle: PermissionStrings.locationAllow,
             primaryAction: {
-                onEvent(.locationAllow)
+                onEvent(PermissionEventLocationAllow.shared)
                 requester.requestAccess { fine, background in
-                    onEvent(.locationResults(fineGranted: fine, backgroundGranted: background))
+                    onEvent(PermissionEventLocationResults(fineGranted: fine, backgroundGranted: background))
                 }
             },
             primaryAccessibilityId: PermissionAccessibility.locationAllow,
             secondaryTitle: PermissionStrings.locationLater,
-            secondaryAction: { onEvent(.locationLater) },
+            secondaryAction: { onEvent(PermissionEventLocationLater.shared) },
             secondaryAccessibilityId: PermissionAccessibility.locationLater,
             content: {
                 PermissionHeroIcon(name: "ic_onboarding_map_pin")
@@ -80,7 +78,7 @@ private struct NotificationPermissionView: View {
             screenId: PermissionAccessibility.notificationScreen,
             primaryTitle: PermissionStrings.notificationAllow,
             primaryAction: {
-                onEvent(.notificationAllow)
+                onEvent(PermissionEventNotificationAllow.shared)
                 let center = UNUserNotificationCenter.current()
                 center.getNotificationSettings { settings in
                     Task { @MainActor in
@@ -88,7 +86,9 @@ private struct NotificationPermissionView: View {
                         case .notDetermined:
                             // First prompt: ask the OS.
                             center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
-                                Task { @MainActor in onEvent(.notificationResult(granted: granted)) }
+                                Task { @MainActor in
+                                    onEvent(PermissionEventNotificationResult(granted: granted))
+                                }
                             }
                         case .denied:
                             // iOS won't re-present once denied; send the user to Settings instead.
@@ -96,14 +96,14 @@ private struct NotificationPermissionView: View {
                                 UIApplication.shared.open(url)
                             }
                         default:
-                            onEvent(.notificationResult(granted: true))
+                            onEvent(PermissionEventNotificationResult(granted: true))
                         }
                     }
                 }
             },
             primaryAccessibilityId: PermissionAccessibility.notificationAllow,
             secondaryTitle: PermissionStrings.notificationSkip,
-            secondaryAction: { onEvent(.notificationSkip) },
+            secondaryAction: { onEvent(PermissionEventNotificationSkip.shared) },
             secondaryAccessibilityId: PermissionAccessibility.notificationSkip,
             content: {
                 PermissionHeroIcon(name: "ic_permission_bell")
@@ -133,10 +133,10 @@ private struct PermissionDeniedView: View {
             centered: true,
             primaryTitle: PermissionStrings.deniedOpenSettings,
             primaryIconName: "ic_permission_external_link",
-            primaryAction: { onEvent(.deniedOpenSettings) },
+            primaryAction: { onEvent(PermissionEventDeniedOpenSettings.shared) },
             primaryAccessibilityId: PermissionAccessibility.deniedOpenSettings,
             secondaryTitle: PermissionStrings.deniedLimited,
-            secondaryAction: { onEvent(.deniedLimitedFeatures) },
+            secondaryAction: { onEvent(PermissionEventDeniedLimitedFeatures.shared) },
             secondaryAccessibilityId: PermissionAccessibility.deniedLimited,
             content: {
                 PermissionHeroIcon(

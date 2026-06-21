@@ -1,6 +1,5 @@
 package com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation
 
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,25 +7,23 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 /**
- * Shared state machine for the permission flow. Platform ViewModels become thin
- * adapters that forward events and expose [state] / [effects] to the UI:
+ * Shared state machine for the permission flow — a plain synchronous reducer with no
+ * coroutine scope of its own. Platform adapters wrap it:
  *
- *  - Android: collect [state] as `StateFlow`, collect [effects] in a `LaunchedEffect`.
- *  - iOS: bridge [state] into an `@Observable` mirror, consume [effects] in `.task`.
+ *  - Android: `PermissionFlowViewModel` exposes [state] as `StateFlow` and collects
+ *    [effects] in a `LaunchedEffect`.
+ *  - iOS: a holder collects [state]/[effects] on a `MainScope` and mirrors them into
+ *    an `@Observable` ViewModel.
  *
- * The platform owns lifecycle observation (app foreground) and the system calls
- * (permission requests, opening Settings); this store owns the *decisions*.
- *
- * @param scope a long-lived scope (the platform ViewModel's `viewModelScope` /
- *   a `Task`-backed scope on iOS) used for effect emission and async refresh.
+ * The platform owns lifecycle observation (app foreground), the system calls
+ * (permission requests, opening Settings), and any async status refresh — after which
+ * it calls [refresh]. This store owns only the *decisions*.
  */
 class PermissionFlowStore(
     private val statusStore: PermissionStatusStore,
-    private val statusReader: PermissionStatusReader,
-    private val scope: CoroutineScope
+    private val statusReader: PermissionStatusReader
 ) {
     private val _state = MutableStateFlow(PermissionFlowState())
     val state: StateFlow<PermissionFlowState> = _state.asStateFlow()
@@ -41,61 +38,47 @@ class PermissionFlowStore(
         clearStalePersistedDefers()
         syncDeniedStateFromOs()
         recompute()
-        // Notification status may load asynchronously; prime it so a returning user
-        // who already granted does not see the notification screen flash on launch.
-        scope.launch { refresh() }
     }
 
-    /** Re-run the resolver after the flow becomes visible (no state mutation). */
-    fun onFlowEntered() {
-        scope.launch { refresh() }
-    }
+    /** Re-run the resolver after the flow becomes visible or status was refreshed. */
+    fun onFlowEntered() = recompute()
+
+    fun refresh() = recompute()
 
     fun onEvent(event: PermissionEvent) {
         when (event) {
-            PermissionEvent.Refresh -> scope.launch { refresh() }
+            PermissionEvent.Refresh -> recompute()
             PermissionEvent.AppReturnedFromBackground -> {
                 locationSkippedThisSession = false
                 notificationSkippedThisSession = false
                 clearStalePersistedDefers()
-                recomputeThenRefresh()
+                recompute()
             }
             PermissionEvent.LocationAllow -> statusStore.setLocationAllowAttempted()
             PermissionEvent.LocationLater -> {
                 locationSkippedThisSession = true
                 statusStore.setShowLocationDeniedScreen(false)
-                recomputeThenRefresh()
+                recompute()
             }
             is PermissionEvent.LocationResults -> handleLocationResults(event)
             PermissionEvent.NotificationAllow -> Unit
             PermissionEvent.NotificationSkip -> {
                 notificationSkippedThisSession = true
-                recomputeThenRefresh()
+                recompute()
             }
             is PermissionEvent.NotificationResult -> {
                 if (event.granted) notificationSkippedThisSession = false
-                recomputeThenRefresh()
+                recompute()
             }
-            PermissionEvent.DeniedOpenSettings ->
-                scope.launch { _effects.send(PermissionEffect.OpenAppSettings) }
+            PermissionEvent.DeniedOpenSettings -> _effects.trySend(PermissionEffect.OpenAppSettings)
             PermissionEvent.DeniedLimitedFeatures -> {
                 statusStore.setLimitedFeaturesAcknowledged()
                 statusStore.setShowLocationDeniedScreen(false)
                 locationSkippedThisSession = false
                 notificationSkippedThisSession = false
-                recomputeThenRefresh()
+                recompute()
             }
         }
-    }
-
-    suspend fun refresh() {
-        statusReader.refreshNotificationStatus()
-        recompute()
-    }
-
-    private fun recomputeThenRefresh() {
-        recompute()
-        scope.launch { refresh() }
     }
 
     private fun recompute() {
@@ -112,7 +95,7 @@ class PermissionFlowStore(
         } else {
             statusStore.setShowLocationDeniedScreen(true)
         }
-        recomputeThenRefresh()
+        recompute()
     }
 
     private fun clearStalePersistedDefers() {

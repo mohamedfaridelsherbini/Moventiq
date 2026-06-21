@@ -9,6 +9,7 @@ import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mohamedfaridelsherbini.moventiq.R
+import com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation.PermissionEvent
 import com.mohamedfaridelsherbini.moventiq.ui.theme.MoventiqTheme
 import org.junit.Assert.assertEquals
 import org.junit.Rule

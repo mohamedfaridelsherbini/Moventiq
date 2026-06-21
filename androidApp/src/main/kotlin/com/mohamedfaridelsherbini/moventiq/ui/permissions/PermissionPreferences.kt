@@ -2,6 +2,7 @@ package com.mohamedfaridelsherbini.moventiq.ui.permissions
 
 import android.content.Context
 import androidx.core.content.edit
+import com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation.PermissionStatusStore
 
 private const val PREFS_NAME = "moventiq_app_prefs"
 private const val KEY_LOCATION_PROMPT_COMPLETED = "location_permission_prompt_completed"

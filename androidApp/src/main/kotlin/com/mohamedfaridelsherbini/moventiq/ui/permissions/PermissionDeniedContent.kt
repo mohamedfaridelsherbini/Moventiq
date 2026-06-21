@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.mohamedfaridelsherbini.moventiq.R
+import com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation.PermissionEvent
 import com.mohamedfaridelsherbini.moventiq.ui.components.MoventiqPrimaryButton
 import com.mohamedfaridelsherbini.moventiq.ui.permissions.components.PermissionDeniedStepsCard
 import com.mohamedfaridelsherbini.moventiq.ui.permissions.components.PermissionHeroIcon
