@@ -11,7 +11,10 @@ struct PermissionFlowView: View {
             if viewModel.state.step == PermissionFlowStep.location {
                 LocationPermissionView(onEvent: viewModel.handle)
             } else if viewModel.state.step == PermissionFlowStep.notification {
-                NotificationPermissionView(onEvent: viewModel.handle)
+                NotificationPermissionView(
+                    onEvent: viewModel.handle,
+                    onNotificationResult: viewModel.handleNotificationResult,
+                )
             } else if viewModel.state.step == PermissionFlowStep.denied {
                 PermissionDeniedView(onEvent: viewModel.handle)
             } else {
@@ -70,6 +73,7 @@ private struct LocationPermissionView: View {
 
 private struct NotificationPermissionView: View {
     let onEvent: (PermissionEvent) -> Void
+    let onNotificationResult: (Bool) async -> Void
 
     @Environment(\.moventiqSpacing) private var spacing
 
@@ -87,16 +91,16 @@ private struct NotificationPermissionView: View {
                             // First prompt: ask the OS.
                             center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
                                 Task { @MainActor in
-                                    onEvent(PermissionEventNotificationResult(granted: granted))
+                                    await onNotificationResult(granted)
                                 }
                             }
                         case .denied:
                             // iOS won't re-present once denied; send the user to Settings instead.
                             if let url = URL(string: UIApplication.openSettingsURLString) {
-                                UIApplication.shared.open(url)
+                                await UIApplication.shared.open(url)
                             }
                         default:
-                            onEvent(PermissionEventNotificationResult(granted: true))
+                            await onNotificationResult(true)
                         }
                     }
                 }

@@ -19,7 +19,7 @@ class PermissionFlowStoreHolder(
     statusStore: PermissionStatusStore,
     statusReader: PermissionStatusReader
 ) {
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val store = PermissionFlowStore(statusStore, statusReader)
 
     /** Current state, read synchronously so the Swift VM can seed itself before the

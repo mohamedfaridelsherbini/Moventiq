@@ -39,9 +39,10 @@ final class PermissionFlowViewModel {
         })
 
         // Prime async notification status, then recompute (avoids notif screen flash).
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self else { return }
             await reader.loadNotificationStatus()
-            holder.refresh()
+            self.holder?.refresh()
         }
 
         sessionTask = Task { @MainActor [weak self] in
@@ -73,6 +74,14 @@ final class PermissionFlowViewModel {
     func onPermissionFlowEntered() async {
         await reader?.loadNotificationStatus()
         holder?.onFlowEntered()
+    }
+
+    func handleNotificationResult(granted: Bool) async {
+        // Refresh the reader cache before forwarding — isNotificationGranted() is synchronous
+        // and reads a cached value; without this, the store recomputes with stale data and
+        // keeps the user on the notification screen even after they grant permission.
+        await reader?.loadNotificationStatus()
+        holder?.onEvent(event: PermissionEventNotificationResult(granted: granted))
     }
 
     func handle(_ event: PermissionEvent) {
