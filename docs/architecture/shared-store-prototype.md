@@ -1,4 +1,10 @@
-# Shared KMP store — prototype (permission flow)
+# Shared KMP store — permission flow
+
+> **Status: shipped** on branch `feat/permission-shared-store`. The permission flow now runs on the shared `PermissionFlowStore` (`commonMain`) on both platforms. The store is a synchronous, scope-free reducer; Android wraps it in a thin `ViewModel`, iOS wraps `PermissionFlowStoreHolder` (iosMain) which bridges `state`/`effects` Flows to Swift closures (a hand-rolled bridge — **swap to SKIE** for `AsyncSequence`/Swift-enum ergonomics once SKIE supports Kotlin 2.3.21; it currently caps at 2.3.10). The async iOS notification query lives Swift-side (`NotificationStatusLoader`) so the Kotlin reader stays fully synchronous and Swift never has to implement a Kotlin `suspend` protocol method.
+
+---
+
+## Original design notes
 
 > Reference for enhancement (b): move the state-reduction logic into a single `commonMain` store so the Android and iOS ViewModels stop re-implementing the same reducer. The permission flow is the pilot because its reducer is currently written **twice** (Kotlin `PermissionFlowViewModel` + Swift `PermissionFlowViewModel`), which is exactly the parity surface `moventiq-code-review` polices.
 
@@ -61,7 +67,7 @@ final class PermissionFlowViewModel {
         let (stream, continuation) = AsyncStream<PermissionEffect>.makeStream()
         effects = stream
 
-        // Flow → @Observable mirror (via SkieSwiftStateFlow or a Flow→AsyncSequence bridge)
+        // Flow → @Observable mirror (via SKIESwiftStateFlow or a Flow→AsyncSequence bridge)
         tasks.append(Task { [weak self] in
             for await s in store.state { self?.state = s }
         })
@@ -76,12 +82,12 @@ final class PermissionFlowViewModel {
 ```
 
 The `Flow` → `AsyncSequence` bridge is the one piece of plumbing iOS needs. Options, cheapest first:
-1. **SKIE** (Gradle plugin) — exposes `StateFlow`/`Flow` as native Swift `AsyncSequence`; near-zero hand-written bridge. Recommended.
+1. **SKIE** (Gradle plugin) — exposes `StateFlow`/`Flow` as native Swift `AsyncSequence`; near-zero handwritten bridge. Recommended.
 2. A small hand-rolled `Flow.collect { }` wrapper in `Bridge/SharedLogic+Async.swift` (the file ARCHITECTURE §8 already anticipates).
 
 ## Why this is worth it
 
-- **One reducer, one test suite.** The 13 cases in `PermissionFlowStoreTest` replace the parallel Android `PermissionFlowViewModelTest` + iOS `PermissionFlowViewModelTests`. A behaviour change is made and tested once.
+- **One reducer, one test suite.** The 13 cases in `PermissionFlowStoreTest` replace the parallel Android `PermissionFlowViewModelTest` + iOS `PermissionFlowViewModelTests`. A behavior change is made and tested once.
 - **Parity becomes structural.** The "branch order must match on both platforms" rule in `moventiq-code-review` can't be violated — there's a single branch order.
 - **Platform leak removed.** `requiresBackgroundLocation` now comes from `PermissionStatusReader`, so the reducer has no `Build.VERSION` / hardcoded-`true` fork.
 

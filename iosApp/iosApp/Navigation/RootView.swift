@@ -1,3 +1,4 @@
+import SharedLogic
 import SwiftUI
 
 private enum AppPhase: Equatable {

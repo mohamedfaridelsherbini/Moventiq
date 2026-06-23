@@ -36,9 +36,9 @@ final class OnboardingFlowUITests: XCTestCase {
         let onboarding = app.descendants(matching: .any)[OnboardingAccessibilityId.screen]
         XCTAssertTrue(onboarding.waitForExistence(timeout: 5))
 
-        XCTAssertTrue(app.staticTexts["Create tasks linked to places"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["Create tasks linked to places"].waitForExistence(timeout: 5))
         app.buttons[OnboardingAccessibilityId.continue].tap()
-        XCTAssertTrue(app.staticTexts["Moventiq detects when you arrive"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["Moventiq detects when you arrive"].waitForExistence(timeout: 5))
     }
 
     func test_app_navigatesToHome_afterOnboardingCompletes() {

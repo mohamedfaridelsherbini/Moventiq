@@ -5,17 +5,22 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.ContextCompat
+import com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation.PermissionStatusReader
 
 class AndroidPermissionStatusChecker(
     private val context: Context,
-) : PermissionStatusChecker {
+) : PermissionStatusReader {
+    // Geofencing needs background location, which only exists as a separate grant on Q+.
+    override val requiresBackgroundLocation: Boolean =
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+
     override fun hasAdequateLocationAccess(): Boolean {
         val fineGranted = ContextCompat.checkSelfPermission(
             context,
             Manifest.permission.ACCESS_FINE_LOCATION,
         ) == PackageManager.PERMISSION_GRANTED
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+        if (!requiresBackgroundLocation) {
             return fineGranted
         }
 
@@ -40,7 +45,7 @@ class AndroidPermissionStatusChecker(
         ) == PackageManager.PERMISSION_GRANTED
 
         // Partial grant: foreground OK, background missing on Android Q+.
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && (fineGranted || coarseGranted)
+        return requiresBackgroundLocation && (fineGranted || coarseGranted)
     }
 
     override fun isNotificationPromptRequired(): Boolean =

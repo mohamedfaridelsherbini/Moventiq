@@ -2,139 +2,42 @@ package com.mohamedfaridelsherbini.moventiq.ui.permissions
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.channels.Channel
+import com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation.PermissionEffect
+import com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation.PermissionEvent
+import com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation.PermissionFlowState
+import com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation.PermissionFlowStore
+import com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation.PermissionStatusReader
+import com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation.PermissionStatusStore
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * Thin Android adapter over the shared [PermissionFlowStore]. The reducer lives in
+ * `:sharedLogic` (`commonMain`); this class only supplies `viewModelScope`, forwards
+ * events, and exposes the store's [state]/[effects] to Compose. Platform-specific
+ * lifecycle (app foreground) is observed here and pushed in as an event.
+ */
 class PermissionFlowViewModel(
-    private val statusStore: PermissionStatusStore,
-    private val statusChecker: PermissionStatusChecker,
+    statusStore: PermissionStatusStore,
+    statusReader: PermissionStatusReader,
 ) : ViewModel() {
-    private val _state = MutableStateFlow(PermissionFlowUiState())
-    val state: StateFlow<PermissionFlowUiState> = _state.asStateFlow()
+    private val store = PermissionFlowStore(statusStore, statusReader)
 
-    private val _effects = Channel<PermissionEffect>(Channel.BUFFERED)
-    val effects: Flow<PermissionEffect> = _effects.receiveAsFlow()
-
-    private var locationSkippedThisSession = false
-    private var notificationSkippedThisSession = false
+    val state: StateFlow<PermissionFlowState> = store.state
+    val effects: Flow<PermissionEffect> = store.effects
 
     init {
         viewModelScope.launch {
             PermissionAppSession.returnedFromBackground.collect {
-                onEvent(PermissionEvent.AppReturnedFromBackground)
-            }
-        }
-        clearStalePersistedDefers()
-        syncDeniedStateFromOs()
-        refreshFlow()
-    }
-
-    fun onPermissionFlowEntered() {
-        refreshFlow()
-    }
-
-    fun onEvent(event: PermissionEvent) {
-        when (event) {
-            PermissionEvent.Refresh -> refreshFlow()
-            PermissionEvent.AppReturnedFromBackground -> {
-                locationSkippedThisSession = false
-                notificationSkippedThisSession = false
-                clearStalePersistedDefers()
-                refreshFlow()
-            }
-            PermissionEvent.LocationAllow -> {
-                statusStore.setLocationAllowAttempted()
-            }
-            PermissionEvent.LocationLater -> {
-                locationSkippedThisSession = true
-                statusStore.setShowLocationDeniedScreen(false)
-                refreshFlow()
-            }
-            is PermissionEvent.LocationResults -> handleLocationResults(event)
-            PermissionEvent.NotificationAllow -> Unit
-            PermissionEvent.NotificationSkip -> {
-                notificationSkippedThisSession = true
-                refreshFlow()
-            }
-            is PermissionEvent.NotificationResult -> {
-                if (event.granted) {
-                    notificationSkippedThisSession = false
-                }
-                refreshFlow()
-            }
-            PermissionEvent.DeniedOpenSettings ->
-                viewModelScope.launch { _effects.send(PermissionEffect.OpenAppSettings) }
-            PermissionEvent.DeniedLimitedFeatures -> {
-                statusStore.setLimitedFeaturesAcknowledged()
-                statusStore.setShowLocationDeniedScreen(false)
-                locationSkippedThisSession = false
-                notificationSkippedThisSession = false
-                refreshFlow()
+                store.onEvent(PermissionEvent.AppReturnedFromBackground)
             }
         }
     }
 
-    private fun handleLocationResults(event: PermissionEvent.LocationResults) {
-        val adequate = event.backgroundGranted ||
-            (event.fineGranted && !requiresBackgroundPermission())
+    fun onPermissionFlowEntered() = store.onFlowEntered()
 
-        if (adequate) {
-            locationSkippedThisSession = false
-            statusStore.setShowLocationDeniedScreen(false)
-        } else {
-            statusStore.setShowLocationDeniedScreen(true)
-        }
-        refreshFlow()
-    }
-
-    fun refreshFlow() {
-        _state.update { it.copy(step = computeStep()) }
-    }
-
-    private fun clearStalePersistedDefers() {
-        if (statusStore.isLimitedFeaturesAcknowledged()) return
-        statusStore.clearLegacyDeferFlags()
-    }
-
-    private fun syncDeniedStateFromOs() {
-        if (statusStore.isLimitedFeaturesAcknowledged()) return
-        if (statusChecker.hasAdequateLocationAccess()) {
-            statusStore.setShowLocationDeniedScreen(false)
-            return
-        }
-        if (
-            statusStore.shouldShowLocationDeniedScreen() ||
-            statusChecker.isLocationPermissionDenied() ||
-            statusStore.wasLocationAllowAttempted()
-        ) {
-            statusStore.setShowLocationDeniedScreen(true)
-        }
-    }
-
-    private fun computeStep(): PermissionFlowStep =
-        PermissionFlowStepResolver.resolve(
-            PermissionFlowInput(
-                limitedFeaturesAcknowledged = statusStore.isLimitedFeaturesAcknowledged(),
-                hasAdequateLocationAccess = statusChecker.hasAdequateLocationAccess(),
-                showLocationDeniedRecovery = shouldShowLocationDeniedRecovery(),
-                locationSkippedThisSession = locationSkippedThisSession,
-                notificationSkippedThisSession = notificationSkippedThisSession,
-                notificationPromptRequired = statusChecker.isNotificationPromptRequired(),
-                notificationGranted = statusChecker.isNotificationGranted(),
-            ),
-        )
-
-    private fun shouldShowLocationDeniedRecovery(): Boolean =
-        statusStore.shouldShowLocationDeniedScreen() || statusChecker.isLocationPermissionDenied()
-
-    private fun requiresBackgroundPermission(): Boolean =
-        android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
+    fun onEvent(event: PermissionEvent) = store.onEvent(event)
 
     companion object {
         internal fun resetSessionForTests() {

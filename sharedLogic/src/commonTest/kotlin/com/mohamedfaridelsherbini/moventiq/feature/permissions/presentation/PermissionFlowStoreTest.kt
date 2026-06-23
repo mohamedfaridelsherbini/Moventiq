@@ -1,150 +1,128 @@
 package com.mohamedfaridelsherbini.moventiq.feature.permissions.presentation
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class PermissionFlowStoreTest {
-    private fun TestScope.newStore(
+    private fun newStore(
         statusStore: PermissionStatusStore = FakePermissionStatusStore(),
         reader: PermissionStatusReader = FakePermissionStatusReader()
-    ) = PermissionFlowStore(
-        statusStore,
-        reader,
-        CoroutineScope(UnconfinedTestDispatcher(testScheduler))
-    )
+    ) = PermissionFlowStore(statusStore, reader)
 
     @Test
-    fun startsAtLocation_whenFreshStoreAndNoAccess() =
-        runTest {
-            val s = newStore()
-            assertEquals(PermissionFlowStep.Location, s.state.value.step)
-        }
+    fun startsAtLocation_whenFreshStoreAndNoAccess() {
+        assertEquals(PermissionFlowStep.Location, newStore().state.value.step)
+    }
 
     @Test
-    fun locationResults_denied_showsDeniedScreen() =
-        runTest {
-            val s = newStore()
-            s.onEvent(PermissionEvent.LocationResults(fineGranted = false, backgroundGranted = false))
-            assertEquals(PermissionFlowStep.Denied, s.state.value.step)
-        }
+    fun locationResults_denied_showsDeniedScreen() {
+        val s = newStore()
+        s.onEvent(PermissionEvent.LocationResults(fineGranted = false, backgroundGranted = false))
+        assertEquals(PermissionFlowStep.Denied, s.state.value.step)
+    }
 
     @Test
-    fun locationResults_whenInUseOnly_showsDeniedScreen() =
-        runTest {
-            val s = newStore()
-            s.onEvent(PermissionEvent.LocationResults(fineGranted = true, backgroundGranted = false))
-            assertEquals(PermissionFlowStep.Denied, s.state.value.step)
-        }
+    fun locationResults_whenInUseOnly_showsDeniedScreen() {
+        val s = newStore()
+        s.onEvent(PermissionEvent.LocationResults(fineGranted = true, backgroundGranted = false))
+        assertEquals(PermissionFlowStep.Denied, s.state.value.step)
+    }
 
     @Test
-    fun locationResults_granted_thenRefresh_movesToNotification() =
-        runTest {
-            val reader = FakePermissionStatusReader()
-            val s = newStore(reader = reader)
+    fun locationResults_granted_thenRefresh_movesToNotification() {
+        val reader = FakePermissionStatusReader()
+        val s = newStore(reader = reader)
 
-            s.onEvent(PermissionEvent.LocationResults(fineGranted = true, backgroundGranted = true))
-            reader.adequateLocation = true
-            s.onEvent(PermissionEvent.Refresh)
+        s.onEvent(PermissionEvent.LocationResults(fineGranted = true, backgroundGranted = true))
+        reader.adequateLocation = true
+        s.onEvent(PermissionEvent.Refresh)
 
-            assertEquals(PermissionFlowStep.Notification, s.state.value.step)
-        }
-
-    @Test
-    fun notificationResult_granted_completesFlow() =
-        runTest {
-            val reader = FakePermissionStatusReader(adequateLocation = true)
-            val s = newStore(reader = reader)
-
-            reader.notificationGranted = true
-            s.onEvent(PermissionEvent.NotificationResult(granted = true))
-
-            assertEquals(PermissionFlowStep.None, s.state.value.step)
-        }
+        assertEquals(PermissionFlowStep.Notification, s.state.value.step)
+    }
 
     @Test
-    fun notificationSkip_completesFlow() =
-        runTest {
-            val s = newStore(reader = FakePermissionStatusReader(adequateLocation = true))
-            s.onEvent(PermissionEvent.NotificationSkip)
-            assertEquals(PermissionFlowStep.None, s.state.value.step)
-        }
+    fun notificationResult_granted_completesFlow() {
+        val reader = FakePermissionStatusReader(adequateLocation = true)
+        val s = newStore(reader = reader)
+
+        reader.notificationGranted = true
+        s.onEvent(PermissionEvent.NotificationResult(granted = true))
+
+        assertEquals(PermissionFlowStep.None, s.state.value.step)
+    }
 
     @Test
-    fun locationLater_movesToNotification_andDoesNotShowDenied() =
-        runTest {
-            val statusStore = FakePermissionStatusStore()
-            val s = newStore(statusStore = statusStore)
-
-            s.onEvent(PermissionEvent.LocationLater)
-
-            assertEquals(PermissionFlowStep.Notification, s.state.value.step)
-            assertFalse(statusStore.shouldShowLocationDeniedScreen())
-        }
+    fun notificationSkip_completesFlow() {
+        val s = newStore(reader = FakePermissionStatusReader(adequateLocation = true))
+        s.onEvent(PermissionEvent.NotificationSkip)
+        assertEquals(PermissionFlowStep.None, s.state.value.step)
+    }
 
     @Test
-    fun deniedLimitedFeatures_completesFlow() =
-        runTest {
-            val statusStore = FakePermissionStatusStore().apply { setShowLocationDeniedScreen(true) }
-            val s = newStore(statusStore = statusStore)
+    fun locationLater_movesToNotification_andDoesNotShowDenied() {
+        val statusStore = FakePermissionStatusStore()
+        val s = newStore(statusStore = statusStore)
 
-            s.onEvent(PermissionEvent.DeniedLimitedFeatures)
+        s.onEvent(PermissionEvent.LocationLater)
 
-            assertEquals(PermissionFlowStep.None, s.state.value.step)
-        }
-
-    @Test
-    fun appReturnedFromBackground_afterLimitedFeatures_staysComplete() =
-        runTest {
-            val statusStore = FakePermissionStatusStore().apply { setLimitedFeaturesAcknowledged() }
-            val s = newStore(statusStore = statusStore)
-            assertEquals(PermissionFlowStep.None, s.state.value.step)
-
-            s.onEvent(PermissionEvent.AppReturnedFromBackground)
-
-            assertEquals(PermissionFlowStep.None, s.state.value.step)
-        }
+        assertEquals(PermissionFlowStep.Notification, s.state.value.step)
+        assertFalse(statusStore.shouldShowLocationDeniedScreen())
+    }
 
     @Test
-    fun locationGranted_thenNotificationSkip_thenForeground_showsNotificationAgain() =
-        runTest {
-            val s = newStore(reader = FakePermissionStatusReader(adequateLocation = true))
+    fun deniedLimitedFeatures_completesFlow() {
+        val statusStore = FakePermissionStatusStore().apply { setShowLocationDeniedScreen(true) }
+        val s = newStore(statusStore = statusStore)
 
-            s.onEvent(PermissionEvent.NotificationSkip)
-            assertEquals(PermissionFlowStep.None, s.state.value.step)
+        s.onEvent(PermissionEvent.DeniedLimitedFeatures)
 
-            s.onEvent(PermissionEvent.AppReturnedFromBackground)
-
-            assertEquals(PermissionFlowStep.Notification, s.state.value.step)
-        }
+        assertEquals(PermissionFlowStep.None, s.state.value.step)
+    }
 
     @Test
-    fun foreground_afterMaybeLaterAndNotNow_reShowsLocation() =
-        runTest {
-            val s = newStore()
+    fun appReturnedFromBackground_afterLimitedFeatures_staysComplete() {
+        val statusStore = FakePermissionStatusStore().apply { setLimitedFeaturesAcknowledged() }
+        val s = newStore(statusStore = statusStore)
+        assertEquals(PermissionFlowStep.None, s.state.value.step)
 
-            s.onEvent(PermissionEvent.LocationLater)
-            s.onEvent(PermissionEvent.NotificationSkip)
-            assertEquals(PermissionFlowStep.None, s.state.value.step)
+        s.onEvent(PermissionEvent.AppReturnedFromBackground)
 
-            s.onEvent(PermissionEvent.AppReturnedFromBackground)
-
-            assertEquals(PermissionFlowStep.Location, s.state.value.step)
-        }
+        assertEquals(PermissionFlowStep.None, s.state.value.step)
+    }
 
     @Test
-    fun coldStart_osDenied_showsDeniedScreen() =
-        runTest {
-            val s = newStore(reader = FakePermissionStatusReader(locationPermissionDenied = true))
-            assertEquals(PermissionFlowStep.Denied, s.state.value.step)
-        }
+    fun locationGranted_thenNotificationSkip_thenForeground_showsNotificationAgain() {
+        val s = newStore(reader = FakePermissionStatusReader(adequateLocation = true))
+
+        s.onEvent(PermissionEvent.NotificationSkip)
+        assertEquals(PermissionFlowStep.None, s.state.value.step)
+
+        s.onEvent(PermissionEvent.AppReturnedFromBackground)
+
+        assertEquals(PermissionFlowStep.Notification, s.state.value.step)
+    }
+
+    @Test
+    fun foreground_afterMaybeLaterAndNotNow_reShowsLocation() {
+        val s = newStore()
+
+        s.onEvent(PermissionEvent.LocationLater)
+        s.onEvent(PermissionEvent.NotificationSkip)
+        assertEquals(PermissionFlowStep.None, s.state.value.step)
+
+        s.onEvent(PermissionEvent.AppReturnedFromBackground)
+
+        assertEquals(PermissionFlowStep.Location, s.state.value.step)
+    }
+
+    @Test
+    fun coldStart_osDenied_showsDeniedScreen() {
+        val s = newStore(reader = FakePermissionStatusReader(locationPermissionDenied = true))
+        assertEquals(PermissionFlowStep.Denied, s.state.value.step)
+    }
 
     @Test
     fun deniedOpenSettings_emitsOpenAppSettingsEffect() =
@@ -195,6 +173,4 @@ private class FakePermissionStatusReader(
     override fun isNotificationPromptRequired() = notificationPromptRequired
 
     override fun isNotificationGranted() = notificationGranted
-
-    override suspend fun refreshNotificationStatus() = Unit
 }

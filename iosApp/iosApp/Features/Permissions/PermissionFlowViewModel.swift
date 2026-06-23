@@ -1,172 +1,91 @@
 import Foundation
 import Observation
+import SharedLogic
 
+/// Thin iOS adapter over the shared `PermissionFlowStoreHolder` (which wraps the
+/// `commonMain` `PermissionFlowStore`). The reducer lives in `:sharedLogic`; this class
+/// mirrors the store's state into `@Observable`, surfaces effects as an `AsyncStream`,
+/// owns platform lifecycle observation, and runs the async notification refresh.
 @MainActor
 @Observable
 final class PermissionFlowViewModel {
-    private(set) var state = PermissionFlowUiState()
+    private(set) var state: PermissionFlowState
 
     let effects: AsyncStream<PermissionEffect>
     private let effectsContinuation: AsyncStream<PermissionEffect>.Continuation
 
-    private let statusStore: PermissionStatusStore
-    private let statusChecker: any PermissionStatusChecker
-
-    private var locationSkippedThisSession = false
-    private var notificationSkippedThisSession = false
+    private let holder: PermissionFlowStoreHolder?
+    private let reader: (any NotificationStatusLoader)?
     private nonisolated(unsafe) var sessionTask: Task<Void, Never>?
 
     init(
         statusStore: PermissionStatusStore,
-        statusChecker: (any PermissionStatusChecker)? = nil,
+        reader: any NotificationStatusLoader = IOSPermissionStatusChecker(),
     ) {
         (effects, effectsContinuation) = AsyncStream<PermissionEffect>.makeStream()
-        self.statusStore = statusStore
-        self.statusChecker = statusChecker ?? IOSPermissionStatusChecker()
-        clearStalePersistedDefers()
-        syncDeniedStateFromOs()
-        state.step = computeStep()
-        // Notification status loads asynchronously; prime it now so a returning user
-        // who already granted does not see the notification screen flash on launch.
+        self.reader = reader
+        let holder = PermissionFlowStoreHolder(statusStore: statusStore, statusReader: reader)
+        self.holder = holder
+        // Seed synchronously from the store's current value so the first render has the
+        // real step; otherwise the default `.none` reads as "flow complete".
+        self.state = holder.currentState
+
+        // Holder forwards on the main dispatcher, so direct state assignment is safe.
+        holder.observeState(onChange: { [weak self] newState in
+            MainActor.assumeIsolated { self?.state = newState }
+        })
+        holder.observeEffects(onEffect: { [weak self] effect in
+            self?.effectsContinuation.yield(effect)
+        })
+
+        // Prime async notification status, then recompute (avoids notif screen flash).
         Task { @MainActor [weak self] in
-            await self?.refreshFlow()
+            guard let self else { return }
+            await reader.loadNotificationStatus()
+            self.holder?.refresh()
         }
+
         sessionTask = Task { @MainActor [weak self] in
             for await _ in NotificationCenter.default.notifications(
                 named: .permissionAppReturnedFromBackground,
             ) {
-                self?.handle(.appReturnedFromBackground)
+                self?.holder?.onEvent(event: PermissionEventAppReturnedFromBackground.shared)
             }
         }
     }
 
-    deinit {
-        sessionTask?.cancel()
-        effectsContinuation.finish()
-    }
-
-    fileprivate init(previewStep: PermissionFlowStep) {
+    private init(previewStep: PermissionFlowStep) {
         (effects, effectsContinuation) = AsyncStream<PermissionEffect>.makeStream()
-        self.statusStore = CompletedPermissionStatusStore()
-        self.statusChecker = IOSPermissionStatusChecker()
-        self.state = PermissionFlowUiState(step: previewStep)
+        self.holder = nil
+        self.reader = nil
+        self.state = PermissionFlowState(step: previewStep)
     }
 
     static func preview(step: PermissionFlowStep) -> PermissionFlowViewModel {
         PermissionFlowViewModel(previewStep: step)
     }
 
+    deinit {
+        sessionTask?.cancel()
+        holder?.dispose()
+        effectsContinuation.finish()
+    }
+
     func onPermissionFlowEntered() async {
-        await refreshFlow()
+        await reader?.loadNotificationStatus()
+        holder?.onFlowEntered()
+    }
+
+    func handleNotificationResult(granted: Bool) async {
+        // Refresh the reader cache before forwarding — isNotificationGranted() is synchronous
+        // and reads a cached value; without this, the store recomputes with stale data and
+        // keeps the user on the notification screen even after they grant permission.
+        await reader?.loadNotificationStatus()
+        holder?.onEvent(event: PermissionEventNotificationResult(granted: granted))
     }
 
     func handle(_ event: PermissionEvent) {
-        switch event {
-        case .refresh:
-            state.step = computeStep()
-            Task { await refreshFlow() }
-        case .appReturnedFromBackground:
-            locationSkippedThisSession = false
-            notificationSkippedThisSession = false
-            clearStalePersistedDefers()
-            state.step = computeStep()
-            Task { await refreshFlow() }
-        case .locationAllow:
-            statusStore.setLocationAllowAttempted()
-        case .notificationAllow:
-            break
-        case .deniedOpenSettings:
-            effectsContinuation.yield(.openAppSettings)
-        case .locationLater:
-            locationSkippedThisSession = true
-            statusStore.setShowLocationDeniedScreen(false)
-            state.step = computeStep()
-            Task { await refreshFlow() }
-        case let .locationResults(fineGranted, backgroundGranted):
-            handleLocationResults(fineGranted: fineGranted, backgroundGranted: backgroundGranted)
-        case .notificationSkip:
-            notificationSkippedThisSession = true
-            state.step = computeStep()
-            Task { await refreshFlow() }
-        case .notificationResult(let granted):
-            handleNotificationResult(granted: granted)
-        case .deniedLimitedFeatures:
-            statusStore.setLimitedFeaturesAcknowledged()
-            statusStore.setShowLocationDeniedScreen(false)
-            locationSkippedThisSession = false
-            notificationSkippedThisSession = false
-            state.step = computeStep()
-            Task { await refreshFlow() }
-        }
-    }
-
-    private func handleNotificationResult(granted: Bool) {
-        if granted {
-            notificationSkippedThisSession = false
-        }
-        state.step = computeStep()
-        Task { await refreshFlow() }
-    }
-
-    func refreshFlow() async {
-        await statusChecker.refreshNotificationStatus()
-        state.step = computeStep()
-    }
-
-    private func clearStalePersistedDefers() {
-        if statusStore.isLimitedFeaturesAcknowledged() {
-            return
-        }
-        statusStore.clearLegacyDeferFlags()
-    }
-
-    private func syncDeniedStateFromOs() {
-        if statusStore.isLimitedFeaturesAcknowledged() {
-            return
-        }
-        if statusChecker.hasAdequateLocationAccess() {
-            statusStore.setShowLocationDeniedScreen(false)
-            return
-        }
-        if statusStore.shouldShowLocationDeniedScreen()
-            || statusChecker.isLocationPermissionDenied()
-            || statusStore.wasLocationAllowAttempted() {
-            statusStore.setShowLocationDeniedScreen(true)
-        }
-    }
-
-    private func handleLocationResults(fineGranted: Bool, backgroundGranted: Bool) {
-        let adequate = backgroundGranted || (fineGranted && !requiresBackgroundPermission())
-        if adequate {
-            locationSkippedThisSession = false
-            statusStore.setShowLocationDeniedScreen(false)
-        } else {
-            statusStore.setShowLocationDeniedScreen(true)
-        }
-        state.step = computeStep()
-        Task { await refreshFlow() }
-    }
-
-    private func computeStep() -> PermissionFlowStep {
-        PermissionFlowStepResolver.resolve(
-            PermissionFlowInput(
-                limitedFeaturesAcknowledged: statusStore.isLimitedFeaturesAcknowledged(),
-                hasAdequateLocationAccess: statusChecker.hasAdequateLocationAccess(),
-                showLocationDeniedRecovery: shouldShowLocationDeniedRecovery(),
-                locationSkippedThisSession: locationSkippedThisSession,
-                notificationSkippedThisSession: notificationSkippedThisSession,
-                notificationPromptRequired: statusChecker.isNotificationPromptRequired(),
-                notificationGranted: statusChecker.isNotificationGranted(),
-            ),
-        )
-    }
-
-    private func shouldShowLocationDeniedRecovery() -> Bool {
-        statusStore.shouldShowLocationDeniedScreen() || statusChecker.isLocationPermissionDenied()
-    }
-
-    private func requiresBackgroundPermission() -> Bool {
-        true
+        holder?.onEvent(event: event)
     }
 
     static func resetSessionForTests() {
@@ -174,20 +93,22 @@ final class PermissionFlowViewModel {
     }
 }
 
-private final class UITestCompletedPermissionChecker: PermissionStatusChecker {
+private final class UITestCompletedPermissionChecker: NotificationStatusLoader {
+    var requiresBackgroundLocation: Bool { true }
     func hasAdequateLocationAccess() -> Bool { true }
     func isLocationPermissionDenied() -> Bool { false }
     func isNotificationPromptRequired() -> Bool { true }
     func isNotificationGranted() -> Bool { true }
-    func refreshNotificationStatus() async {}
+    func loadNotificationStatus() async {}
 }
 
-private final class UITestDeniedPermissionChecker: PermissionStatusChecker {
+private final class UITestDeniedPermissionChecker: NotificationStatusLoader {
+    var requiresBackgroundLocation: Bool { true }
     func hasAdequateLocationAccess() -> Bool { false }
     func isLocationPermissionDenied() -> Bool { true }
     func isNotificationPromptRequired() -> Bool { true }
     func isNotificationGranted() -> Bool { false }
-    func refreshNotificationStatus() async {}
+    func loadNotificationStatus() async {}
 }
 
 enum PermissionFlowViewModelFactory {
@@ -197,13 +118,13 @@ enum PermissionFlowViewModelFactory {
         if arguments.contains("-UITestSkipPermissions") {
             return PermissionFlowViewModel(
                 statusStore: CompletedPermissionStatusStore(),
-                statusChecker: UITestCompletedPermissionChecker(),
+                reader: UITestCompletedPermissionChecker(),
             )
         }
         if arguments.contains("-UITestPermissionDenied") {
             return PermissionFlowViewModel(
                 statusStore: FreshPermissionStatusStore(),
-                statusChecker: UITestDeniedPermissionChecker(),
+                reader: UITestDeniedPermissionChecker(),
             )
         }
         return PermissionFlowViewModel(statusStore: PermissionPreferences())
@@ -217,7 +138,7 @@ final class CompletedPermissionStatusStore: PermissionStatusStore {
     func isLimitedFeaturesAcknowledged() -> Bool { false }
     func setLimitedFeaturesAcknowledged() {}
     func shouldShowLocationDeniedScreen() -> Bool { false }
-    func setShowLocationDeniedScreen(_ show: Bool) {}
+    func setShowLocationDeniedScreen(show: Bool) {}
 }
 
 final class FreshPermissionStatusStore: PermissionStatusStore {
@@ -231,5 +152,5 @@ final class FreshPermissionStatusStore: PermissionStatusStore {
     func isLimitedFeaturesAcknowledged() -> Bool { limitedFeatures }
     func setLimitedFeaturesAcknowledged() { limitedFeatures = true }
     func shouldShowLocationDeniedScreen() -> Bool { showDenied }
-    func setShowLocationDeniedScreen(_ show: Bool) { showDenied = show }
+    func setShowLocationDeniedScreen(show: Bool) { showDenied = show }
 }

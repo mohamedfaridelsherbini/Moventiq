@@ -29,7 +29,7 @@ class SplashFlowTest {
     private fun completedPermissionViewModel(): PermissionFlowViewModel =
         PermissionFlowViewModel(
             statusStore = CompletedPermissionStatusStore(),
-            statusChecker = FakePermissionStatusChecker(
+            statusReader = FakePermissionStatusChecker(
                 adequateLocation = true,
                 notificationGranted = true,
             ),

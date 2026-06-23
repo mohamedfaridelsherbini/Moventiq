@@ -71,9 +71,11 @@ interface PermissionStatusStore {
 }
 
 /**
- * Live OS permission status — implemented per platform. [requiresBackgroundLocation]
- * replaces the old `Build.VERSION` / hardcoded-true check that leaked into each
- * platform reducer, keeping the shared logic free of platform APIs.
+ * Live OS permission status — implemented per platform. All reads are synchronous so
+ * the store stays a plain (coroutine-free) reducer. Platforms whose OS query is async
+ * (iOS notification status) cache the value and call [PermissionFlowStore.refresh]
+ * after refreshing it. [requiresBackgroundLocation] keeps the `Build.VERSION` /
+ * hardcoded-true fork out of the shared logic.
  */
 interface PermissionStatusReader {
     val requiresBackgroundLocation: Boolean
@@ -85,6 +87,4 @@ interface PermissionStatusReader {
     fun isNotificationPromptRequired(): Boolean
 
     fun isNotificationGranted(): Boolean
-
-    suspend fun refreshNotificationStatus()
 }
