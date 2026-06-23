@@ -72,15 +72,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install SwiftLint (Linux binary)
+      - name: Lint (official SwiftLint Docker image)
         run: |
-          curl -Lo swiftlint.zip \
-            https://github.com/realm/SwiftLint/releases/latest/download/swiftlint_linux.zip
-          unzip swiftlint.zip -d "$HOME/.swiftlint"
-          echo "$HOME/.swiftlint" >> "$GITHUB_PATH"
-
-      - name: Lint
-        run: swiftlint lint --strict --config iosApp/.swiftlint.yml iosApp/iosApp
+          docker run --rm \
+            -v "${{ github.workspace }}:/code" \
+            ghcr.io/realm/swiftlint \
+            swiftlint lint --strict \
+              --config /code/iosApp/.swiftlint.yml \
+              /code/iosApp/iosApp
 
   # ── Android path ────────────────────────────────────────────────────────────
 
