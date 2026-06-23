@@ -1,5 +1,12 @@
 # Moventiq CI — based on Kotlin KMP GitHub Actions guide:
 # https://kotlinlang.org/docs/multiplatform/github-actions-for-kmp.html
+#
+# Job graph:
+#
+#   static-analysis ─┐
+#   test-shared      ─┼── build-android ── android-ui-test
+#   swift-lint       ─┤
+#                    └── test-ios-unit ── ios-ui-test
 
 name: Build
 
@@ -14,6 +21,8 @@ env:
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096M -Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.caching=true"
 
 jobs:
+  # ── Fast parallel gates ──────────────────────────────────────────────────────
+
   static-analysis:
     name: Kotlin static analysis
     runs-on: ubuntu-latest
@@ -35,8 +44,8 @@ jobs:
           path: "**/build/reports/detekt/"
           if-no-files-found: ignore
 
-  test:
-    name: Run tests
+  test-shared:
+    name: Shared unit tests (host)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -52,14 +61,33 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-reports
+          name: test-reports-shared
           path: "**/build/reports/tests/"
           if-no-files-found: ignore
+
+  swift-lint:
+    name: SwiftLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install SwiftLint (Linux binary)
+        run: |
+          curl -Lo swiftlint.zip \
+            https://github.com/realm/SwiftLint/releases/latest/download/swiftlint_linux.zip
+          unzip swiftlint.zip -d "$HOME/.swiftlint"
+          echo "$HOME/.swiftlint" >> "$GITHUB_PATH"
+
+      - name: Lint
+        run: swiftlint lint --strict --config iosApp/.swiftlint.yml iosApp/iosApp
+
+  # ── Android path ────────────────────────────────────────────────────────────
 
   build-android:
     name: Build Android
     runs-on: ubuntu-latest
-    needs: [test, static-analysis]
+    needs: [static-analysis, test-shared]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -90,7 +118,8 @@ jobs:
 
       - name: Enable KVM
         run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm.rules
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | \
+            sudo tee /etc/udev/rules.d/99-kvm.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
@@ -99,10 +128,12 @@ jobs:
           ./gradlew :androidApp:pixel6Api36DebugAndroidTest \
             -Pandroid.testInstrumentationRunnerArguments.package=com.mohamedfaridelsherbini.moventiq.ui.splash
 
-  build-ios:
-    name: Build iOS simulator app
+  # ── iOS path ─────────────────────────────────────────────────────────────────
+
+  test-ios-unit:
+    name: iOS unit tests
     runs-on: macos-latest
-    needs: [test, static-analysis]
+    needs: [static-analysis, swift-lint, test-shared]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -113,18 +144,14 @@ jobs:
       - name: Run sharedLogic iOS tests
         run: ./gradlew :sharedLogic:iosSimulatorArm64Test
 
-      - name: SwiftLint
-        run: |
-          brew install swiftlint
-          swiftlint lint --strict --config iosApp/.swiftlint.yml iosApp/iosApp
-
-      - name: Build and test iOS simulator app
+      - name: Build and run Xcode unit tests (skip UI tests)
         run: |
           xcodebuild test \
             -project iosApp/iosApp.xcodeproj \
             -scheme iosApp \
             -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' \
             -derivedDataPath ./build \
+            -skip-testing:iosAppUITests \
             CODE_SIGNING_ALLOWED=NO
 
       - name: Upload iOS simulator app
@@ -133,3 +160,24 @@ jobs:
           name: iphonesimulator-app
           path: build/Build/Products/Debug-iphonesimulator/
           if-no-files-found: error
+
+  ios-ui-test:
+    name: iOS UI tests
+    runs-on: macos-latest
+    needs: test-ios-unit
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Gradle setup
+        uses: ./.github/actions/gradle-setup
+
+      - name: Run Xcode UI tests
+        run: |
+          xcodebuild test \
+            -project iosApp/iosApp.xcodeproj \
+            -scheme iosApp \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' \
+            -derivedDataPath ./build \
+            -only-testing:iosAppUITests \
+            CODE_SIGNING_ALLOWED=NO
